@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prijava potvrđena - Besplatan AI Masterclass | Outliers</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   KONFIGURACIJA
+   ============================================================ */
+window.MC = {
+  datumISO:    "2026-11-20T19:00:00+01:00",   /* TODO: potvrditi datum */
+  krajISO:     "2026-11-20T20:30:00+01:00",
+  datumTekst:  "četvrtak, 20.11. u 19h",
+  trajanje:    "90 minuta",
+
+  naslovEvent: "Besplatan AI Masterclass - Excel, Power BI i AI | Outliers",
+  opisEvent:   "Link za pristup stiže na mejl pre početka. Pitanja: office@excelgrasic.com",
+  lokacija:    "Online",
+
+  /* Opciono: link ka grupi/zajednici. Prazno = sekcija se sakriva. */
+  zajednicaUrl: ""
+};
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --white:#ffffff; --ink:#363636; --ink-2:#6b7570;
+  --green:#004d3a; --deep:#001812; --lime:#e1f25e; --leaf:#75a34d;
+  --cream:#ecede5; --mint:#e1eae8; --line:#dfe5e2; --r:16px;
+  --font:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+body{background:var(--white);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+/* progres 100% */
+.bar-prog{background:var(--white);border-bottom:1px solid var(--line);padding:14px 20px}
+.track{position:relative;max-width:1000px;margin:0 auto;height:26px;background:var(--mint);border-radius:9px;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:9px;
+  background:linear-gradient(90deg,var(--green) 0%,var(--leaf) 55%,var(--lime) 100%);
+  animation:grow 1.4s cubic-bezier(.25,.46,.45,.94) .2s forwards}
+@keyframes grow{to{width:100%}}
+.track-lab{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+  font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--green)}
+
+/* hero */
+.stage{position:relative;overflow:hidden;background:var(--green);color:var(--cream)}
+.stage::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(236,237,229,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(236,237,229,.055) 1px,transparent 1px);
+  background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 75% at 50% 15%,#000 18%,transparent 78%)}
+.stage::after{content:"";position:absolute;width:560px;height:560px;left:50%;top:-320px;margin-left:-280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(225,242,94,.18),transparent 62%);pointer-events:none}
+.shell{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:clamp(44px,6vw,78px) 20px clamp(44px,5vw,66px);text-align:center}
+.tick{width:76px;height:76px;margin:0 auto 26px;border-radius:50%;background:var(--lime);
+  display:grid;place-items:center;animation:pop .5s cubic-bezier(.2,1.2,.4,1) both;box-shadow:0 0 0 10px rgba(225,242,94,.14)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.tick svg{width:34px;height:34px;stroke:var(--green);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+/* redovi priblizno jednake duzine; nikad usamljena rec u poslednjem redu */
+h1,h2,h3{text-wrap:balance}
+p,li{text-wrap:pretty}
+.nb{white-space:nowrap}
+h1{font-size:clamp(1.85rem,5vw,3rem);font-weight:500;line-height:1.12;letter-spacing:-.025em;margin-bottom:14px;color:var(--cream)}
+.lime{color:var(--lime)}
+.sub{max-width:580px;margin:0 auto;color:rgba(236,237,229,.8);font-size:clamp(.96rem,1.6vw,1.05rem)}
+.hello{display:block;font-size:.9rem;color:var(--lime);font-weight:600;margin-bottom:12px}
+
+/* termin kartica */
+.slot{position:relative;max-width:640px;margin:clamp(30px,4vw,44px) auto 0;background:var(--white);color:var(--ink);
+  border-radius:20px;padding:clamp(24px,3vw,32px);box-shadow:0 30px 70px rgba(0,16,12,.3);text-align:left}
+.slot-lab{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px}
+.slot-lab::before{content:"";width:18px;height:2px;background:var(--lime)}
+.slot-date{font-size:clamp(1.3rem,3.4vw,1.75rem);font-weight:500;letter-spacing:-.02em;color:var(--green)}
+.slot-meta{font-size:.9rem;color:var(--ink-2);margin-top:6px}
+.cd{display:flex;gap:9px;margin-top:22px}
+.cd-box{flex:1;background:var(--cream);border-radius:12px;padding:12px 5px;text-align:center}
+.cd-num{font-size:clamp(1.2rem,3vw,1.6rem);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--green)}
+.cd-lab{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-top:6px}
+.cal{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--lime);color:var(--green);
+  font-family:var(--font);font-weight:700;font-size:.95rem;padding:15px 24px;border-radius:var(--r);border:0;cursor:pointer;
+  text-decoration:none;overflow:hidden;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .18s ease;flex:1;min-width:180px}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+  transform:translateX(-120%);transition:transform .6s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,77,58,.2)}
+.btn:hover::after{transform:translateX(120%)}
+.btn-ghost{background:transparent;color:var(--green);border:1px solid var(--green)}
+.btn-ghost:hover{background:var(--cream)}
+
+/* sekcije */
+.sec{padding:clamp(48px,6vw,84px) 0}
+.sec-head{text-align:center;max-width:680px;margin:0 auto clamp(28px,3vw,42px)}
+h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:500;line-height:1.16;letter-spacing:-.025em}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--green);margin-bottom:14px}
+.eyebrow::before{content:"";width:18px;height:2px;background:var(--lime)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:var(--mint);border-radius:var(--r);padding:26px;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease}
+.step:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(0,77,58,.12)}
+.step .n{width:32px;height:32px;border-radius:10px;background:var(--green);color:var(--lime);
+  font-weight:700;font-size:.85rem;display:grid;place-items:center;margin-bottom:16px}
+.step h3{font-size:1.05rem;font-weight:600;margin-bottom:8px;color:var(--green)}
+.step p{font-size:.9rem;color:var(--ink)}
+.step code{background:var(--white);border-radius:6px;padding:2px 7px;font-size:.85em;color:var(--green)}
+
+.note{display:flex;gap:14px;align-items:flex-start;max-width:740px;margin:clamp(28px,3vw,38px) auto 0;
+  background:var(--cream);border-left:3px solid var(--lime);border-radius:14px;padding:20px 22px}
+.note svg{width:20px;height:20px;stroke:var(--green);fill:none;stroke-width:1.9;flex:0 0 20px;margin-top:3px}
+.note p{font-size:.92rem;color:var(--ink)}
+.note b{color:var(--green);font-weight:600}
+
+.prep{background:var(--cream)}
+.prep-list{display:grid;gap:12px;max-width:740px;margin:0 auto}
+.prep-list li{list-style:none;display:flex;gap:13px;background:var(--white);border-radius:13px;padding:18px 20px;
+  transition:transform .22s ease}
+.prep-list li:hover{transform:translateX(4px)}
+.prep-list svg{width:20px;height:20px;stroke:var(--green);fill:none;stroke-width:2.6;flex:0 0 20px;margin-top:3px;stroke-linecap:round;stroke-linejoin:round}
+.prep-list span{font-size:.94rem;color:var(--ink)}
+.prep-list b{color:var(--green);font-weight:600}
+
+.community{text-align:center}
+.community .sub{color:var(--ink-2)}
+.community .btn{flex:0 0 auto;min-width:0}
+
+footer{background:var(--deep);padding:32px 20px;text-align:center}
+.foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
+.foot-by a{color:rgba(236,237,229,.6);font-weight:600;text-decoration:none}
+.foot-by a:hover{color:var(--lime)}
+footer img{height:22px;width:auto;margin:0 auto 10px}
+footer p{font-size:.76rem;color:rgba(236,237,229,.5)}
+footer a{color:rgba(236,237,229,.5);text-decoration:none}
+footer a:hover{color:var(--lime)}
+
+@media (max-width:760px){ .steps{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<div class="bar-prog">
+  <div class="track"><div class="fill"></div><span class="track-lab">100%</span></div>
+</div>
+
+<section class="stage">
+  <div class="shell">
+    <div class="tick"><svg viewBox="0 0 24 24"><path d="m4 12 5.5 5.5L20 7"/></svg></div>
+    <h1><span class="hello" id="hello"></span>Prijava je <span class="lime">potvrđena</span></h1>
+    <p class="sub">Tvoje mesto na Masterclassu je rezervisano. Link za pristup stiže ti na mejl, a podsetnik dobijaš i pre samog početka.</p>
+
+    <div class="slot">
+      <div class="slot-lab">Tvoj termin</div>
+      <div class="slot-date" id="slot-date"></div>
+      <div class="slot-meta" id="slot-meta"></div>
+      <div class="cd">
+        <div class="cd-box"><div class="cd-num" data-d>00</div><div class="cd-lab">dana</div></div>
+        <div class="cd-box"><div class="cd-num" data-h>00</div><div class="cd-lab">sati</div></div>
+        <div class="cd-box"><div class="cd-num" data-m>00</div><div class="cd-lab">minuta</div></div>
+        <div class="cd-box"><div class="cd-num" data-s>00</div><div class="cd-lab">sekundi</div></div>
+      </div>
+      <div class="cal">
+        <a class="btn" id="gcal" target="_blank" rel="noopener">Dodaj u Google kalendar</a>
+        <button class="btn btn-ghost" id="ics">Preuzmi .ics fajl</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Šta sada</div>
+      <h2>Tri koraka do Masterclassa</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Proveri mejl</h3>
+        <p>Potvrda prijave ti stiže u roku od nekoliko minuta sa adrese <code>office@excelgrasic.com</code>.</p></div>
+      <div class="step"><div class="n">2</div><h3>Pomeri iz promocija</h3>
+        <p>Ako mejla nema u Inboxu, pogledaj Promocije ili Spam i prevuci ga u Inbox - tako ti ne promakne ni link ni podsetnik.</p></div>
+      <div class="step"><div class="n">3</div><h3>Upiši termin</h3>
+        <p>Dodaj Masterclass u kalendar da ti blokira vreme. Traje <b id="dur"></b> i preporučujemo da budeš za računarom.</p></div>
+    </div>
+
+    <div class="note">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+      <p><b>Snimak je dostupan 48 sati nakon Masterclassa</b>, ali najviše izvlače oni koji gledaju uživo - tada možeš da postavljaš pitanja i dobiješ odgovor na svoj konkretan slučaj.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec prep">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Pripremi se</div>
+      <h2>Da izvučeš maksimum iz 90 minuta</h2>
+    </div>
+    <ul class="prep-list">
+      <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Pripremi jedan svoj fajl.</b> Izveštaj ili tabelu na kojoj gubiš najviše vremena - primere ćeš odmah moći da preslikaš na svoje podatke.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Zapiši jedno pitanje.</b> Konkretan problem iz svog posla koji želiš da rešiš uz AI.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Budi za računarom.</b> Masterclass je praktičan - lakše je pratiti kada možeš odmah da probaš.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Pozovi kolegu.</b> Ako u timu imate isti problem sa ručnom pripremom izveštaja, prosledi im prijavu.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec community" id="community" style="display:none">
+  <div class="wrap">
+    <div class="eyebrow">Zajednica</div>
+    <h2 style="margin-bottom:16px">Pridruži se ostalim učesnicima</h2>
+    <p class="sub" style="margin-bottom:24px">Tu objavljujemo materijale, podsetnike i odgovaramo na pitanja pre Masterclassa.</p>
+    <a class="btn" id="community-link" target="_blank" rel="noopener">Uđi u zajednicu →</a>
+  </div>
+</section>
+
+<footer>
+  <img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)">
+  <p>© <span id="yr"></span> Outliers - Excel Grašić · <a href="mailto:office@excelgrasic.com">office@excelgrasic.com</a></p>
+  <p class="foot-by">powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
+</footer>
+
+<script>
+(function(){
+  var C = window.MC, p = new URLSearchParams(location.search);
+  var start = new Date(C.datumISO), end = new Date(C.krajISO);
+
+  document.getElementById('slot-date').textContent = C.datumTekst;
+  document.getElementById('slot-meta').textContent = 'Online · traje ' + C.trajanje + ' · snimak dostupan 48h';
+  document.getElementById('dur').textContent = C.trajanje;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  var ime = (p.get('firstname') || p.get('ime') || '').trim();
+  if (ime) {
+    ime = ime.charAt(0).toUpperCase() + ime.slice(1);
+    document.getElementById('hello').textContent = ime + ', vidimo se uskoro.';
+  }
+
+  /* ---------- countdown ---------- */
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  var cd = document.querySelector('.cd');
+  function tick(){
+    var diff = start.getTime() - Date.now(); if (diff < 0) diff = 0;
+    cd.querySelector('[data-d]').textContent = pad(Math.floor(diff / 864e5));
+    cd.querySelector('[data-h]').textContent = pad(Math.floor(diff % 864e5 / 36e5));
+    cd.querySelector('[data-m]').textContent = pad(Math.floor(diff % 36e5 / 6e4));
+    cd.querySelector('[data-s]').textContent = pad(Math.floor(diff % 6e4 / 1e3));
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ---------- kalendar ---------- */
+  function utc(d){ return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
+  document.getElementById('gcal').href =
+    'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+    '&text='     + encodeURIComponent(C.naslovEvent) +
+    '&dates='    + utc(start) + '/' + utc(end) +
+    '&details='  + encodeURIComponent(C.opisEvent) +
+    '&location=' + encodeURIComponent(C.lokacija);
+
+  document.getElementById('ics').addEventListener('click', function(){
+    var ics = [
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Outliers//Masterclass//SR','BEGIN:VEVENT',
+      'UID:' + Date.now() + '@excelgrasic.com',
+      'DTSTAMP:' + utc(new Date()),
+      'DTSTART:' + utc(start),
+      'DTEND:'   + utc(end),
+      'SUMMARY:' + C.naslovEvent,
+      'DESCRIPTION:' + C.opisEvent,
+      'LOCATION:' + C.lokacija,
+      'BEGIN:VALARM','TRIGGER:-PT30M','ACTION:DISPLAY','DESCRIPTION:Masterclass počinje za 30 minuta','END:VALARM',
+      'END:VEVENT','END:VCALENDAR'
+    ].join('\r\n');
+    var url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+    var a = document.createElement('a');
+    a.href = url; a.download = 'masterclass-outliers.ics';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+  });
+
+  /* ---------- zajednica (opciono) ---------- */
+  if (C.zajednicaUrl) {
+    document.getElementById('community').style.display = '';
+    document.getElementById('community-link').href = C.zajednicaUrl;
+  }
+
+  /* ---------- konverzija ---------- */
+  if (typeof fbq === 'function') { try { fbq('track', 'CompleteRegistration'); } catch(e){} }
+  if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch(e){} }
+})();
+</script>
+</body>
+</html>

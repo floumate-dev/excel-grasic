@@ -1,0 +1,34 @@
+/* ============================================================
+   Excel Grašić / Outliers - brand tokeni
+   Izvučeno sa excelgrasic.com (Bricks tema, /productivity-masterclass/)
+   Stranice su self-contained; ovaj fajl je referenca.
+   ============================================================ */
+:root{
+  /* osnova - stranica je SVETLA, zelene trake su akcenat */
+  --white:#ffffff;      /* body pozadina */
+  --ink:#363636;        /* body tekst */
+  --ink-2:#6b7570;      /* sekundarni tekst */
+
+  /* brend */
+  --green:#004d3a;      /* --primary  hsl(165,100%,15.1%) - hero / CTA trake */
+  --deep:#001812;       /* footer, najtamnija */
+  --lime:#e1f25e;       /* --secondary hsl(67,85.1%,65.9%) - CTA dugmad */
+  --leaf:#75a34d;       /* --tertiary  hsl(92,35.8%,47.1%) - akcenat */
+
+  /* svetle podloge */
+  --cream:#ecede5;      /* alternativna traka (press, pripremi se) */
+  --mint:#e1eae8;       /* kartice */
+  --line:#dfe5e2;       /* linije */
+
+  --r:16px;             /* radijus kartica i dugmadi (isti kao na sajtu) */
+  --font:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+/* Tipografija kao na sajtu: naslovi su weight 500, ne bold.
+   H1 ~52px / 1.1 · H2 ~30px / 1.2 · body 16px / 1.6
+   CTA: bg --lime, tekst --green, weight 700, radius 16px.
+   Sekundarno dugme: transparent + 1px solid --green.
+
+   Redosled traka na originalu:
+   belo → ZELENO (hero) → belo → cream (press) → belo → ZELENO (prijava) → deep (footer)
+*/

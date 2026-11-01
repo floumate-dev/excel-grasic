@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Još jedan korak - Besplatan AI Masterclass | Outliers</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   KONFIGURACIJA
+   ============================================================ */
+window.MC = {
+  datumTekst: "četvrtak, 20.11. u 19h",   /* TODO: potvrditi datum */
+  nextUrl:    "thankyou.html",
+
+  /* VSL na ovoj stranici. TODO: zameniti ID-em novog bridge videa. */
+  vimeoId:    "1193208786",
+
+  /* Anketa. Ostavi prazno dok ne stigne pravi ID - tada se prikazuje fallback dugme. */
+  typeformId: "",
+
+  progres:    62
+};
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --white:#ffffff; --ink:#363636; --ink-2:#6b7570;
+  --green:#004d3a; --deep:#001812; --lime:#e1f25e; --leaf:#75a34d;
+  --cream:#ecede5; --mint:#e1eae8; --line:#dfe5e2; --r:16px;
+  --font:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+body{background:var(--white);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+
+/* ---------- traka + progres ---------- */
+.bar-fix{position:fixed;top:0;left:0;width:100%;z-index:90}
+.bar-alert{background:var(--lime);padding:12px 20px;text-align:center}
+.bar-alert span{font-size:clamp(.68rem,2.6vw,.8rem);font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
+.bar-prog{background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 20px}
+.track{position:relative;max-width:1000px;margin:0 auto;height:26px;background:var(--mint);border-radius:9px;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:9px;
+  background:linear-gradient(90deg,var(--green) 0%,var(--leaf) 62%,var(--lime) 100%);
+  animation:grow 1.6s cubic-bezier(.25,.46,.45,.94) .25s forwards}
+@keyframes grow{to{width:var(--pct)}}
+.fill::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shim 2.8s ease-in-out 2s infinite}
+@keyframes shim{to{left:120%}}
+.track-lab{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
+  font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--cream);pointer-events:none;text-shadow:0 1px 3px rgba(0,16,12,.45)}
+.bar-spacer{height:94px}
+
+/* ---------- glavni deo ---------- */
+.stage{position:relative;overflow:hidden;background:var(--green);color:var(--cream)}
+.stage::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(236,237,229,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(236,237,229,.055) 1px,transparent 1px);
+  background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 70% at 50% 18%,#000 18%,transparent 78%)}
+.stage::after{content:"";position:absolute;width:560px;height:560px;right:-200px;top:-220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(225,242,94,.14),transparent 62%);pointer-events:none}
+.shell{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:clamp(36px,5vw,58px) 20px clamp(56px,7vw,88px);text-align:center}
+.pill{display:inline-flex;align-items:center;gap:9px;background:rgba(225,242,94,.12);border:1px solid rgba(225,242,94,.34);
+  color:var(--lime);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:999px;margin-bottom:24px}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+/* redovi priblizno jednake duzine; nikad usamljena rec u poslednjem redu */
+h1,h2,h3{text-wrap:balance}
+p,li{text-wrap:pretty}
+.nb{white-space:nowrap}
+h1{font-size:clamp(1.85rem,5vw,3rem);font-weight:500;line-height:1.12;letter-spacing:-.025em;margin-bottom:16px;color:var(--cream)}
+.lime{color:var(--lime)}
+.sub{max-width:640px;margin:0 auto;color:rgba(236,237,229,.8);font-size:clamp(.96rem,1.6vw,1.05rem)}
+.sub b{color:var(--cream);font-weight:600}
+.hello{display:block;font-size:.9rem;color:var(--lime);font-weight:600;margin-bottom:12px;letter-spacing:.01em}
+
+.vsl-wrap{position:relative;margin:clamp(28px,4vw,44px) auto 0;max-width:880px}
+.vsl-wrap::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.45);border-radius:var(--r);
+  transform:translate(14px,14px);pointer-events:none}
+.vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,16,12,.45)}
+.vsl::before{content:"";display:block;padding-top:56.25%}
+.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+.cta-wrap{margin-top:clamp(30px,4vw,42px)}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--lime);color:var(--green);
+  font-family:var(--font);font-weight:700;font-size:clamp(.96rem,1.7vw,1.1rem);padding:18px 36px;border-radius:var(--r);border:0;cursor:pointer;
+  text-decoration:none;overflow:hidden;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .18s ease}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+  transform:translateX(-120%);transition:transform .6s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,16,12,.3)}
+.btn:hover::after{transform:translateX(120%)}
+.cta-note{display:block;margin-top:12px;font-size:.82rem;color:rgba(236,237,229,.6)}
+
+.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:clamp(30px,4vw,44px)}
+.step{display:flex;align-items:center;gap:9px;background:rgba(236,237,229,.08);border:1px solid rgba(236,237,229,.16);
+  border-radius:999px;padding:9px 17px;font-size:.82rem;color:rgba(236,237,229,.78)}
+.step b{color:var(--cream);font-weight:600}
+.step .n{width:20px;height:20px;border-radius:50%;background:rgba(236,237,229,.12);border:1px solid rgba(236,237,229,.3);
+  color:rgba(236,237,229,.8);font-size:.66rem;font-weight:700;display:grid;place-items:center}
+.step.done .n{background:var(--lime);border-color:var(--lime);color:var(--green)}
+
+/* ---------- anketa ---------- */
+.survey{max-height:0;opacity:0;overflow:hidden;transition:max-height .7s ease,opacity .5s ease;padding:0 20px;background:var(--cream)}
+.survey.open{max-height:1500px;opacity:1;padding-top:56px;padding-bottom:72px}
+.survey-in{max-width:880px;margin:0 auto}
+.divider{display:flex;align-items:center;gap:16px;margin:0 0 24px}
+.divider .ln{flex:1;height:1px;background:var(--line)}
+.divider span{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.survey-box{background:var(--white);border-radius:20px;padding:clamp(16px,2.4vw,26px);box-shadow:0 24px 60px rgba(0,77,58,.1)}
+.survey-box [data-tf-live]{min-height:520px}
+.survey-fallback{text-align:center;padding:40px 20px}
+.survey-fallback p{color:var(--ink-2);font-size:.95rem;margin-bottom:22px}
+
+footer{background:var(--deep);padding:28px 20px;text-align:center}
+.foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
+.foot-by a{color:rgba(236,237,229,.6);font-weight:600;text-decoration:none}
+.foot-by a:hover{color:var(--lime)}
+footer img{height:22px;width:auto;margin:0 auto 10px}
+footer p{font-size:.76rem;color:rgba(236,237,229,.5)}
+
+@media (max-width:680px){
+  .bar-spacer{height:88px}
+  .steps{gap:8px}
+  .step{padding:8px 13px;font-size:.78rem}
+  .vsl-wrap::before{transform:translate(9px,9px)}
+}
+</style>
+</head>
+<body>
+
+<div class="bar-fix">
+  <div class="bar-alert"><span>Ne zatvaraj i ne osvežavaj ovu stranicu</span></div>
+  <div class="bar-prog">
+    <div class="track">
+      <div class="fill" id="fill"></div>
+      <span class="track-lab" id="track-lab">62%</span>
+    </div>
+  </div>
+</div>
+<div class="bar-spacer"></div>
+
+<section class="stage">
+  <div class="shell">
+    <span class="pill"><span class="dot"></span>Tvoja prijava je skoro gotova</span>
+
+    <h1><span class="hello" id="hello"></span>Pogledaj <span class="lime">kratak video</span><br>i otključaj poslednji korak</h1>
+    <p class="sub">Video ispod ti objašnjava kako da izvučeš maksimum iz Masterclassa i šta te tačno čeka <b id="dt"></b>. Posle njega popunjavaš kratku anketu - na osnovu nje prilagođavamo primere tvojoj poziciji.</p>
+
+    <div class="vsl-wrap">
+      <div class="vsl"><iframe id="vsl" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Sledeći korak"></iframe></div>
+    </div>
+
+    <div class="cta-wrap">
+      <button class="btn" id="open-survey">Popuni anketu i otključaj pristup →</button>
+      <span class="cta-note">Traje manje od minuta</span>
+    </div>
+
+    <div class="steps">
+      <div class="step done"><span class="n">✓</span><b>Prijava poslata</b></div>
+      <div class="step"><span class="n">2</span><span>Kratka anketa</span></div>
+      <div class="step"><span class="n">3</span><span>Pristupni link na mejl</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="survey" id="survey">
+  <div class="survey-in">
+    <div class="divider"><span class="ln"></span><span>Anketa</span><span class="ln"></span></div>
+    <div class="survey-box" id="survey-box"></div>
+  </div>
+</div>
+
+<footer>
+  <img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)">
+  <p>© <span id="yr"></span> Outliers - Excel Grašić</p>
+  <p class="foot-by">powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
+</footer>
+
+<script>
+(function(){
+  var C = window.MC, p = new URLSearchParams(location.search);
+
+  /* ---------- progres ---------- */
+  document.getElementById('fill').style.setProperty('--pct', C.progres + '%');
+  document.getElementById('track-lab').textContent = C.progres + '%';
+  document.getElementById('dt').textContent = C.datumTekst;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---------- pozdrav po imenu ---------- */
+  var ime = (p.get('firstname') || p.get('ime') || '').trim();
+  if (ime) {
+    ime = ime.charAt(0).toUpperCase() + ime.slice(1);
+    document.getElementById('hello').textContent = ime + ', još samo jedan korak.';
+  }
+
+  /* ---------- VSL ---------- */
+  document.getElementById('vsl').src =
+    'https://player.vimeo.com/video/' + C.vimeoId + '?autoplay=1&title=0&portrait=0&byline=0';
+
+  /* ---------- anketa ---------- */
+  var box = document.getElementById('survey-box');
+  if (C.typeformId) {
+    box.innerHTML = '<div data-tf-live="' + C.typeformId + '"></div>';
+    var s = document.createElement('script');
+    s.src = 'https://embed.typeform.com/next/embed.js';
+    document.body.appendChild(s);
+  } else {
+    /* Fallback dok anketa nije postavljena - vodi pravo na thank you */
+    box.innerHTML =
+      '<div class="survey-fallback"><p>Anketa se uskoro postavlja. U međuvremenu možeš da nastaviš na poslednji korak.</p>' +
+      '<a class="btn" href="' + C.nextUrl + location.search + '">Nastavi na poslednji korak →</a></div>';
+  }
+
+  document.getElementById('open-survey').addEventListener('click', function(){
+    var sec = document.getElementById('survey');
+    sec.classList.add('open');
+    requestAnimationFrame(function(){ sec.scrollIntoView({ behavior:'smooth', block:'start' }); });
+  });
+
+  /* ---------- Meta advanced matching + Lead (ako je piksel ucitan) ---------- */
+  if (typeof fbq === 'function') {
+    try {
+      var em = (p.get('email') || '').trim().toLowerCase();
+      if (em) fbq('init', 'PIXEL_ID', { em: em });   /* TODO: upisati pravi pixel ID */
+      fbq('track', 'Lead');
+    } catch(e){}
+  }
+})();
+</script>
+</body>
+</html>
