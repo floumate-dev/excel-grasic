@@ -23,6 +23,9 @@ window.MC = {
   opisEvent:   "Link za pristup stiže na mejl pre početka. Pitanja: office@excelgrasic.com",
   lokacija:    "Online",
 
+  /* Video u heroju. TODO: zameniti ID-em pravog videa za ovu stranicu. */
+  vimeoId:     "1193208786",
+
   /* Adresa sa koje smo poslali potvrdu - pise na kartici i trazi se u Gmailu. */
   posiljalac:  "office@excelgrasic.com",
 
@@ -118,6 +121,14 @@ p,li{text-wrap:pretty}
 @media (prefers-reduced-motion:reduce){.tick svg{animation:none;stroke-dashoffset:0}}
 .hello{display:block;color:var(--lime);font-size:.6em;margin-bottom:8px}
 .sub{margin:16px auto 0;max-width:58ch;font-size:clamp(.96rem,1.4vw,1.05rem);color:rgba(236,237,229,.85);text-wrap:balance}
+
+/* video sa lime ramom, isto kao hero na optinu */
+.vsl-shell{position:relative;margin-top:clamp(26px,3.4vw,36px)}
+.vsl-shell::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.5);
+  border-radius:var(--r);transform:translate(14px,14px);pointer-events:none}
+.vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,0,0,.4)}
+.vsl::before{content:"";display:block;padding-top:56.25%}
+.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 /* ULAZNICA - isti motiv kao na optinu */
 .ticket{position:relative;display:grid;grid-template-columns:138px 1fr;text-align:left;
@@ -239,6 +250,7 @@ footer a:hover{color:var(--lime)}
   .tk-t{margin:0 0 0 auto;padding:0;border:0;width:auto}
   .tk-body{border-left:0;border-top:2px dashed var(--line)}
   .tk-cut{display:none}
+  .vsl-shell::before{transform:translate(9px,9px)}
   .cal{flex-direction:column}
   .cal .btn{width:100%}
   .cd-box{padding:11px 4px}
@@ -258,6 +270,10 @@ footer a:hover{color:var(--lime)}
     <div class="tick"><svg viewBox="0 0 24 24"><path d="m4 12 5.5 5.5L20 7"/></svg></div>
     <h1><span class="hello" id="hello"></span>Prijava je <span class="lime">potvrđena</span></h1>
     <p class="sub">Mesto na Masterclassu je rezervisano. Link za pristup stiže ti na mejl, a podsetnik dobijaš i pre samog početka.</p>
+
+    <div class="vsl-shell">
+      <div class="vsl"><iframe id="vsl" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vidimo se na Masterclassu"></iframe></div>
+    </div>
 
     <div class="ticket">
       <div class="tk-stub">
@@ -382,6 +398,10 @@ footer a:hover{color:var(--lime)}
     }
   }
   tick(); setInterval(tick, 1000);
+
+  /* ---------- video ---------- */
+  document.getElementById('vsl').src =
+    'https://player.vimeo.com/video/' + C.vimeoId + '?autoplay=1&title=0&portrait=0&byline=0';
 
   /* ---------- korak 1: otvaranje mejla ---------- */
   var mail = (p.get('email') || '').trim().toLowerCase();
