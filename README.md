@@ -22,8 +22,10 @@ Svaka stranica ima `window.MC = {…}` blok na vrhu `<head>`. Sve što se menja 
    Trenutno stoji placeholder **20.11. u 19h**.
 2. **Bridge VSL** - `vimeoId` u `application.html` sada pokazuje na isti video kao optin.
    Zameniti ID-em novog videa kada stigne.
-3. **Anketa** - `typeformId` u `application.html` je prazan, pa se prikazuje fallback dugme
-   koje vodi pravo na thank you. Upisati Typeform ID da se embeduje anketa.
+3. **Anketa** - u `application.html` postoji prazan slot `#survey-box`. Dok je prazan,
+   u njemu stoji privremena kartica sa dugmetom koje vodi pravo na thank you. Kad stigne
+   embed kod (Typeform, Tally, Google Forms, Make), zameni se ceo sadrzaj tog diva -
+   nista drugo ne treba dirati, parametri iz URL-a se i dalje prosledjuju dalje.
 4. **Pikseli** - stranice okidaju `fbq`/`ttq` evente samo ako je bazni piksel već učitan.
    Dodati GTM/Meta/TikTok snippet u `<head>` svake stranice (ili preko hosting platforme).
    U `application.html` postoji `PIXEL_ID` placeholder za Meta advanced matching.

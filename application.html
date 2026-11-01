@@ -11,18 +11,17 @@
 
 <script>
 /* ============================================================
-   KONFIGURACIJA
+   KONFIGURACIJA - sve sto se menja je ovde
    ============================================================ */
 window.MC = {
-  datumTekst: "četvrtak, 20.11. u 19h",   /* TODO: potvrditi datum */
+  datumISO:   "2026-11-20T19:00:00+01:00",   /* TODO: potvrditi datum sa klijentom */
+  datumTekst: "četvrtak, 20.11. u 19h",
   nextUrl:    "thankyou.html",
 
   /* VSL na ovoj stranici. TODO: zameniti ID-em novog bridge videa. */
   vimeoId:    "1193208786",
 
-  /* Anketa. Ostavi prazno dok ne stigne pravi ID - tada se prikazuje fallback dugme. */
-  typeformId: "",
-
+  /* Koliko je prijava popunjena, u procentima. */
   progres:    62
 };
 </script>
@@ -39,11 +38,51 @@ html{scroll-behavior:smooth}
 body{background:var(--white);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
 img{max-width:100%;display:block}
 
-/* ---------- traka + progres ---------- */
+/* redovi priblizno jednake duzine; nikad usamljena rec u poslednjem redu */
+h1,h2,h3{font-weight:500;letter-spacing:-.025em;line-height:1.12;text-wrap:balance}
+h1{font-size:clamp(1.85rem,4.6vw,2.9rem);color:var(--cream)}
+h2{font-size:clamp(1.5rem,3.4vw,2.05rem);line-height:1.18}
+h3{font-size:clamp(1.05rem,1.9vw,1.25rem);line-height:1.3}
+p,li{text-wrap:pretty}
+.nb{white-space:nowrap}
+.lime{color:var(--lime)}
+
+/* ============================================================
+   DUGMAD - isto kao na optinu
+   ============================================================ */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;
+  background:linear-gradient(145deg,#f2ff8c 0%,var(--lime) 44%,#cde14c 100%);
+  color:var(--green);font-family:var(--font);font-weight:700;letter-spacing:-.01em;
+  font-size:clamp(.95rem,1.5vw,1.12rem);padding:18px 26px 18px 32px;border-radius:999px;
+  text-decoration:none;border:0;cursor:pointer;overflow:hidden;
+  box-shadow:0 4px 0 0 #a7bd3d, 0 16px 30px rgba(0,24,18,.26);
+  animation:btnGlow 3.2s ease-out infinite;
+  transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s ease}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.6) 50%,transparent 68%);
+  transform:translateX(-120%);transition:transform .6s ease}
+.btn:hover{animation:none;transform:translateY(2px);box-shadow:0 2px 0 0 #a7bd3d,0 10px 20px rgba(0,24,18,.3)}
+.btn:active{animation:none;transform:translateY(4px);box-shadow:0 0 0 0 #a7bd3d,0 6px 14px rgba(0,24,18,.28)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:focus-visible{outline:3px solid rgba(225,242,94,.9);outline-offset:3px}
+.btn .arw{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;
+  border-radius:50%;background:rgba(0,77,58,.14);font-size:1rem;line-height:1;
+  transition:transform .22s cubic-bezier(.22,1,.36,1),background .22s ease}
+.btn:hover .arw{transform:translateX(4px);background:rgba(0,77,58,.22)}
+@keyframes btnGlow{
+  0%,70%,100%{box-shadow:0 4px 0 0 #a7bd3d,0 16px 30px rgba(0,24,18,.26),0 0 0 0 rgba(225,242,94,.5)}
+  35%{box-shadow:0 4px 0 0 #a7bd3d,0 16px 30px rgba(0,24,18,.26),0 0 0 14px rgba(225,242,94,0)}}
+@media (prefers-reduced-motion:reduce){.btn{animation:none}}
+
+/* ============================================================
+   GORNJA TRAKA - upozorenje i progres
+   ============================================================ */
 .bar-fix{position:fixed;top:0;left:0;width:100%;z-index:90}
-.bar-alert{background:var(--lime);padding:12px 20px;text-align:center}
-.bar-alert span{font-size:clamp(.68rem,2.6vw,.8rem);font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--green)}
-.bar-prog{background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 20px}
+.bar-alert{background:var(--lime);padding:11px 20px;text-align:center}
+.bar-alert span{display:inline-flex;align-items:center;gap:9px;
+  font-size:clamp(.66rem,2.5vw,.78rem);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green)}
+.bar-alert svg{width:15px;height:15px;stroke:var(--green);fill:none;stroke-width:2.2;flex:0 0 15px;
+  stroke-linecap:round;stroke-linejoin:round}
+.bar-prog{background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:13px 20px}
 .track{position:relative;max-width:1000px;margin:0 auto;height:26px;background:var(--mint);border-radius:9px;overflow:hidden}
 .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:9px;
   background:linear-gradient(90deg,var(--green) 0%,var(--leaf) 62%,var(--lime) 100%);
@@ -53,88 +92,124 @@ img{max-width:100%;display:block}
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shim 2.8s ease-in-out 2s infinite}
 @keyframes shim{to{left:120%}}
 .track-lab{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--cream);pointer-events:none;text-shadow:0 1px 3px rgba(0,16,12,.45)}
-.bar-spacer{height:94px}
+  font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--cream);pointer-events:none;
+  text-shadow:0 1px 3px rgba(0,16,12,.45)}
+.bar-spacer{height:92px}
+@media (prefers-reduced-motion:reduce){.fill{animation:none;width:var(--pct)}.fill::after{animation:none}}
 
-/* ---------- glavni deo ---------- */
+/* ============================================================
+   ZELENI DEO - video i poziv na anketu
+   ============================================================ */
 .stage{position:relative;overflow:hidden;background:var(--green);color:var(--cream)}
+/* tabelarna mreza, isti motiv kao na optinu */
 .stage::before{content:"";position:absolute;inset:0;
   background-image:linear-gradient(rgba(236,237,229,.055) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(236,237,229,.055) 1px,transparent 1px);
-  background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 70% at 50% 18%,#000 18%,transparent 78%)}
-.stage::after{content:"";position:absolute;width:560px;height:560px;right:-200px;top:-220px;border-radius:50%;
-  background:radial-gradient(circle,rgba(225,242,94,.14),transparent 62%);pointer-events:none}
-.shell{position:relative;z-index:2;max-width:980px;margin:0 auto;padding:clamp(36px,5vw,58px) 20px clamp(56px,7vw,88px);text-align:center}
+  background-size:68px 44px;
+  mask-image:radial-gradient(ellipse 90% 75% at 50% 20%,#000 20%,transparent 78%)}
+.stage::after{content:"";position:absolute;width:620px;height:620px;right:-200px;top:-260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
+.shell{position:relative;z-index:2;max-width:820px;margin:0 auto;padding:clamp(34px,5vw,56px) 20px clamp(40px,5vw,62px);text-align:center}
 .pill{display:inline-flex;align-items:center;gap:9px;background:rgba(225,242,94,.12);border:1px solid rgba(225,242,94,.34);
-  color:var(--lime);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:9px 18px;border-radius:999px;margin-bottom:24px}
-.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 2.2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-/* redovi priblizno jednake duzine; nikad usamljena rec u poslednjem redu */
-h1,h2,h3{text-wrap:balance}
-p,li{text-wrap:pretty}
-.nb{white-space:nowrap}
-h1{font-size:clamp(1.85rem,5vw,3rem);font-weight:500;line-height:1.12;letter-spacing:-.025em;margin-bottom:16px;color:var(--cream)}
-.lime{color:var(--lime)}
-.sub{max-width:640px;margin:0 auto;color:rgba(236,237,229,.8);font-size:clamp(.96rem,1.6vw,1.05rem)}
+  color:var(--lime);font-size:.72rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  padding:9px 16px;border-radius:999px;margin-bottom:20px}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 0 0 rgba(225,242,94,.6);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(225,242,94,0)}100%{box-shadow:0 0 0 0 rgba(225,242,94,0)}}
+.hello{display:block;color:var(--lime);font-size:.62em;margin-bottom:8px}
+.sub{margin:18px auto 0;max-width:62ch;font-size:clamp(.96rem,1.4vw,1.05rem);color:rgba(236,237,229,.85);text-wrap:balance}
 .sub b{color:var(--cream);font-weight:600}
-.hello{display:block;font-size:.9rem;color:var(--lime);font-weight:600;margin-bottom:12px;letter-spacing:.01em}
 
-.vsl-wrap{position:relative;margin:clamp(28px,4vw,44px) auto 0;max-width:880px}
-.vsl-wrap::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.45);border-radius:var(--r);
-  transform:translate(14px,14px);pointer-events:none}
-.vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,16,12,.45)}
+/* video sa lime ramom, isto kao hero na optinu */
+.vsl-shell{position:relative;margin-top:clamp(26px,3.4vw,36px)}
+.vsl-shell::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.5);
+  border-radius:var(--r);transform:translate(14px,14px);pointer-events:none}
+.vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,0,0,.4)}
 .vsl::before{content:"";display:block;padding-top:56.25%}
 .vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
-.cta-wrap{margin-top:clamp(30px,4vw,42px)}
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--lime);color:var(--green);
-  font-family:var(--font);font-weight:700;font-size:clamp(.96rem,1.7vw,1.1rem);padding:18px 36px;border-radius:var(--r);border:0;cursor:pointer;
-  text-decoration:none;overflow:hidden;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .18s ease}
-.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
-  transform:translateX(-120%);transition:transform .6s ease}
-.btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,16,12,.3)}
-.btn:hover::after{transform:translateX(120%)}
+.cta-wrap{margin-top:clamp(26px,3.4vw,34px)}
 .cta-note{display:block;margin-top:12px;font-size:.82rem;color:rgba(236,237,229,.6)}
 
-.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:clamp(30px,4vw,44px)}
-.step{display:flex;align-items:center;gap:9px;background:rgba(236,237,229,.08);border:1px solid rgba(236,237,229,.16);
-  border-radius:999px;padding:9px 17px;font-size:.82rem;color:rgba(236,237,229,.78)}
-.step b{color:var(--cream);font-weight:600}
-.step .n{width:20px;height:20px;border-radius:50%;background:rgba(236,237,229,.12);border:1px solid rgba(236,237,229,.3);
-  color:rgba(236,237,229,.8);font-size:.66rem;font-weight:700;display:grid;place-items:center}
-.step.done .n{background:var(--lime);border-color:var(--lime);color:var(--green)}
+/* termin */
+.slot{display:inline-flex;align-items:center;gap:10px;margin-top:22px;
+  background:rgba(0,24,18,.42);border:1px solid rgba(236,237,229,.14);border-radius:13px;padding:11px 16px;
+  font-size:.88rem;color:rgba(236,237,229,.85)}
+.slot svg{width:17px;height:17px;stroke:var(--lime);fill:none;stroke-width:1.8;flex:0 0 17px;
+  stroke-linecap:round;stroke-linejoin:round}
+.slot b{color:var(--cream);font-weight:600}
 
-/* ---------- anketa ---------- */
-.survey{max-height:0;opacity:0;overflow:hidden;transition:max-height .7s ease,opacity .5s ease;padding:0 20px;background:var(--cream)}
-.survey.open{max-height:1500px;opacity:1;padding-top:56px;padding-bottom:72px}
-.survey-in{max-width:880px;margin:0 auto}
-.divider{display:flex;align-items:center;gap:16px;margin:0 0 24px}
-.divider .ln{flex:1;height:1px;background:var(--line)}
-.divider span{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
-.survey-box{background:var(--white);border-radius:20px;padding:clamp(16px,2.4vw,26px);box-shadow:0 24px 60px rgba(0,77,58,.1)}
-.survey-box [data-tf-live]{min-height:520px}
-.survey-fallback{text-align:center;padding:40px 20px}
-.survey-fallback p{color:var(--ink-2);font-size:.95rem;margin-bottom:22px}
+/* tri koraka */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:clamp(30px,4vw,40px);text-align:left}
+.step{display:flex;gap:12px;align-items:flex-start;background:rgba(0,24,18,.34);
+  border:1px solid rgba(236,237,229,.12);border-radius:14px;padding:14px 15px;
+  font-size:.86rem;line-height:1.4;color:rgba(236,237,229,.72)}
+.step .n{flex:0 0 26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  background:rgba(236,237,229,.1);color:rgba(236,237,229,.65);font-size:.78rem;font-weight:700}
+.step.done{border-color:rgba(225,242,94,.3)}
+.step.done .n{background:var(--lime);color:var(--green)}
+.step.now{background:rgba(225,242,94,.1);border-color:rgba(225,242,94,.45);color:var(--cream)}
+.step.now .n{background:rgba(225,242,94,.22);color:var(--lime)}
+.step b{display:block;color:var(--cream);font-weight:600}
 
-footer{background:var(--deep);padding:28px 20px;text-align:center}
+/* ============================================================
+   ANKETA
+   ============================================================ */
+.survey{background:var(--cream);padding:clamp(40px,5vw,66px) 20px}
+.survey-in{max-width:820px;margin:0 auto}
+.survey-head{text-align:center;margin-bottom:clamp(22px,3vw,30px)}
+.survey-head h2{color:var(--green)}
+.survey-head p{margin-top:12px;color:var(--ink-2);max-width:56ch;margin-left:auto;margin-right:auto;text-wrap:balance}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--green);margin-bottom:14px}
+.eyebrow::before{content:"";width:18px;height:2px;background:var(--leaf)}
+
+/* ovde ide embed ankete */
+.survey-box{background:var(--white);border-radius:20px;padding:clamp(20px,2.6vw,28px);
+  box-shadow:0 30px 70px rgba(0,16,12,.12);min-height:420px;display:flex;flex-direction:column}
+.survey-box > :only-child{flex:1}
+/* privremeni sadrzaj dok embed ne stigne */
+.ph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  border:2px dashed var(--line);border-radius:14px;padding:34px 24px;gap:14px}
+.ph-ico{width:46px;height:46px;border-radius:50%;background:var(--mint);display:grid;place-items:center}
+.ph-ico svg{width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ph h3{color:var(--green)}
+.ph p{font-size:.9rem;color:var(--ink-2);max-width:42ch}
+.ph .btn{margin-top:6px}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{background:var(--deep);padding:30px 20px;text-align:center}
+footer img{height:24px;width:auto;margin:0 auto 12px}
+footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 .foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
 .foot-by a{color:rgba(236,237,229,.6);font-weight:600;text-decoration:none}
 .foot-by a:hover{color:var(--lime)}
-footer img{height:22px;width:auto;margin:0 auto 10px}
-footer p{font-size:.76rem;color:rgba(236,237,229,.5)}
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width:680px){
-  .bar-spacer{height:88px}
-  .steps{gap:8px}
-  .step{padding:8px 13px;font-size:.78rem}
-  .vsl-wrap::before{transform:translate(9px,9px)}
+  .bar-spacer{height:86px}
+  .steps{grid-template-columns:1fr}
+  .cta-wrap .btn{width:100%;font-size:.92rem;padding:17px 14px;gap:0;white-space:nowrap}
+  .cta-wrap .btn .arw{display:none}
+  .vsl-shell::before{transform:translate(9px,9px)}
+  .survey-box{min-height:360px;padding:16px}
 }
 </style>
 </head>
 <body>
 
+<!-- ============ GORNJA TRAKA ============ -->
 <div class="bar-fix">
-  <div class="bar-alert"><span>Ne zatvaraj i ne osvežavaj ovu stranicu</span></div>
+  <div class="bar-alert">
+    <span>
+      <svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      Ne zatvaraj i ne osvežavaj ovu stranicu
+    </span>
+  </div>
   <div class="bar-prog">
     <div class="track">
       <div class="fill" id="fill"></div>
@@ -144,36 +219,63 @@ footer p{font-size:.76rem;color:rgba(236,237,229,.5)}
 </div>
 <div class="bar-spacer"></div>
 
+<!-- ============ VIDEO ============ -->
 <section class="stage">
   <div class="shell">
-    <span class="pill"><span class="dot"></span>Tvoja prijava je skoro gotova</span>
+    <span class="pill"><span class="dot"></span>Prijava je primljena</span>
+    <h1><span class="hello" id="hello"></span>Pogledaj <span class="lime">kratak video</span> i otključaj poslednji korak</h1>
+    <!-- TODO: zameniti pravim copyjem kad stigne od klijenta -->
+    <p class="sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-    <h1><span class="hello" id="hello"></span>Pogledaj <span class="lime">kratak video</span><br>i otključaj poslednji korak</h1>
-    <p class="sub">Video ispod ti objašnjava kako da izvučeš maksimum iz Masterclassa i šta te tačno čeka <b id="dt"></b>. Posle njega popunjavaš kratku anketu - na osnovu nje prilagođavamo primere tvojoj poziciji.</p>
-
-    <div class="vsl-wrap">
+    <div class="vsl-shell">
       <div class="vsl"><iframe id="vsl" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Sledeći korak"></iframe></div>
     </div>
 
     <div class="cta-wrap">
-      <button class="btn" id="open-survey">Popuni anketu i otključaj pristup →</button>
+      <button class="btn" type="button" id="open-survey"><span>POPUNI ANKETU I ZAVRŠI PRIJAVU</span><span class="arw" aria-hidden="true">&#8594;</span></button>
       <span class="cta-note">Traje manje od minuta</span>
     </div>
 
+    <div class="slot">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+      <span>Termin: <b id="slot-date"></b></span>
+    </div>
+
     <div class="steps">
-      <div class="step done"><span class="n">✓</span><b>Prijava poslata</b></div>
-      <div class="step"><span class="n">2</span><span>Kratka anketa</span></div>
-      <div class="step"><span class="n">3</span><span>Pristupni link na mejl</span></div>
+      <div class="step done"><span class="n">&#10003;</span><span><b>Prijava poslata</b>Podaci su stigli kod nas</span></div>
+      <div class="step now"><span class="n">2</span><span><b>Kratka anketa</b>Jedan minut, ispod videa</span></div>
+      <div class="step"><span class="n">3</span><span><b>Pristupni link</b>Stiže ti na mejl</span></div>
     </div>
   </div>
 </section>
 
-<div class="survey" id="survey">
+<!-- ============ ANKETA ============ -->
+<section class="survey" id="survey">
   <div class="survey-in">
-    <div class="divider"><span class="ln"></span><span>Anketa</span><span class="ln"></span></div>
-    <div class="survey-box" id="survey-box"></div>
+    <div class="survey-head">
+      <span class="eyebrow">Poslednji korak</span>
+      <h2>Odgovori na nekoliko pitanja</h2>
+      <p>Na osnovu odgovora biramo primere koji odgovaraju tvom poslu. Nema pogrešnog odgovora i ništa od ovoga ne utiče na tvoje mesto na Masterclassu.</p>
+    </div>
+
+    <!-- =========================================================
+         SLOT ZA ANKETU
+         Zameni ceo sadrzaj ovog diva embed kodom (Typeform, Tally,
+         Google Forms, Make forma...). Sve sto nije iframe visine
+         100% radi bez dodatnog CSS-a; iframe dobija visinu sam.
+         ========================================================= -->
+    <div class="survey-box" id="survey-box">
+      <div class="ph">
+        <span class="ph-ico">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </span>
+        <h3>Ovde ide anketa</h3>
+        <p>Slot je spreman - kad stigne embed kod, ubacuje se na ovo mesto. Do tada možeš da nastaviš na poslednji korak.</p>
+        <a class="btn" id="skip" href="thankyou.html"><span>NASTAVI NA POSLEDNJI KORAK</span><span class="arw" aria-hidden="true">&#8594;</span></a>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
 <footer>
   <img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)">
@@ -185,51 +287,49 @@ footer p{font-size:.76rem;color:rgba(236,237,229,.5)}
 (function(){
   var C = window.MC, p = new URLSearchParams(location.search);
 
-  /* ---------- progres ---------- */
+  /* ---------- progres i datumi ---------- */
   document.getElementById('fill').style.setProperty('--pct', C.progres + '%');
   document.getElementById('track-lab').textContent = C.progres + '%';
-  document.getElementById('dt').textContent = C.datumTekst;
+  document.getElementById('slot-date').textContent = C.datumTekst;
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---------- razmak ispod fiksne trake prati njenu stvarnu visinu ---------- */
+  var bar = document.querySelector('.bar-fix'), spacer = document.querySelector('.bar-spacer');
+  function meriTraku(){ spacer.style.height = bar.offsetHeight + 'px'; }
+  meriTraku();
+  window.addEventListener('resize', meriTraku, { passive: true });
+  window.addEventListener('load', meriTraku);
 
   /* ---------- pozdrav po imenu ---------- */
   var ime = (p.get('firstname') || p.get('ime') || '').trim();
   if (ime) {
-    ime = ime.charAt(0).toUpperCase() + ime.slice(1);
-    document.getElementById('hello').textContent = ime + ', još samo jedan korak.';
+    ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1);
+    document.getElementById('hello').textContent = ime + ', još jedan korak.';
   }
 
   /* ---------- VSL ---------- */
   document.getElementById('vsl').src =
     'https://player.vimeo.com/video/' + C.vimeoId + '?autoplay=1&title=0&portrait=0&byline=0';
 
-  /* ---------- anketa ---------- */
-  var box = document.getElementById('survey-box');
-  if (C.typeformId) {
-    box.innerHTML = '<div data-tf-live="' + C.typeformId + '"></div>';
-    var s = document.createElement('script');
-    s.src = 'https://embed.typeform.com/next/embed.js';
-    document.body.appendChild(s);
-  } else {
-    /* Fallback dok anketa nije postavljena - vodi pravo na thank you */
-    box.innerHTML =
-      '<div class="survey-fallback"><p>Anketa se uskoro postavlja. U međuvremenu možeš da nastaviš na poslednji korak.</p>' +
-      '<a class="btn" href="' + C.nextUrl + location.search + '">Nastavi na poslednji korak →</a></div>';
-  }
+  /* ---------- parametri se prosledjuju dalje kroz funnel ---------- */
+  var qs = location.search;
+  var skip = document.getElementById('skip');
+  if (skip) skip.href = C.nextUrl + qs;
 
+  /* ---------- dugme vodi na anketu ---------- */
   document.getElementById('open-survey').addEventListener('click', function(){
-    var sec = document.getElementById('survey');
-    sec.classList.add('open');
-    requestAnimationFrame(function(){ sec.scrollIntoView({ behavior:'smooth', block:'start' }); });
+    document.getElementById('survey').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* ---------- Meta advanced matching + Lead (ako je piksel ucitan) ---------- */
+  /* ---------- Meta advanced matching + event (ako je piksel ucitan) ---------- */
   if (typeof fbq === 'function') {
     try {
       var em = (p.get('email') || '').trim().toLowerCase();
-      if (em) fbq('init', 'PIXEL_ID', { em: em });   /* TODO: upisati pravi pixel ID */
-      fbq('track', 'Lead');
-    } catch(e){}
+      if (em) fbq('init', 'PIXEL_ID', { em: em, fn: ime.toLowerCase() });   /* TODO: pravi PIXEL_ID */
+      fbq('track', 'CompleteRegistration');
+    } catch (e) {}
   }
+  if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch (e) {} }
 })();
 </script>
 </body>
