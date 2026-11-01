@@ -23,6 +23,12 @@ window.MC = {
   opisEvent:   "Link za pristup stiže na mejl pre početka. Pitanja: office@excelgrasic.com",
   lokacija:    "Online",
 
+  /* Adresa sa koje smo poslali potvrdu - pise na kartici i trazi se u Gmailu. */
+  posiljalac:  "office@excelgrasic.com",
+
+  /* Link za prijavu koji ucesnik kopira i prosledjuje. Prazno = racuna se sam. */
+  prijavaUrl:  "",
+
   /* Opciono: link ka grupi ili zajednici. Prazno = sekcija se ne prikazuje. */
   zajednicaUrl: ""
 };
@@ -174,12 +180,28 @@ p,li{text-wrap:pretty}
   text-transform:uppercase;color:var(--green);margin-bottom:14px}
 .eyebrow::before{content:"";width:18px;height:2px;background:var(--leaf)}
 
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.step{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px 22px}
-.step .n{width:34px;height:34px;border-radius:11px;background:var(--mint);color:var(--green);
-  display:grid;place-items:center;font-weight:700;font-size:.92rem;margin-bottom:14px}
-.step p{font-size:.9rem;color:var(--ink-2);margin-top:8px}
+.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.step{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line);
+  border-radius:var(--r);padding:26px 24px}
+.step .n{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  background:var(--mint);color:var(--green);border-radius:999px;padding:6px 13px;
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:15px}
+.step p{font-size:.92rem;color:var(--ink-2);margin-top:9px}
 .step code{background:var(--cream);padding:2px 6px;border-radius:6px;font-size:.84em;color:var(--green)}
+.step .act{margin-top:auto;padding-top:18px}
+.step .btn{font-size:.88rem;padding:13px 20px 13px 22px}
+.sent{display:block;margin-top:11px;font-size:.8rem;color:var(--ink-2)}
+.sent b{color:var(--green);font-weight:600;word-break:break-all}
+/* polje sa linkom koji se kopira */
+.copy{display:flex;gap:8px;align-items:stretch}
+.copy input{flex:1;min-width:0;background:var(--cream);border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;font-family:var(--font);font-size:.84rem;color:var(--ink-2)}
+.copy input:focus{outline:none;border-color:var(--green)}
+.copy button{flex:0 0 auto;background:var(--green);color:var(--cream);border:0;border-radius:12px;
+  padding:12px 18px;font-family:var(--font);font-size:.84rem;font-weight:700;cursor:pointer;
+  transition:background .15s ease}
+.copy button:hover{background:var(--deep)}
+.copy button.done{background:var(--lime);color:var(--green)}
 
 .note{display:flex;gap:14px;align-items:flex-start;margin-top:clamp(22px,3vw,30px);
   background:var(--mint);border-radius:var(--r);padding:20px 22px}
@@ -215,6 +237,8 @@ footer a:hover{color:var(--lime)}
    ============================================================ */
 @media (max-width:860px){
   .steps{grid-template-columns:1fr}
+  .copy{flex-direction:column}
+  .copy button{padding:13px}
   .prep-list{grid-template-columns:1fr}
 }
 @media (max-width:680px){
@@ -287,28 +311,33 @@ footer a:hover{color:var(--lime)}
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Šta sada</span>
-      <h2>Tri koraka do Masterclassa</h2>
+      <h2>Dva koraka da ti link sigurno stigne</h2>
     </div>
     <div class="steps">
       <div class="step">
-        <div class="n">1</div>
-        <h3>Proveri mejl</h3>
-        <p>Potvrda prijave ti stiže u roku od nekoliko minuta sa adrese <code>office@excelgrasic.com</code>.</p>
+        <span class="n">Korak 1</span>
+        <h3>Odgovori na mejl</h3>
+        <p>Poslali smo ti potvrdu prijave. Otvori je i odgovori jednom rečju - <b>primljeno</b>. Time mejl program vidi da se dopisuješ sa nama, pa pristupni link i podsetnik idu pravo u Inbox umesto u Promocije.</p>
+        <div class="act">
+          <a class="btn" id="open-mail" target="_blank" rel="noopener"><span>OTVORI MEJL</span><span class="arw" aria-hidden="true">&#8594;</span></a>
+          <span class="sent" id="sent-to"></span>
+        </div>
       </div>
       <div class="step">
-        <div class="n">2</div>
-        <h3>Pomeri iz promocija</h3>
-        <p>Ako mejla nema u Inboxu, pogledaj Promocije ili Spam i prevuci ga u Inbox - tako ti ne promakne ni link ni podsetnik.</p>
-      </div>
-      <div class="step">
-        <div class="n">3</div>
-        <h3>Upiši termin</h3>
-        <p>Dodaj Masterclass u kalendar da ti blokira vreme. Traje <b id="dur"></b> i preporučujemo da budeš za računarom.</p>
+        <span class="n">Korak 2</span>
+        <h3>Prosledi link kolegi</h3>
+        <p>Ako neko u tvom timu gubi isto toliko vremena na izveštaje, pošalji mu link za prijavu. Mesto je besplatno, a lakše je primeniti naučeno kada vas je dvoje.</p>
+        <div class="act">
+          <div class="copy">
+            <input id="share-url" type="text" readonly aria-label="Link za prijavu">
+            <button type="button" id="copy-btn">Kopiraj link</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="note">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
-      <p><b>Snimak je dostupan 48 sati nakon Masterclassa</b>, ali najviše izvlače oni koji gledaju uživo - tada možeš da postaviš pitanje i dobiješ odgovor na svoj konkretan slučaj.</p>
+      <p>Masterclass traje <b id="dur"></b> i <b>snimak je dostupan 48 sati</b> nakon njega. Najviše ipak izvlače oni koji gledaju uživo - tada možeš da postaviš pitanje i dobiješ odgovor na svoj konkretan slučaj.</p>
     </div>
   </div>
 </section>
@@ -324,7 +353,7 @@ footer a:hover{color:var(--lime)}
       <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Pripremi jedan svoj fajl.</b> Izveštaj ili tabelu na kojoj gubiš najviše vremena - primere ćeš odmah moći da preslikaš na svoje podatke.</span></li>
       <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Zapiši jedno pitanje.</b> Konkretan problem iz svog posla koji želiš da rešiš uz AI.</span></li>
       <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Budi za računarom.</b> Masterclass je praktičan - lakše je pratiti kada možeš odmah da probaš.</span></li>
-      <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Pozovi kolegu.</b> Ako u timu imate isti problem sa ručnom pripremom izveštaja, prosledi im prijavu.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span><b>Uključi se na vreme.</b> Prvih nekoliko minuta postavlja okvir za sve ostalo, a pitanja uživo idu kroz ceo prenos.</span></li>
     </ul>
   </div>
 </section>
@@ -384,6 +413,47 @@ footer a:hover{color:var(--lime)}
     }
   }
   tick(); setInterval(tick, 1000);
+
+  /* ---------- korak 1: otvaranje mejla ---------- */
+  var mail = (p.get('email') || '').trim().toLowerCase();
+  var sent = document.getElementById('sent-to');
+  if (mail) {
+    sent.innerHTML = 'Poslali smo na <b>' + mail.replace(/[<>&]/g, '') + '</b>';
+  } else {
+    sent.textContent = 'Stiže sa adrese ' + C.posiljalac;
+  }
+  /* Gmail korisnike vodimo pravo na pretragu naseg mejla, ostale na njihov mejl program */
+  var dom = mail.split('@')[1] || '';
+  var linkMejl = 'https://mail.google.com/mail/u/0/#search/from%3A' + encodeURIComponent(C.posiljalac);
+  if (dom && !/^(gmail\.com|googlemail\.com)$/.test(dom)) {
+    linkMejl = /^(outlook|hotmail|live|msn)\./.test(dom) || /^(outlook|hotmail|live|msn)\.com$/.test(dom)
+      ? 'https://outlook.live.com/mail/0/'
+      : /yahoo\./.test(dom) ? 'https://mail.yahoo.com/'
+      : 'https://mail.google.com/mail/u/0/#search/from%3A' + encodeURIComponent(C.posiljalac);
+  }
+  document.getElementById('open-mail').href = linkMejl;
+
+  /* ---------- korak 2: kopiranje linka za prijavu ---------- */
+  var polje = document.getElementById('share-url'), dugme = document.getElementById('copy-btn');
+  var link = C.prijavaUrl || location.origin + location.pathname.replace(/[^/]*$/, '') + 'optin/';
+  polje.value = link;
+
+  dugme.addEventListener('click', function(){
+    function uspeh(){
+      dugme.textContent = 'Kopirano';
+      dugme.classList.add('done');
+      setTimeout(function(){ dugme.textContent = 'Kopiraj link'; dugme.classList.remove('done'); }, 2200);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(uspeh, rucno);
+    } else {
+      rucno();
+    }
+    function rucno(){
+      polje.focus(); polje.setSelectionRange(0, polje.value.length);
+      try { document.execCommand('copy'); uspeh(); } catch (e) {}
+    }
+  });
 
   /* ---------- kalendar ---------- */
   function utc(d){ return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
