@@ -391,15 +391,12 @@ body.no-scroll{overflow:hidden}
 /* ============================================================
    FOOTER
    ============================================================ */
-footer{background:var(--deep);padding:34px 0}
-.foot-in{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;
-  max-width:1000px;margin:0 auto;padding:0 20px}
-.foot-in img{height:24px;width:auto}
-.foot-in p{font-size:.78rem;color:rgba(236,237,229,.5)}
-.foot-by{font-size:.74rem;color:rgba(236,237,229,.38)}
-.foot-by a{font-size:.74rem;color:rgba(236,237,229,.6);font-weight:600;text-decoration:none;transition:color .15s ease}
+footer{background:var(--deep);padding:32px 20px;text-align:center}
+footer img{height:24px;width:auto;margin:0 auto 12px}
+footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
+.foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
+.foot-by a{color:rgba(236,237,229,.6);font-weight:600;text-decoration:none;transition:color .15s ease}
 .foot-by a:hover{color:var(--lime)}
-@media (max-width:680px){.foot-in{flex-direction:column;text-align:center;gap:12px}}
 
 /* ============================================================
    STICKY CTA (mobilni)
@@ -758,11 +755,9 @@ footer{background:var(--deep);padding:34px 0}
 </section>
 
 <footer>
-  <div class="foot-in">
-    <img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)">
-    <p>© <span id="yr"></span> Outliers - Excel Grašić. Sva prava zadržana.</p>
-    <p class="foot-by">powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
-  </div>
+  <img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)">
+  <p>© <span id="yr"></span> Outliers - Excel Grašić. Sva prava zadržana.</p>
+  <p class="foot-by">powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
 </footer>
 
 <!-- sticky CTA (mobilni) -->
