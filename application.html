@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Još jedan korak - Besplatan AI Masterclass | Outliers</title>
 <meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-32x32.png" sizes="32x32">
+<link rel="icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-180x180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -131,14 +134,6 @@ p,li{text-wrap:pretty}
 .cta-wrap{margin-top:clamp(26px,3.4vw,34px)}
 .cta-note{display:block;margin-top:12px;font-size:.82rem;color:rgba(236,237,229,.6)}
 
-/* termin */
-.slot{display:inline-flex;align-items:center;gap:10px;margin-top:22px;
-  background:rgba(0,24,18,.42);border:1px solid rgba(236,237,229,.14);border-radius:13px;padding:11px 16px;
-  font-size:.88rem;color:rgba(236,237,229,.85)}
-.slot svg{width:17px;height:17px;stroke:var(--lime);fill:none;stroke-width:1.8;flex:0 0 17px;
-  stroke-linecap:round;stroke-linejoin:round}
-.slot b{color:var(--cream);font-weight:600}
-
 /* tri koraka */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:clamp(30px,4vw,40px);text-align:left}
 .step{display:flex;gap:12px;align-items:flex-start;background:rgba(0,24,18,.34);
@@ -236,11 +231,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       <span class="cta-note">Traje manje od minuta</span>
     </div>
 
-    <div class="slot">
-      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
-      <span>Termin: <b id="slot-date"></b></span>
-    </div>
-
     <div class="steps">
       <div class="step done"><span class="n">&#10003;</span><span><b>Prijava poslata</b>Podaci su stigli kod nas</span></div>
       <div class="step now"><span class="n">2</span><span><b>Kratka anketa</b>Jedan minut, ispod videa</span></div>
@@ -290,7 +280,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   /* ---------- progres i datumi ---------- */
   document.getElementById('fill').style.setProperty('--pct', C.progres + '%');
   document.getElementById('track-lab').textContent = C.progres + '%';
-  document.getElementById('slot-date').textContent = C.datumTekst;
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   /* ---------- razmak ispod fiksne trake prati njenu stvarnu visinu ---------- */
