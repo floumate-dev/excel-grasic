@@ -11,10 +11,10 @@
 
 <script>
 /* ============================================================
-   KONFIGURACIJA
+   KONFIGURACIJA - sve sto se menja je ovde
    ============================================================ */
 window.MC = {
-  datumISO:    "2026-11-20T19:00:00+01:00",   /* TODO: potvrditi datum */
+  datumISO:    "2026-11-20T19:00:00+01:00",   /* TODO: potvrditi datum sa klijentom */
   krajISO:     "2026-11-20T20:30:00+01:00",
   datumTekst:  "četvrtak, 20.11. u 19h",
   trajanje:    "90 minuta",
@@ -23,7 +23,7 @@ window.MC = {
   opisEvent:   "Link za pristup stiže na mejl pre početka. Pitanja: office@excelgrasic.com",
   lokacija:    "Online",
 
-  /* Opciono: link ka grupi/zajednici. Prazno = sekcija se sakriva. */
+  /* Opciono: link ka grupi ili zajednici. Prazno = sekcija se ne prikazuje. */
   zajednicaUrl: ""
 };
 </script>
@@ -38,167 +38,286 @@ window.MC = {
 }
 body{background:var(--white);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
 img{max-width:100%;display:block}
-a{color:inherit}
-.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
 
-/* progres 100% */
-.bar-prog{background:var(--white);border-bottom:1px solid var(--line);padding:14px 20px}
+/* redovi priblizno jednake duzine; nikad usamljena rec u poslednjem redu */
+h1,h2,h3{font-weight:500;letter-spacing:-.025em;line-height:1.12;text-wrap:balance}
+h1{font-size:clamp(1.9rem,4.8vw,3rem);color:var(--cream)}
+h2{font-size:clamp(1.5rem,3.4vw,2.05rem);line-height:1.18;color:var(--green)}
+h3{font-size:clamp(1.02rem,1.8vw,1.18rem);line-height:1.3;color:var(--green)}
+p,li{text-wrap:pretty}
+.nb{white-space:nowrap}
+.lime{color:var(--lime)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.sec{padding:clamp(44px,5.5vw,74px) 0}
+
+/* ============================================================
+   DUGMAD - isto kao na ostalim stranicama
+   ============================================================ */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;
+  background:linear-gradient(145deg,#f2ff8c 0%,var(--lime) 44%,#cde14c 100%);
+  color:var(--green);font-family:var(--font);font-weight:700;letter-spacing:-.01em;
+  font-size:clamp(.92rem,1.4vw,1.04rem);padding:16px 24px 16px 28px;border-radius:999px;
+  text-decoration:none;border:0;cursor:pointer;overflow:hidden;
+  box-shadow:0 4px 0 0 #a7bd3d, 0 16px 30px rgba(0,24,18,.26);
+  transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s ease}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.6) 50%,transparent 68%);
+  transform:translateX(-120%);transition:transform .6s ease}
+.btn:hover{transform:translateY(2px);box-shadow:0 2px 0 0 #a7bd3d,0 10px 20px rgba(0,24,18,.3)}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 0 #a7bd3d,0 6px 14px rgba(0,24,18,.28)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:focus-visible{outline:3px solid rgba(225,242,94,.9);outline-offset:3px}
+.btn .arw{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:0 0 28px;
+  border-radius:50%;background:rgba(0,77,58,.14);font-size:.95rem;line-height:1;
+  transition:transform .22s cubic-bezier(.22,1,.36,1),background .22s ease}
+.btn:hover .arw{transform:translateX(4px);background:rgba(0,77,58,.22)}
+/* sporedno dugme na zelenoj podlozi */
+.btn-ghost{background:transparent;color:var(--cream);border:1px solid rgba(236,237,229,.34);box-shadow:none}
+.btn-ghost:hover{background:rgba(236,237,229,.08);border-color:rgba(236,237,229,.5);transform:translateY(0);box-shadow:none}
+.btn-ghost:active{transform:translateY(1px);box-shadow:none}
+.btn-ghost::after{display:none}
+
+/* ============================================================
+   PROGRES - zavrsen
+   ============================================================ */
+.bar-prog{background:var(--white);border-bottom:1px solid var(--line);padding:13px 20px}
 .track{position:relative;max-width:1000px;margin:0 auto;height:26px;background:var(--mint);border-radius:9px;overflow:hidden}
 .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:9px;
   background:linear-gradient(90deg,var(--green) 0%,var(--leaf) 55%,var(--lime) 100%);
-  animation:grow 1.4s cubic-bezier(.25,.46,.45,.94) .2s forwards}
+  animation:grow 1.5s cubic-bezier(.25,.46,.45,.94) .2s forwards}
 @keyframes grow{to{width:100%}}
 .track-lab{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--green)}
+  font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--green);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.fill{animation:none;width:100%}}
 
-/* hero */
+/* ============================================================
+   ZELENI DEO - potvrda i ulaznica
+   ============================================================ */
 .stage{position:relative;overflow:hidden;background:var(--green);color:var(--cream)}
 .stage::before{content:"";position:absolute;inset:0;
   background-image:linear-gradient(rgba(236,237,229,.055) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(236,237,229,.055) 1px,transparent 1px);
-  background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 75% at 50% 15%,#000 18%,transparent 78%)}
-.stage::after{content:"";position:absolute;width:560px;height:560px;left:50%;top:-320px;margin-left:-280px;border-radius:50%;
-  background:radial-gradient(circle,rgba(225,242,94,.18),transparent 62%);pointer-events:none}
-.shell{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:clamp(44px,6vw,78px) 20px clamp(44px,5vw,66px);text-align:center}
-.tick{width:76px;height:76px;margin:0 auto 26px;border-radius:50%;background:var(--lime);
-  display:grid;place-items:center;animation:pop .5s cubic-bezier(.2,1.2,.4,1) both;box-shadow:0 0 0 10px rgba(225,242,94,.14)}
-@keyframes pop{from{transform:scale(.6);opacity:0}}
-.tick svg{width:34px;height:34px;stroke:var(--green);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-/* redovi priblizno jednake duzine; nikad usamljena rec u poslednjem redu */
-h1,h2,h3{text-wrap:balance}
-p,li{text-wrap:pretty}
-.nb{white-space:nowrap}
-h1{font-size:clamp(1.85rem,5vw,3rem);font-weight:500;line-height:1.12;letter-spacing:-.025em;margin-bottom:14px;color:var(--cream)}
-.lime{color:var(--lime)}
-.sub{max-width:580px;margin:0 auto;color:rgba(236,237,229,.8);font-size:clamp(.96rem,1.6vw,1.05rem)}
-.hello{display:block;font-size:.9rem;color:var(--lime);font-weight:600;margin-bottom:12px}
+  background-size:68px 44px;
+  mask-image:radial-gradient(ellipse 90% 75% at 50% 18%,#000 20%,transparent 78%)}
+.stage::after{content:"";position:absolute;width:620px;height:620px;right:-200px;top:-280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
+.shell{position:relative;z-index:2;max-width:760px;margin:0 auto;
+  padding:clamp(36px,5vw,58px) 20px clamp(44px,5.5vw,66px);text-align:center}
 
-/* termin kartica */
-.slot{position:relative;max-width:640px;margin:clamp(30px,4vw,44px) auto 0;background:var(--white);color:var(--ink);
-  border-radius:20px;padding:clamp(24px,3vw,32px);box-shadow:0 30px 70px rgba(0,16,12,.3);text-align:left}
-.slot-lab{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:10px;
-  display:flex;align-items:center;gap:8px}
-.slot-lab::before{content:"";width:18px;height:2px;background:var(--lime)}
-.slot-date{font-size:clamp(1.3rem,3.4vw,1.75rem);font-weight:500;letter-spacing:-.02em;color:var(--green)}
-.slot-meta{font-size:.9rem;color:var(--ink-2);margin-top:6px}
-.cd{display:flex;gap:9px;margin-top:22px}
-.cd-box{flex:1;background:var(--cream);border-radius:12px;padding:12px 5px;text-align:center}
-.cd-num{font-size:clamp(1.2rem,3vw,1.6rem);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--green)}
-.cd-lab{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-top:6px}
-.cal{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--lime);color:var(--green);
-  font-family:var(--font);font-weight:700;font-size:.95rem;padding:15px 24px;border-radius:var(--r);border:0;cursor:pointer;
-  text-decoration:none;overflow:hidden;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .18s ease;flex:1;min-width:180px}
-.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
-  transform:translateX(-120%);transition:transform .6s ease}
-.btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,77,58,.2)}
-.btn:hover::after{transform:translateX(120%)}
-.btn-ghost{background:transparent;color:var(--green);border:1px solid var(--green)}
-.btn-ghost:hover{background:var(--cream)}
+/* kvacica */
+.tick{width:66px;height:66px;margin:0 auto 22px;border-radius:50%;background:var(--lime);
+  display:grid;place-items:center;box-shadow:0 0 0 10px rgba(225,242,94,.14)}
+.tick svg{width:30px;height:30px;stroke:var(--green);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:32;stroke-dashoffset:32;animation:draw .6s cubic-bezier(.22,1,.36,1) .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.tick svg{animation:none;stroke-dashoffset:0}}
+.hello{display:block;color:var(--lime);font-size:.6em;margin-bottom:8px}
+.sub{margin:16px auto 0;max-width:58ch;font-size:clamp(.96rem,1.4vw,1.05rem);color:rgba(236,237,229,.85);text-wrap:balance}
 
-/* sekcije */
-.sec{padding:clamp(48px,6vw,84px) 0}
-.sec-head{text-align:center;max-width:680px;margin:0 auto clamp(28px,3vw,42px)}
-h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:500;line-height:1.16;letter-spacing:-.025em}
+/* ULAZNICA - isti motiv kao na optinu */
+.ticket{position:relative;display:grid;grid-template-columns:138px 1fr;text-align:left;
+  background:var(--white);border-radius:20px;margin-top:clamp(28px,4vw,40px);
+  box-shadow:0 40px 90px rgba(0,16,12,.38)}
+.tk-stub{background:var(--cream);border-radius:20px 0 0 20px;padding:26px 16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.tk-d{font-size:clamp(2.7rem,5vw,3.5rem);font-weight:600;line-height:.92;color:var(--green);
+  letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.tk-m{font-size:.76rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-top:7px}
+.tk-t{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);width:100%;
+  font-size:1.02rem;font-weight:600;color:var(--green);font-variant-numeric:tabular-nums}
+.tk-body{position:relative;border-left:2px dashed var(--line);padding:clamp(20px,2.6vw,27px) clamp(20px,2.6vw,28px)}
+.tk-cut{position:absolute;left:138px;width:26px;height:26px;border-radius:50%;background:var(--green);
+  transform:translateX(-50%);z-index:2}
+.tk-cut.top{top:-13px}
+.tk-cut.bot{bottom:-13px}
+.tk-kicker{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--leaf)}
+.tk-kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--leaf);
+  box-shadow:0 0 0 0 rgba(117,163,77,.6);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(117,163,77,0)}100%{box-shadow:0 0 0 0 rgba(117,163,77,0)}}
+.ticket .tk-body h3{margin:9px 0 6px}
+.ticket .tk-meta{font-size:.84rem;color:var(--ink-2);margin:0}
+.tk-name{display:flex;align-items:center;gap:9px;margin-top:16px;padding-top:15px;border-top:1px solid var(--line);
+  font-size:.84rem;color:var(--ink-2)}
+.tk-name b{color:var(--green);font-weight:600}
+.tk-name svg{width:16px;height:16px;stroke:var(--leaf);fill:none;stroke-width:2;flex:0 0 16px;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* ODBROJAVANJE */
+.cd-wrap{position:relative;max-width:430px;margin:clamp(24px,3vw,32px) auto 0;padding:16px 16px 18px;border-radius:20px;
+  background:linear-gradient(180deg,rgba(0,24,18,.62),rgba(0,24,18,.34));
+  border:1px solid rgba(225,242,94,.3);box-shadow:0 20px 44px rgba(0,16,12,.3)}
+.cd-wrap::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(70% 130% at 50% 0,rgba(225,242,94,.17),transparent 68%)}
+.cd-urg{position:relative;display:flex;align-items:center;justify-content:center;gap:9px;margin:0 0 14px;
+  font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.cd-urg .dot{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 0 0 rgba(225,242,94,.65);animation:pulseLime 1.8s infinite}
+@keyframes pulseLime{70%{box-shadow:0 0 0 8px rgba(225,242,94,0)}100%{box-shadow:0 0 0 0 rgba(225,242,94,0)}}
+.cd{position:relative;display:flex;gap:8px}
+.cd-box{flex:1;background:rgba(0,16,12,.58);border:1px solid rgba(236,237,229,.12);border-radius:13px;
+  padding:13px 4px;text-align:center}
+.cd-num{font-size:clamp(1.55rem,3vw,2rem);font-weight:700;color:var(--lime);line-height:1;
+  font-variant-numeric:tabular-nums;text-shadow:0 0 22px rgba(225,242,94,.3)}
+.cd-lab{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(236,237,229,.5);margin-top:9px}
+.cd-box.tick-pop{animation:tickPop .5s cubic-bezier(.22,1,.36,1)}
+@keyframes tickPop{0%{transform:scale(1.045);border-color:rgba(225,242,94,.5)}100%{transform:scale(1);border-color:rgba(236,237,229,.12)}}
+@media (prefers-reduced-motion:reduce){.cd-urg .dot,.cd-box.tick-pop{animation:none}}
+
+.cal{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:clamp(22px,3vw,28px)}
+.cal-note{display:block;margin-top:12px;font-size:.8rem;color:rgba(236,237,229,.55)}
+
+/* ============================================================
+   SEKCIJE
+   ============================================================ */
+.sec-head{text-align:center;max-width:620px;margin:0 auto clamp(28px,3.4vw,42px)}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.14em;
   text-transform:uppercase;color:var(--green);margin-bottom:14px}
-.eyebrow::before{content:"";width:18px;height:2px;background:var(--lime)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.step{background:var(--mint);border-radius:var(--r);padding:26px;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease}
-.step:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(0,77,58,.12)}
-.step .n{width:32px;height:32px;border-radius:10px;background:var(--green);color:var(--lime);
-  font-weight:700;font-size:.85rem;display:grid;place-items:center;margin-bottom:16px}
-.step h3{font-size:1.05rem;font-weight:600;margin-bottom:8px;color:var(--green)}
-.step p{font-size:.9rem;color:var(--ink)}
-.step code{background:var(--white);border-radius:6px;padding:2px 7px;font-size:.85em;color:var(--green)}
+.eyebrow::before{content:"";width:18px;height:2px;background:var(--leaf)}
 
-.note{display:flex;gap:14px;align-items:flex-start;max-width:740px;margin:clamp(28px,3vw,38px) auto 0;
-  background:var(--cream);border-left:3px solid var(--lime);border-radius:14px;padding:20px 22px}
-.note svg{width:20px;height:20px;stroke:var(--green);fill:none;stroke-width:1.9;flex:0 0 20px;margin-top:3px}
-.note p{font-size:.92rem;color:var(--ink)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px 22px}
+.step .n{width:34px;height:34px;border-radius:11px;background:var(--mint);color:var(--green);
+  display:grid;place-items:center;font-weight:700;font-size:.92rem;margin-bottom:14px}
+.step p{font-size:.9rem;color:var(--ink-2);margin-top:8px}
+.step code{background:var(--cream);padding:2px 6px;border-radius:6px;font-size:.84em;color:var(--green)}
+
+.note{display:flex;gap:14px;align-items:flex-start;margin-top:clamp(22px,3vw,30px);
+  background:var(--mint);border-radius:var(--r);padding:20px 22px}
+.note svg{width:21px;height:21px;stroke:var(--green);fill:none;stroke-width:1.8;flex:0 0 21px;margin-top:2px;
+  stroke-linecap:round;stroke-linejoin:round}
+.note p{font-size:.9rem;color:var(--ink)}
 .note b{color:var(--green);font-weight:600}
 
 .prep{background:var(--cream)}
-.prep-list{display:grid;gap:12px;max-width:740px;margin:0 auto}
-.prep-list li{list-style:none;display:flex;gap:13px;background:var(--white);border-radius:13px;padding:18px 20px;
-  transition:transform .22s ease}
-.prep-list li:hover{transform:translateX(4px)}
-.prep-list svg{width:20px;height:20px;stroke:var(--green);fill:none;stroke-width:2.6;flex:0 0 20px;margin-top:3px;stroke-linecap:round;stroke-linejoin:round}
-.prep-list span{font-size:.94rem;color:var(--ink)}
+.prep-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:880px;margin:0 auto}
+.prep-list li{display:flex;gap:13px;background:var(--white);border-radius:var(--r);padding:19px 20px;
+  font-size:.92rem;line-height:1.5}
+.prep-list svg{width:18px;height:18px;stroke:var(--leaf);fill:none;stroke-width:2.8;flex:0 0 18px;margin-top:3px;
+  stroke-linecap:round;stroke-linejoin:round}
 .prep-list b{color:var(--green);font-weight:600}
 
-.community{text-align:center}
-.community .sub{color:var(--ink-2)}
-.community .btn{flex:0 0 auto;min-width:0}
+.community{background:var(--white);text-align:center}
+.community .sub{color:var(--ink-2);margin:12px auto 24px}
 
-footer{background:var(--deep);padding:32px 20px;text-align:center}
-.foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
-.foot-by a{color:rgba(236,237,229,.6);font-weight:600;text-decoration:none}
-.foot-by a:hover{color:var(--lime)}
-footer img{height:22px;width:auto;margin:0 auto 10px}
-footer p{font-size:.76rem;color:rgba(236,237,229,.5)}
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{background:var(--deep);padding:30px 20px;text-align:center}
+footer img{height:24px;width:auto;margin:0 auto 12px}
+footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 footer a{color:rgba(236,237,229,.5);text-decoration:none}
 footer a:hover{color:var(--lime)}
+.foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
+.foot-by a{color:rgba(236,237,229,.6);font-weight:600}
 
-@media (max-width:760px){ .steps{grid-template-columns:1fr} }
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:860px){
+  .steps{grid-template-columns:1fr}
+  .prep-list{grid-template-columns:1fr}
+}
+@media (max-width:680px){
+  .ticket{grid-template-columns:1fr}
+  .tk-stub{flex-direction:row;align-items:baseline;gap:12px;padding:16px 20px;border-radius:20px 20px 0 0}
+  .tk-d{font-size:2.2rem}
+  .tk-m{margin-top:0}
+  .tk-t{margin:0 0 0 auto;padding:0;border:0;width:auto}
+  .tk-body{border-left:0;border-top:2px dashed var(--line)}
+  .tk-cut{display:none}
+  .cal{flex-direction:column}
+  .cal .btn{width:100%}
+  .cd-box{padding:11px 4px}
+}
 </style>
 </head>
 <body>
 
+<!-- ============ PROGRES ============ -->
 <div class="bar-prog">
   <div class="track"><div class="fill"></div><span class="track-lab">100%</span></div>
 </div>
 
+<!-- ============ POTVRDA ============ -->
 <section class="stage">
   <div class="shell">
     <div class="tick"><svg viewBox="0 0 24 24"><path d="m4 12 5.5 5.5L20 7"/></svg></div>
     <h1><span class="hello" id="hello"></span>Prijava je <span class="lime">potvrđena</span></h1>
-    <p class="sub">Tvoje mesto na Masterclassu je rezervisano. Link za pristup stiže ti na mejl, a podsetnik dobijaš i pre samog početka.</p>
+    <p class="sub">Mesto na Masterclassu je rezervisano. Link za pristup stiže ti na mejl, a podsetnik dobijaš i pre samog početka.</p>
 
-    <div class="slot">
-      <div class="slot-lab">Tvoj termin</div>
-      <div class="slot-date" id="slot-date"></div>
-      <div class="slot-meta" id="slot-meta"></div>
-      <div class="cd">
+    <div class="ticket">
+      <div class="tk-stub">
+        <span class="tk-d" id="tk-d">00</span>
+        <span class="tk-m" id="tk-m">-</span>
+        <span class="tk-t" id="tk-t">00:00</span>
+      </div>
+      <span class="tk-cut top" aria-hidden="true"></span>
+      <span class="tk-cut bot" aria-hidden="true"></span>
+      <div class="tk-body">
+        <span class="tk-kicker"><span class="dot"></span>Besplatan ulaz</span>
+        <h3>Productivity Masterclass</h3>
+        <p class="tk-meta">Online · 90 minuta · snimak dostupan 48 sati</p>
+        <div class="tk-name" id="tk-name" style="display:none">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Glasi na: <b id="tk-who"></b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cd-wrap">
+      <p class="cd-urg"><span class="dot"></span>Masterclass počinje za</p>
+      <div class="cd" id="cd">
         <div class="cd-box"><div class="cd-num" data-d>00</div><div class="cd-lab">dana</div></div>
         <div class="cd-box"><div class="cd-num" data-h>00</div><div class="cd-lab">sati</div></div>
         <div class="cd-box"><div class="cd-num" data-m>00</div><div class="cd-lab">minuta</div></div>
         <div class="cd-box"><div class="cd-num" data-s>00</div><div class="cd-lab">sekundi</div></div>
       </div>
-      <div class="cal">
-        <a class="btn" id="gcal" target="_blank" rel="noopener">Dodaj u Google kalendar</a>
-        <button class="btn btn-ghost" id="ics">Preuzmi .ics fajl</button>
-      </div>
     </div>
+
+    <div class="cal">
+      <a class="btn" id="gcal" target="_blank" rel="noopener"><span>DODAJ U GOOGLE KALENDAR</span><span class="arw" aria-hidden="true">&#8594;</span></a>
+      <button class="btn btn-ghost" type="button" id="ics">Preuzmi .ics fajl</button>
+    </div>
+    <span class="cal-note">Podsetnik se uključuje 30 minuta pre početka</span>
   </div>
 </section>
 
+<!-- ============ STA SADA ============ -->
 <section class="sec">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">Šta sada</div>
+      <span class="eyebrow">Šta sada</span>
       <h2>Tri koraka do Masterclassa</h2>
     </div>
     <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Proveri mejl</h3>
-        <p>Potvrda prijave ti stiže u roku od nekoliko minuta sa adrese <code>office@excelgrasic.com</code>.</p></div>
-      <div class="step"><div class="n">2</div><h3>Pomeri iz promocija</h3>
-        <p>Ako mejla nema u Inboxu, pogledaj Promocije ili Spam i prevuci ga u Inbox - tako ti ne promakne ni link ni podsetnik.</p></div>
-      <div class="step"><div class="n">3</div><h3>Upiši termin</h3>
-        <p>Dodaj Masterclass u kalendar da ti blokira vreme. Traje <b id="dur"></b> i preporučujemo da budeš za računarom.</p></div>
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Proveri mejl</h3>
+        <p>Potvrda prijave ti stiže u roku od nekoliko minuta sa adrese <code>office@excelgrasic.com</code>.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Pomeri iz promocija</h3>
+        <p>Ako mejla nema u Inboxu, pogledaj Promocije ili Spam i prevuci ga u Inbox - tako ti ne promakne ni link ni podsetnik.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Upiši termin</h3>
+        <p>Dodaj Masterclass u kalendar da ti blokira vreme. Traje <b id="dur"></b> i preporučujemo da budeš za računarom.</p>
+      </div>
     </div>
-
     <div class="note">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
-      <p><b>Snimak je dostupan 48 sati nakon Masterclassa</b>, ali najviše izvlače oni koji gledaju uživo - tada možeš da postavljaš pitanja i dobiješ odgovor na svoj konkretan slučaj.</p>
+      <p><b>Snimak je dostupan 48 sati nakon Masterclassa</b>, ali najviše izvlače oni koji gledaju uživo - tada možeš da postaviš pitanje i dobiješ odgovor na svoj konkretan slučaj.</p>
     </div>
   </div>
 </section>
 
+<!-- ============ PRIPREMA ============ -->
 <section class="sec prep">
   <div class="wrap">
     <div class="sec-head">
-      <div class="eyebrow">Pripremi se</div>
+      <span class="eyebrow">Pripremi se</span>
       <h2>Da izvučeš maksimum iz 90 minuta</h2>
     </div>
     <ul class="prep-list">
@@ -210,12 +329,13 @@ footer a:hover{color:var(--lime)}
   </div>
 </section>
 
+<!-- ============ ZAJEDNICA (opciono) ============ -->
 <section class="sec community" id="community" style="display:none">
   <div class="wrap">
-    <div class="eyebrow">Zajednica</div>
-    <h2 style="margin-bottom:16px">Pridruži se ostalim učesnicima</h2>
-    <p class="sub" style="margin-bottom:24px">Tu objavljujemo materijale, podsetnike i odgovaramo na pitanja pre Masterclassa.</p>
-    <a class="btn" id="community-link" target="_blank" rel="noopener">Uđi u zajednicu →</a>
+    <span class="eyebrow">Zajednica</span>
+    <h2>Pridruži se ostalim učesnicima</h2>
+    <p class="sub">Tu objavljujemo materijale, podsetnike i odgovaramo na pitanja pre Masterclassa.</p>
+    <a class="btn" id="community-link" target="_blank" rel="noopener"><span>UĐI U ZAJEDNICU</span><span class="arw" aria-hidden="true">&#8594;</span></a>
   </div>
 </section>
 
@@ -230,26 +350,38 @@ footer a:hover{color:var(--lime)}
   var C = window.MC, p = new URLSearchParams(location.search);
   var start = new Date(C.datumISO), end = new Date(C.krajISO);
 
-  document.getElementById('slot-date').textContent = C.datumTekst;
-  document.getElementById('slot-meta').textContent = 'Online · traje ' + C.trajanje + ' · snimak dostupan 48h';
   document.getElementById('dur').textContent = C.trajanje;
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  /* ---------- datum na ulaznici: citamo pravo iz ISO zapisa, bez vremenskih zona ---------- */
+  var MESECI = ['jan','feb','mar','apr','maj','jun','jul','avg','sep','okt','nov','dec'];
+  var iso = C.datumISO;
+  document.getElementById('tk-d').textContent = String(+iso.slice(8, 10));
+  document.getElementById('tk-m').textContent = MESECI[+iso.slice(5, 7) - 1];
+  document.getElementById('tk-t').textContent = iso.slice(11, 16);
+
+  /* ---------- pozdrav i ime na ulaznici ---------- */
   var ime = (p.get('firstname') || p.get('ime') || '').trim();
   if (ime) {
-    ime = ime.charAt(0).toUpperCase() + ime.slice(1);
+    ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1);
     document.getElementById('hello').textContent = ime + ', vidimo se uskoro.';
+    document.getElementById('tk-who').textContent = ime;
+    document.getElementById('tk-name').style.display = '';
   }
 
-  /* ---------- countdown ---------- */
+  /* ---------- odbrojavanje ---------- */
   function pad(n){ return n < 10 ? '0' + n : '' + n; }
-  var cd = document.querySelector('.cd');
+  var cd = document.getElementById('cd');
   function tick(){
     var diff = start.getTime() - Date.now(); if (diff < 0) diff = 0;
     cd.querySelector('[data-d]').textContent = pad(Math.floor(diff / 864e5));
     cd.querySelector('[data-h]').textContent = pad(Math.floor(diff % 864e5 / 36e5));
     cd.querySelector('[data-m]').textContent = pad(Math.floor(diff % 36e5 / 6e4));
-    cd.querySelector('[data-s]').textContent = pad(Math.floor(diff % 6e4 / 1e3));
+    var sb = cd.querySelector('[data-s]'), cell = sb.parentNode, s = pad(Math.floor(diff % 6e4 / 1e3));
+    if (sb.textContent !== s) {
+      sb.textContent = s;
+      cell.classList.remove('tick-pop'); void cell.offsetWidth; cell.classList.add('tick-pop');
+    }
   }
   tick(); setInterval(tick, 1000);
 
@@ -289,8 +421,8 @@ footer a:hover{color:var(--lime)}
   }
 
   /* ---------- konverzija ---------- */
-  if (typeof fbq === 'function') { try { fbq('track', 'CompleteRegistration'); } catch(e){} }
-  if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch(e){} }
+  if (typeof fbq === 'function') { try { fbq('track', 'CompleteRegistration'); } catch (e) {} }
+  if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch (e) {} }
 })();
 </script>
 </body>

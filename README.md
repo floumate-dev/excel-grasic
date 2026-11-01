@@ -5,11 +5,14 @@ hostuje se bilo gde (Vercel, Netlify, S3, Cloudflare Pages).
 
 | Fajl | Uloga | Progres traka |
 |---|---|---|
-| `index.html` | Landing + prijava u popupu (ActiveCampaign) | - |
+| `optin/index.html` | Landing + prijava u popupu (ActiveCampaign) | - |
 | `application.html` | Bridge: VSL + anketa | 62% |
 | `thankyou.html` | Potvrda + kalendar | 100% |
 
-Tok: `index.html` → (AC submit) → `application.html?firstname=…&email=…&utm_*` → anketa → `thankyou.html`
+Tok: `/optin/` → (AC submit) → `application.html?firstname=…&email=…&utm_*` → anketa → `thankyou.html`
+
+Landing zivi u `optin/index.html` da bi adresa bila `/excel-grasic/optin` bez nastavka `.html`.
+Koreni `index.html` je samo preusmerenje na `optin/` i prosledjuje UTM parametre.
 
 ## Konfiguracija
 

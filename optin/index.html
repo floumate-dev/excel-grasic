@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Besplatan AI Masterclass - Excel, Power BI i AI | Outliers</title>
+<meta name="description" content="Besplatan online Masterclass: poveži Excel, Power BI i AI i završi posao 5-10x brže. 90 minuta, konkretni poslovni primeri, gotovi šabloni.">
+<meta property="og:title" content="Besplatan AI Masterclass - Excel, Power BI i AI">
+<meta property="og:description" content="90 minuta. Konkretni primeri. Gotovi šabloni. Snimak dostupan 48h.">
+<meta property="og:image" content="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-main.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   KONFIGURACIJA - menja se samo ovde
+   ============================================================ */
+window.MC = {
+  /* Datum i vreme webinara (ISO, CET/CEST offset). TODO: potvrditi sa klijentom. */
+  datumISO:   "2026-11-20T19:00:00+01:00",
+  datumTekst: "četvrtak, 20.11. u 19h",
+  datumKratko:"20.11. u 19h",
+  trajanje:   "90 minuta",
+
+  /* Gde ide posetilac nakon prijave */
+  nextUrl:    "../application.html",
+
+  /* ActiveCampaign (forma 35 sa excelgrasic.com - jedan fiksan termin) */
+  ac: {
+    endpoint: "https://excelgrasic.activehosted.com/proc.php",
+    u: "6AE5C8B7002DE",
+    f: "35",
+    or: "83103e39-76f2-40ee-b0ac-55e0142fe058"
+  }
+};
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+/* ============================================================
+   BRAND TOKENI - preuzeti sa excelgrasic.com (Bricks tema)
+   ============================================================ */
+:root{
+  --white:#ffffff;
+  --ink:#363636;          /* body tekst */
+  --ink-2:#6b7570;        /* sekundarni tekst */
+  --green:#004d3a;        /* primarna zelena */
+  --deep:#001812;         /* footer / najtamnija */
+  --lime:#e1f25e;         /* CTA */
+  --leaf:#75a34d;         /* akcenat */
+  --cream:#ecede5;        /* svetla traka */
+  --mint:#e1eae8;         /* kartice */
+  --line:#dfe5e2;
+  --line-dark:rgba(236,237,229,.16);
+  --r:16px;
+  --font:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+body{background:var(--white);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 20px}
+.sec{padding:clamp(60px,8vw,108px) 0;scroll-margin-top:84px}
+/* naslovi se prelamaju u redove priblizno jednake duzine, nikad jedna rec u redu */
+h1,h2,h3{font-weight:500;letter-spacing:-.025em;line-height:1.1;text-wrap:balance}
+h1{font-size:clamp(2.1rem,5.2vw,3.35rem)}
+h2{font-size:clamp(1.6rem,3.6vw,2.15rem);line-height:1.18}
+h3{font-size:clamp(1.1rem,1.9vw,1.3rem);line-height:1.25}
+/* pretty sprecava usamljenu rec u poslednjem redu pasusa */
+p,li,figcaption,blockquote{text-wrap:pretty}
+/* kratki, centrirani pasusi se takodje balansiraju */
+.sec-head p,.hero-lead,.bio-sub,.signup-kicker,.fb-sub,.form-intro{text-wrap:balance}
+p{color:var(--ink)}
+/* reci sa crticom ne smeju da se lome preko dva reda */
+.nb{white-space:nowrap}
+
+/* svetlo-na-tamnom kontekst */
+.on-dark{color:var(--cream)}
+.on-dark h1,.on-dark h2,.on-dark h3{color:var(--cream)}
+.on-dark p{color:rgba(236,237,229,.8)}
+
+/* lime "marker" podvlaka */
+.hl{background-image:linear-gradient(transparent 58%, rgba(225,242,94,.45) 58%);padding:0 .08em}
+.on-dark .hl{background-image:none;color:var(--lime)}
+
+/* ---------- reveal on scroll ---------- */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(117,163,77,0)}100%{box-shadow:0 0 0 0 rgba(117,163,77,0)}}
+
+/* ============================================================
+   DUGMAD
+   ============================================================ */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;
+  background:linear-gradient(145deg,#f2ff8c 0%,var(--lime) 44%,#cde14c 100%);
+  color:var(--green);font-family:var(--font);font-weight:700;letter-spacing:-.01em;
+  font-size:clamp(.95rem,1.5vw,1.12rem);padding:18px 26px 18px 32px;border-radius:999px;
+  text-decoration:none;border:0;cursor:pointer;overflow:hidden;
+  box-shadow:0 4px 0 0 #a7bd3d, 0 16px 30px rgba(0,24,18,.26);
+  animation:btnGlow 3.2s ease-out infinite;
+  transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s ease}
+/* sjaj koji prelazi preko dugmeta */
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.6) 50%,transparent 68%);
+  transform:translateX(-120%);transition:transform .6s ease}
+.btn:hover{animation:none;transform:translateY(2px);box-shadow:0 2px 0 0 #a7bd3d,0 10px 20px rgba(0,24,18,.3)}
+.btn:active{animation:none;transform:translateY(4px);box-shadow:0 0 0 0 #a7bd3d,0 6px 14px rgba(0,24,18,.28)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:focus-visible{outline:3px solid rgba(225,242,94,.9);outline-offset:3px}
+/* strelica u krugu - klizi na hover */
+.btn .arw{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;
+  border-radius:50%;background:rgba(0,77,58,.14);font-size:1rem;line-height:1;
+  transition:transform .22s cubic-bezier(.22,1,.36,1),background .22s ease}
+.btn:hover .arw{transform:translateX(4px);background:rgba(0,77,58,.22)}
+@keyframes btnGlow{
+  0%,70%,100%{box-shadow:0 4px 0 0 #a7bd3d,0 16px 30px rgba(0,24,18,.26),0 0 0 0 rgba(225,242,94,.5)}
+  35%{box-shadow:0 4px 0 0 #a7bd3d,0 16px 30px rgba(0,24,18,.26),0 0 0 14px rgba(225,242,94,0)}}
+@media (prefers-reduced-motion:reduce){.btn{animation:none}}
+.btn-wide{width:100%}
+.btn-sm{background:var(--lime);color:var(--green);font-family:var(--font);font-weight:700;font-size:.82rem;padding:10px 18px;
+  border-radius:999px;border:0;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform .15s ease}
+.btn-sm:hover{transform:translateY(-1px)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;overflow:hidden;background:var(--green)}
+/* tabelarna mreza - diskretan "spreadsheet" motiv */
+.hero::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(236,237,229,.055) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(236,237,229,.055) 1px,transparent 1px);
+  background-size:68px 44px;mask-image:radial-gradient(ellipse 90% 75% at 50% 25%,#000 20%,transparent 78%)}
+.hero::after{content:"";position:absolute;width:620px;height:620px;right:-180px;top:-240px;border-radius:50%;
+  background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(28px,4vw,60px);align-items:start;
+  padding:clamp(46px,6vw,84px) 20px clamp(52px,6vw,92px);max-width:1180px;margin:0 auto}
+.pill{display:inline-flex;align-items:center;gap:9px;background:rgba(225,242,94,.12);border:1px solid rgba(225,242,94,.34);
+  color:var(--lime);font-size:.72rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;padding:9px 16px;border-radius:999px}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(225,242,94,.6);animation:pulse 2.2s infinite}
+.hero h1{margin:20px 0 18px}
+.hero-lead{font-size:clamp(.98rem,1.4vw,1.06rem)}
+.hero-lead strong{color:var(--cream);font-weight:600}
+
+/* numerisana lista sa vertikalnom linijom */
+.hero-list{list-style:none;margin:26px 0 30px;display:grid;gap:0;position:relative}
+.hero-list li{display:flex;gap:16px;align-items:flex-start;font-size:.97rem;color:rgba(236,237,229,.84);
+  padding:14px 0;border-top:1px solid rgba(236,237,229,.1)}
+.hero-list li:last-child{border-bottom:1px solid rgba(236,237,229,.1)}
+.hero-list .num{flex:0 0 30px;height:30px;border-radius:9px;border:1px solid rgba(225,242,94,.4);background:rgba(225,242,94,.08);
+  color:var(--lime);font-size:.8rem;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.hero-list strong{color:var(--cream);font-weight:600}
+
+/* video sa lime offset ramom */
+.vsl-shell{position:relative}
+.vsl-shell::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.5);border-radius:var(--r);
+  transform:translate(14px,14px);pointer-events:none}
+.vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,0,0,.4)}
+.vsl::before{content:"";display:block;padding-top:56.25%}
+.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.gift{display:flex;gap:13px;align-items:center;margin-top:26px;background:rgba(236,237,229,.07);
+  border:1px solid rgba(236,237,229,.14);border-radius:14px;padding:15px 17px}
+.gift img{width:34px;height:34px;flex:0 0 34px}
+.gift p{font-size:.88rem;margin:0;color:rgba(236,237,229,.82)}
+.gift strong{color:var(--cream);font-weight:600}
+
+/* countdown */
+.cd-wrap{position:relative;margin-top:24px;padding:16px 16px 18px;border-radius:20px;
+  background:linear-gradient(180deg,rgba(0,24,18,.62),rgba(0,24,18,.34));
+  border:1px solid rgba(225,242,94,.3);box-shadow:0 20px 44px rgba(0,16,12,.3)}
+/* lime izmaglica iznad tajmera */
+.cd-wrap::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(70% 130% at 50% 0,rgba(225,242,94,.17),transparent 68%)}
+.cd-urg{position:relative;display:flex;align-items:center;justify-content:center;gap:9px;margin:0 0 14px;
+  font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime)}
+.cd-urg .dot{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 0 0 rgba(225,242,94,.65);animation:pulseLime 1.8s infinite}
+@keyframes pulseLime{70%{box-shadow:0 0 0 8px rgba(225,242,94,0)}100%{box-shadow:0 0 0 0 rgba(225,242,94,0)}}
+.cd{position:relative;display:flex;gap:8px}
+.cd-box{flex:1;background:rgba(0,16,12,.58);border:1px solid rgba(236,237,229,.12);border-radius:13px;
+  padding:13px 4px;text-align:center}
+.cd-num{font-size:clamp(1.65rem,3.1vw,2.15rem);font-weight:700;color:var(--lime);line-height:1;
+  font-variant-numeric:tabular-nums;text-shadow:0 0 22px rgba(225,242,94,.3)}
+.cd-lab{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(236,237,229,.5);margin-top:9px}
+/* sekunde otkucavaju */
+.cd-box.tick{animation:tickPop .5s cubic-bezier(.22,1,.36,1)}
+@keyframes tickPop{0%{transform:scale(1.045);border-color:rgba(225,242,94,.5)}100%{transform:scale(1);border-color:rgba(236,237,229,.12)}}
+@media (prefers-reduced-motion:reduce){.cd-urg .dot,.cd-box.tick{animation:none}}
+
+/* ============================================================
+   ZAGLAVLJA SEKCIJA
+   ============================================================ */
+.sec-head{max-width:760px;margin:0 auto clamp(34px,4vw,54px);text-align:center}
+.sec-head p{margin-top:15px;font-size:1.02rem;color:var(--ink-2)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--green);margin-bottom:16px}
+.eyebrow::before{content:"";width:18px;height:2px;background:var(--lime)}
+.on-dark .eyebrow{color:var(--lime)}
+.on-dark .eyebrow::before{background:var(--lime)}
+
+/* ============================================================
+   KARTICE
+   ============================================================ */
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{position:relative;overflow:hidden;background:var(--mint);border-radius:var(--r);padding:clamp(24px,3vw,34px);
+  transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(0,77,58,.12)}
+.card h3{margin-bottom:10px;color:var(--green)}
+.card p{font-size:.95rem;color:var(--ink)}
+.card-ico{width:46px;height:46px;border-radius:13px;background:var(--green);display:grid;place-items:center;margin-bottom:18px}
+.card-ico svg{width:21px;height:21px;stroke:var(--lime);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card-watermark{position:absolute;right:-6px;bottom:-26px;font-size:7rem;font-weight:600;color:rgba(0,77,58,.05);line-height:1;pointer-events:none}
+
+/* ============================================================
+   PROBLEM (cream traka)
+   ============================================================ */
+.problem{background:var(--cream)}
+.prob-list{display:grid;gap:14px;max-width:900px;margin:0 auto}
+.prob-row{position:relative;display:flex;gap:16px;align-items:flex-start;background:var(--white);border-radius:14px;padding:22px 24px;
+  border-left:3px solid var(--lime);transition:transform .22s ease}
+.prob-row:hover{transform:translateX(4px)}
+.prob-row .x{flex:0 0 26px;height:26px;border-radius:8px;background:rgba(214,88,70,.1);display:grid;place-items:center;margin-top:2px}
+.prob-row .x svg{width:14px;height:14px;stroke:#c9533f;fill:none;stroke-width:2.6;stroke-linecap:round}
+.prob-row p{font-size:.96rem;margin:0}
+.prob-row strong{color:var(--green);font-weight:600}
+.prob-close{text-align:center;max-width:720px;margin:clamp(34px,4vw,48px) auto 0;font-size:clamp(1.05rem,2vw,1.25rem);color:var(--green);font-weight:500}
+
+/* ============================================================
+   BENEFITI
+   ============================================================ */
+.ben{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.ben-item{display:flex;gap:15px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px;
+  transition:border-color .2s ease,transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease}
+.ben-item:hover{border-color:var(--leaf);transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,77,58,.08)}
+.ben-check{flex:0 0 28px;height:28px;border-radius:9px;background:var(--lime);display:grid;place-items:center;margin-top:1px}
+.ben-check svg{width:15px;height:15px;stroke:var(--green);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ben-item p{font-size:.95rem;margin:0}
+.ben-item strong{color:var(--green);font-weight:600}
+/* poziv na akciju ispod benefita */
+.mid-cta{text-align:center;margin-top:clamp(30px,4vw,42px)}
+.mid-cta p{font-size:1.02rem;color:var(--ink-2);margin-bottom:18px}
+
+/* ============================================================
+   PRESS (cream traka)
+   ============================================================ */
+.press{background:var(--cream)}
+.press-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.press-card{display:flex;flex-direction:column;gap:16px;background:var(--white);border-radius:14px;padding:22px;
+  text-decoration:none;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease}
+.press-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(0,77,58,.1)}
+.press-card img{height:26px;width:auto;object-fit:contain;object-position:left}
+.press-card span{font-size:.85rem;color:var(--ink-2);line-height:1.45}
+.press-card .arrow{margin-top:auto;font-size:.78rem;font-weight:600;color:var(--green);display:flex;align-items:center;gap:6px}
+
+/* ============================================================
+   TESTIMONIJALI
+   ============================================================ */
+.tst-grid{columns:3;column-gap:16px}
+.tst{break-inside:avoid;position:relative;background:var(--mint);border-radius:var(--r);padding:26px 24px 22px;margin-bottom:16px}
+.tst::before{content:"”";position:absolute;top:2px;right:18px;font-size:4.2rem;line-height:1;color:rgba(0,77,58,.12);font-family:Georgia,serif}
+.tst-stars{color:var(--leaf);font-size:.82rem;letter-spacing:2px;margin-bottom:12px}
+.tst p{font-size:.9rem;line-height:1.62;margin:0 0 16px;color:var(--ink)}
+.tst-name{padding-top:14px;border-top:1px solid rgba(0,77,58,.12)}
+.tst-name b{font-size:.88rem;font-weight:600;color:var(--green)}
+
+/* ============================================================
+   BIO
+   ============================================================ */
+.bio{background:var(--white);border-top:1px solid var(--line)}
+.bio-in{display:grid;grid-template-columns:.82fr 1.18fr;gap:clamp(28px,4vw,60px);align-items:center}
+.bio-photo{position:relative;z-index:0}
+/* lime ram pomeren iza slike - isti potez kao oko videa u herou */
+.bio-photo::after{content:"";position:absolute;inset:0;border:1.5px solid rgba(0,77,58,.22);
+  border-radius:24px;transform:translate(14px,14px);z-index:-1;pointer-events:none}
+.bio-stage{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:1/1.05;
+  background:radial-gradient(ellipse 62% 48% at 50% 24%,rgba(225,242,94,.16),transparent 70%),var(--green)}
+/* tabelarna mreza, isti motiv kao hero */
+.bio-stage::before{content:"";position:absolute;inset:0;z-index:1;
+  background-image:linear-gradient(rgba(236,237,229,.06) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(236,237,229,.06) 1px,transparent 1px);
+  background-size:52px 34px;
+  mask-image:radial-gradient(ellipse 85% 70% at 50% 20%,#000 25%,transparent 80%)}
+/* stubici grafikona iza njega */
+.bio-bars{position:absolute;left:0;bottom:0;width:100%;height:82%;z-index:2}
+/* lime avioncic */
+.bio-plane{position:absolute;right:6%;top:9%;width:19%;z-index:3;
+  filter:drop-shadow(0 10px 22px rgba(0,16,12,.35));animation:planeFloat 5.5s ease-in-out infinite}
+@keyframes planeFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-9px) rotate(-3deg)}}
+@media (prefers-reduced-motion:reduce){.bio-plane{animation:none}}
+.bio-man{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:91%;width:auto;max-width:none;z-index:4}
+/* MVP plocica preko slike */
+.bio-chip{position:absolute;left:0;bottom:22px;z-index:5;display:flex;align-items:center;gap:12px;
+  background:var(--white);border-radius:0 16px 16px 0;padding:11px 16px 11px 14px;
+  box-shadow:0 18px 40px rgba(0,16,12,.26)}
+.bio-chip img{height:30px;width:auto}
+.bio-chip span{font-size:.76rem;font-weight:600;color:var(--green);line-height:1.3}
+.bio-list{list-style:none;display:grid;gap:0;margin-top:24px}
+.bio-list li{display:flex;gap:14px;font-size:.95rem;color:var(--ink);padding:14px 0;border-top:1px solid var(--line)}
+.bio-list li:last-child{border-bottom:1px solid var(--line)}
+.bio-list b{color:var(--green);font-weight:600}
+.bio-list .bullet{flex:0 0 8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px rgba(225,242,94,.3);margin-top:8px}
+
+/* ============================================================
+   PRIJAVA (zelena traka)
+   ============================================================ */
+.signup{position:relative;overflow:hidden;background:var(--green)}
+.signup::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(236,237,229,.05) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(236,237,229,.05) 1px,transparent 1px);
+  background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 80% at 50% 50%,#000 10%,transparent 76%)}
+.signup-in{position:relative;z-index:2;max-width:760px;margin:0 auto;text-align:center}
+.signup-lead{margin:16px auto 0;max-width:60ch;color:rgba(236,237,229,.86)}
+/* ULAZNICA - nosi datum, sadrzaj i benefite na jednom mestu */
+.ticket{position:relative;display:grid;grid-template-columns:138px 1fr;text-align:left;
+  background:var(--white);border-radius:20px;margin-top:clamp(28px,4vw,44px);
+  box-shadow:0 40px 90px rgba(0,16,12,.38)}
+/* talon sa datumom */
+.tk-stub{background:var(--cream);border-radius:20px 0 0 20px;padding:26px 16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.tk-d{font-size:clamp(2.7rem,5vw,3.5rem);font-weight:600;line-height:.92;color:var(--green);
+  letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.tk-m{font-size:.76rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-top:7px}
+.tk-t{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);width:100%;
+  font-size:1.02rem;font-weight:600;color:var(--green);font-variant-numeric:tabular-nums}
+/* perforacija */
+.tk-body{position:relative;border-left:2px dashed var(--line);padding:clamp(20px,2.6vw,27px) clamp(20px,2.6vw,28px)}
+.tk-cut{position:absolute;left:138px;width:26px;height:26px;border-radius:50%;background:var(--green);
+  transform:translateX(-50%);z-index:2}
+.tk-cut.top{top:-13px}
+.tk-cut.bot{bottom:-13px}
+.tk-kicker{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--leaf)}
+.tk-kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--leaf);
+  box-shadow:0 0 0 0 rgba(117,163,77,.6);animation:pulse 2.2s infinite}
+.ticket .tk-body h3{color:var(--green);margin:9px 0 6px}
+.ticket .tk-meta{font-size:.84rem;color:var(--ink-2);margin:0}
+.tk-list{list-style:none;display:grid;gap:9px;margin-top:17px;padding-top:16px;border-top:1px solid var(--line)}
+.tk-list li{display:flex;gap:10px;font-size:.87rem;line-height:1.45;color:var(--ink)}
+.tk-list svg{width:16px;height:16px;stroke:var(--leaf);fill:none;stroke-width:2.8;flex:0 0 16px;
+  margin-top:3px;stroke-linecap:round;stroke-linejoin:round}
+.signup-in .cd-wrap{max-width:430px;margin:clamp(22px,3vw,30px) auto 0}
+.signup-in .btn{margin-top:18px;min-width:min(100%,430px)}
+.modal-card h3{color:var(--green);margin-bottom:6px}
+.form-intro{font-size:.88rem;color:var(--ink-2);margin-bottom:16px}
+.bio-sub{font-size:clamp(1.05rem,1.8vw,1.3rem);color:var(--ink-2);margin-top:6px}
+.signup-kicker{font-size:clamp(1rem,1.8vw,1.2rem);color:rgba(236,237,229,.85);margin-bottom:12px;font-weight:500}
+.modal-card .fb-sub{font-size:.88rem;color:var(--ink-2);margin-bottom:22px}
+.form-slot{display:flex;gap:10px;align-items:center;background:var(--cream);border-radius:12px;padding:13px 15px;margin-bottom:20px;font-size:.89rem;color:var(--green)}
+.form-slot svg{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:1.8;flex:0 0 18px}
+.form-slot b{font-weight:600}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin-bottom:7px}
+.fld input{width:100%;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 15px;
+  color:var(--ink);font-family:var(--font);font-size:.97rem;transition:border-color .15s ease,box-shadow .15s ease}
+.fld input::placeholder{color:#a8b2ae}
+.fld input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(0,77,58,.1)}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fld-hint{font-size:.74rem;color:var(--ink-2);margin-top:6px;line-height:1.45}
+.fld-err{display:none;font-size:.77rem;color:#a8402e;margin-top:6px;line-height:1.45}
+.fld.err input{border-color:#c9533f;background:rgba(201,83,63,.04)}
+.fld.err input:focus{border-color:#c9533f;box-shadow:0 0 0 3px rgba(201,83,63,.14)}
+.fld.err .fld-err{display:block}
+.fld.err .fld-hint{display:none}
+.fld.ok input{border-color:var(--leaf)}
+.form-err{display:none;background:rgba(201,83,63,.08);border:1px solid rgba(201,83,63,.3);color:#a8402e;
+  border-radius:11px;padding:11px 13px;font-size:.85rem;margin-bottom:14px}
+
+/* ============================================================
+   OPTIN MODAL
+   ============================================================ */
+.modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(0,16,12,.74);backdrop-filter:blur(7px);animation:modalFade .22s ease}
+.modal-card{position:relative;z-index:2;width:100%;max-width:530px;max-height:calc(100vh - 40px);overflow-y:auto;
+  border-radius:22px;padding:clamp(26px,3vw,36px);
+  /* lime linija na vrhu - kao pozadina, da je radijus kartice iseca */
+  background:var(--white) linear-gradient(90deg,var(--lime),var(--leaf)) top left/100% 4px no-repeat;
+  box-shadow:0 44px 96px rgba(0,16,12,.5);animation:modalIn .3s cubic-bezier(.22,1,.36,1)}
+.modal-x{position:absolute;top:15px;right:15px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);
+  background:var(--white);color:var(--ink-2);font-size:1.05rem;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s ease,color .15s ease}
+.modal-x:hover{background:var(--cream);color:var(--green)}
+.modal-card h3{padding-right:40px}
+body.no-scroll{overflow:hidden}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.modal-card,.modal-bg{animation:none}}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{padding:36px 0;background:var(--deep)}
+.foot-in{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.foot-in img{height:24px;width:auto}
+.foot-in p{font-size:.78rem;color:rgba(236,237,229,.5)}
+.foot-in a{color:rgba(236,237,229,.5);font-size:.78rem;text-decoration:none;margin-left:18px;transition:color .15s ease}
+.foot-in a:hover{color:var(--lime)}
+.foot-right{text-align:right}
+.foot-by{font-size:.74rem;color:rgba(236,237,229,.38)}
+.foot-by a{margin-left:0;font-size:.74rem;color:rgba(236,237,229,.6);font-weight:600}
+
+/* ============================================================
+   STICKY CTA (mobilni)
+   ============================================================ */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:70;display:none;gap:12px;align-items:center;justify-content:space-between;
+  background:rgba(0,24,18,.95);backdrop-filter:blur(12px);padding:11px 16px;transform:translateY(110%);transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.sticky-cta.show{transform:none}
+.sticky-cta .sc-txt{font-size:.76rem;color:rgba(236,237,229,.72);line-height:1.3}
+.sticky-cta .sc-txt b{display:block;color:var(--cream);font-size:.86rem;font-weight:600}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1040px){
+}
+@media (max-width:980px){
+  /* mobilni redosled: naslov → video → CTA → timer → tekst → lista */
+  .hero-in{display:flex;flex-direction:column;align-items:stretch;gap:0;padding-top:46px}
+  .hero-copy,.hero-media{display:contents}
+  .hero-copy .pill{order:1;align-self:flex-start}
+  .hero-copy h1{order:2;margin:18px 0 24px}
+  .hero-media .vsl-shell{order:3;margin-bottom:20px}
+  .hero-copy .btn{order:4;align-self:stretch}
+  .hero-media .cd-wrap{order:6;margin-top:18px}
+  .hero-lead{order:7;margin-top:28px}
+  .hero-list{order:8}
+  .gift{order:9;margin-top:6px}
+  .vsl-shell::before{transform:translate(9px,9px)}
+  .bio-in{grid-template-columns:1fr}
+  .press-grid{grid-template-columns:repeat(2,1fr)}
+  .tst-grid{columns:2}
+}
+@media (max-width:680px){
+  .grid-2,.ben{grid-template-columns:1fr}
+  .tst-grid{columns:1}
+  .fld-row{grid-template-columns:1fr}
+  .ticket{grid-template-columns:1fr}
+  .tk-stub{flex-direction:row;align-items:baseline;gap:12px;padding:16px 20px;border-radius:20px 20px 0 0}
+  .tk-d{font-size:2.2rem}
+  .tk-m{margin-top:0}
+  .tk-t{margin:0 0 0 auto;padding:0;border:0;width:auto}
+  .tk-body{border-left:0;border-top:2px dashed var(--line)}
+  .tk-cut{display:none}
+  .cd-box{padding:11px 4px}
+  .modal-card{padding:24px 20px}
+  .modal-card .btn,.signup-in .btn,.mid-cta .btn{font-size:.92rem;padding:17px 14px;gap:0;white-space:nowrap}
+  .modal-card .btn .arw,.signup-in .btn .arw,.mid-cta .btn .arw{display:none}
+  .mid-cta .btn{width:100%}
+  .sticky-cta{display:flex}
+  body{padding-bottom:64px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero on-dark">
+  <div class="hero-in">
+    <div class="hero-copy">
+      <span class="pill"><span class="dot"></span>Besplatan online Masterclass</span>
+      <h1>Poveži Excel, Power BI i AI i završi posao <span class="hl nb">5-10x brže</span></h1>
+      <p class="hero-lead">Na <strong>besplatnom online <span class="nb">Masterclass-u</span></strong> <strong id="lead-date"></strong>, u trajanju od samo <strong>90 minuta</strong>, videćeš kroz konkretne poslovne primere:</p>
+      <ol class="hero-list">
+        <li><span class="num">1</span><span>Kako da uz AI brže pišeš formule, <strong>sređuješ podatke, automatizuješ ručni rad i pripremaš materijal za analizu</strong></span></li>
+        <li><span class="num">2</span><span>Kako da povežeš Excel, Power BI i AI u <strong>pouzdan proces za redovne izveštaje za menadžment</strong></span></li>
+        <li><span class="num">3</span><span>Kako da <strong>proveriš rezultate AI alata, uočiš greške i zadržiš kontrolu nad podacima</strong> i poslovnim odlukama</span></li>
+      </ol>
+      <button class="btn" type="button" data-open-optin><span>Klikni ovde i prijavi se sada</span><span class="arw" aria-hidden="true">→</span></button>
+    </div>
+
+    <div class="hero-media">
+      <div class="vsl-shell">
+        <div class="vsl">
+          <!-- VSL: Vimeo video sa postojeceg optin pagea -->
+          <iframe src="https://player.vimeo.com/video/1193208786?autoplay=1&loop=1&muted=1&title=0&portrait=0&byline=0"
+                  allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Masterclass najava"></iframe>
+        </div>
+      </div>
+      <div class="gift">
+        <img src="https://excelgrasic.com/wp-content/uploads/2025/11/gift-box.png" alt="">
+        <p>Sa Masterclassa odlaziš sa <strong>gotovim šablonima, praktičnim primerima i jasnim postupkom</strong> koji već narednog dana možeš da primeniš na poslu.</p>
+      </div>
+      <div class="cd-wrap">
+        <p class="cd-urg"><span class="dot"></span>Masterclass počinje za</p>
+        <div class="cd" id="cd-hero">
+          <div class="cd-box"><div class="cd-num" data-d>00</div><div class="cd-lab">dana</div></div>
+          <div class="cd-box"><div class="cd-num" data-h>00</div><div class="cd-lab">sati</div></div>
+          <div class="cd-box"><div class="cd-num" data-m>00</div><div class="cd-lab">minuta</div></div>
+          <div class="cd-box"><div class="cd-num" data-s>00</div><div class="cd-lab">sekundi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOSTUPNO GDE GOD DA SI ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>Dostupno gde god da si</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card rv">
+        <div class="card-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div>
+        <h3>Masterclass će biti ONLINE</h3>
+        <p>Možeš nam se pridružiti sa bilo koje lokacije jer je sve online.</p>
+        <span class="card-watermark">01</span>
+      </div>
+      <div class="card rv">
+        <div class="card-ico"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg></div>
+        <h3>Možeš da pogledaš snimak u narednih 48 sati</h3>
+        <p>Ako ne stigneš da ispratiš svaki deo uživo ili želiš ponovo da prođeš kroz određeni primer, snimak će ti biti dostupan 48 sati nakon održavanja Masterclassa.</p>
+        <span class="card-watermark">02</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="sec problem">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>Koliko vremena ti svakog meseca odnose <span class="hl">isti zadaci?</span></h2>
+      <p>Da li ti se obaveze gomilaju, rokovi postaju kraći, a dobar deo radnog dana i dalje odlazi na poslove koji se ponavljaju?</p>
+    </div>
+    <div class="prob-list">
+      <div class="prob-row rv">
+        <span class="x"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+        <p>Otvaraš tabele, prebacuješ podatke, proveravaš kolone, popravljaš format i pripremaš još jednu verziju izveštaja. Na kraju dana <strong>trošiš više vremena na sređivanje materijala nego na razumevanje onoga što brojevi govore.</strong></p>
+      </div>
+      <div class="prob-row rv">
+        <span class="x"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+        <p>Znaš da AI može da pomogne, ali <strong>nije ti jasno gde tačno da ga uključiš u svoj rad.</strong> Jedno je pitati ChatGPT da napiše mejl. Nešto sasvim drugo je koristiti AI da ubrzaš izveštaje, analizu, formule, Power Query, Power BI ili pripremu materijala za menadžment.</p>
+      </div>
+      <div class="prob-row rv">
+        <span class="x"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+        <p>Imaš osećaj da se Excel, Microsoft 365 i AI alati menjaju iz meseca u mesec. Svi pričaju o produktivnosti, automatizaciji i „budućnosti rada", ali <strong>ti treba nešto mnogo konkretnije:</strong> šta prvo da naučiš, gde da primeniš AI i kako da dobiješ rezultat koji možeš da koristiš u svom poslu.</p>
+      </div>
+      <div class="prob-row rv">
+        <span class="x"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+        <p>Ako si na menadžerskoj poziciji, verovatno vidiš isti problem i u timu. <strong>Ljudi rade mnogo, ali previše vremena odlazi na ručnu pripremu podataka i izveštaja.</strong> Umesto da tim brže dolazi do uvida i odluka, energija se troši na operativu koju je danas moguće znatno skratiti.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BENEFITI ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>Ovaj Masterclass ti nudi tačno rešenje za sve te probleme. <span class="hl">Pa i više od toga.</span></h2>
+      <p>Evo šta ćeš konkretno dobiti u samo 90 minuta i zašto ne smeš da propustiš ovu edukaciju.</p>
+    </div>
+    <div class="ben">
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Konačno ćeš videti kako da Excel, ChatGPT, Copilot i Power BI ne koristiš odvojeno, <strong>već kao povezan sistem</strong> za brži rad sa podacima, izveštajima i poslovnim odlukama.</p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Zaboravićeš na copy/paste jer ćeš otkriti kako da ti <strong>AI kreira formule, analizira podatke i automatizuje Excel izveštaje</strong>, uz tačne rezultate, a ne „halucinacije".</p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Biće ti lakše da preuzmeš složenije zadatke i pokažeš svoju vrednost kroz rad koji kolegama i menadžmentu štedi vreme. Tako ćeš <strong>postati jedan od ključnih igrača u svojoj kompaniji.</strong></p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Saznaćeš kako da <strong>od tabele napraviš jasan izveštaj za menadžera:</strong> šta se promenilo, gde je rizik, šta su prioriteti i koji su sledeći koraci koje treba preduzeti.</p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Otkrićeš kako prava investicija u edukaciju povećava tvoju produktivnost, pa samim tim i poslovni rezultat, <strong>ali i kako da prepoznaš pravu investiciju.</strong></p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Saznaćeš kako da <strong>odlučuješ brže i pametnije</strong> uz bitne strateške uvide pomoću AI umesto da sve radiš ručno.</p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Dobićeš <strong>realne primere koje možeš odmah da probaš</strong> i da iskoristiš već sutra jer ovo je zaista masterclass i želimo da odeš sa praktičnim znanjem.</p></div>
+    </div>
+
+    <div class="mid-cta rv">
+      <p>Sve ovo za 90 minuta, bez ikakve naknade.</p>
+      <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span><span class="arw" aria-hidden="true">&#8594;</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRESS ============ -->
+<section class="sec press">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>O nama su pisali...</h2>
+    </div>
+    <div class="press-grid">
+      <a class="press-card rv" href="https://www.youtube.com/watch?v=Pv2Lm1pRtTE&t=17s" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/08/channels4_profile-removebg-preview-1-e1726930621771.png" alt="Outliers YouTube">
+        <span>Kako da vam Excel pomogne u poslovanju</span>
+        <span class="arrow">Pogledaj →</span></a>
+      <a class="press-card rv" href="https://www.youtube.com/watch?v=zW1Y7dy1Yig" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/08/pojacalo-logo-1-1.png" alt="Pojačalo">
+        <span>Glumac - programer, zaljubljenik u podatke, preduzetnik i edukator</span>
+        <span class="arrow">Pogledaj →</span></a>
+      <a class="press-card rv" href="https://www.youtube.com/watch?v=lvE2ggSflhc" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/08/images__1_-removebg-preview-1-e1726930944954.png" alt="Sefa Talks">
+        <span>Sefa talks podcast</span>
+        <span class="arrow">Pogledaj →</span></a>
+      <a class="press-card rv" href="https://www.nedeljnik.rs/vestacka-inteligencija-moze-da-nas-ucini-produktivnijim/" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/09/5249-2200_import-e1726930097304.png" alt="Nedeljnik">
+        <span>Veštačka inteligencija može da nas učini produktivnijim</span>
+        <span class="arrow">Pročitaj →</span></a>
+      <a class="press-card rv" href="https://www.nedeljnik.rs/new-collab-on-the-block-strateska-saradnja-edukativnog-centra-uciteljica-i-platforme-outliers-excel-grasic/" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/09/5249-2200_import-e1726930097304.png" alt="Nedeljnik">
+        <span>Strateška saradnja Edukativnog centra Učiteljica i platforme Outliers (Excel Grašić)</span>
+        <span class="arrow">Pročitaj →</span></a>
+      <a class="press-card rv" href="https://forbes.n1info.rs/lideri/nije-jokic-ali-je-i-on-globalni-mvp-iz-srbije/" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2023/12/forbs-srb-logo.svg" alt="Forbes Srbija">
+        <span>Nije Jokić, ali je i on globalni MVP iz Srbije</span>
+        <span class="arrow">Pročitaj →</span></a>
+      <a class="press-card rv" href="https://www.youtube.com/watch?v=_TMiK28rHjA" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/08/digitalk-removebg-preview-1-e1726930304606.png" alt="Digitalk">
+        <span>Analiza podataka i njena važnost u donošenju poslovnih odluka</span>
+        <span class="arrow">Pogledaj →</span></a>
+      <a class="press-card rv" href="https://rs.bloombergadria.com/bloomberg-adria-tv/bloomberg-adria-tv/46322/treba-nam-5-do-10-godina-da-naucimo-sve-ai-alate/news" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2023/12/bloomberg-adria-logo.svg" alt="Bloomberg Adria">
+        <span>‘Treba nam 5 do 10 godina da naučimo sve AI alate’ | Bloomberg Adria</span>
+        <span class="arrow">Pogledaj →</span></a>
+      <a class="press-card rv" href="https://mvp.microsoft.com/en-us/PublicProfile/5004606?fullName=Aleksandar%20Gra%C5%A1i%C4%87" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2023/12/microsoft-logo.svg" alt="Microsoft">
+        <span>Prvi i jedini u Srbiji Excel Microsoft MVP</span>
+        <span class="arrow">Pogledaj profil →</span></a>
+      <a class="press-card rv" href="https://www.youtube.com/watch?v=c5qYMXmu_lk" target="_blank" rel="noopener">
+        <img src="https://excelgrasic.com/wp-content/uploads/2024/08/png-clipart-procredit-group-public-joint-company-procredit-bank-finance-bank-text-service__1___1_-removebg-preview-1-e1726930799560.png" alt="ProCredit Bank">
+        <span>Razgovor sa osnivačem edukativne platforme Outliers i <span class="nb">Microsoft MVP-em</span></span>
+        <span class="arrow">Pogledaj →</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2>Pročitajte utiske prisutnih sa prethodnih Masterclassova koji su naučili kako da primene znanje i unaprede svoje karijere</h2>
+      <p>Saznajte kako smo pomogli drugima da se izdvoje na tržištu rada i uštede sate na dnevnom nivou.</p>
+    </div>
+    <div class="tst-grid">
+      <div class="tst rv"><div class="tst-stars">★★★★★</div>
+        <p>Zadovoljstvo <span class="nb">Masterclass-om</span> je ogromno.</p>
+        <p>U svega 45min dobila sam gotov proizvod, nacin kako da ogromne fajlove koji prevazilaze dati broj redova u excelu, rasporedim/grupisem i od njih napravim izvestaj I isti dinmicki vizualizujem.</p>
+        <p>Masterclass sam odslusala sa koleginicom, pa smo obe razmenile utiske vec narednog dana koji su bili sjajni, a I podelila sa kolegama koji nisu slusali predavanje.</p>
+        <p>Prezentovano na masterclassu cu primeniti vec danas na izvestaju koji je sutra na dnevnom redu za prezentovanje.</p>
+        <div class="tst-name"><b>Natasa Tupajic</b></div></div>
+      <div class="tst rv"><div class="tst-stars">★★★★★</div>
+        <p>Zdravo, i hvala na masteru, kao i na svakom mejlu i podsetniku.</p>
+        <p>Mnogo mi se dopao nacin na koji radis, neposredan, nema nervoze u glasu, i sto pitas kako bi mi resili odredjeni zadatak.</p>
+        <p>Posebno mi je vazno bilo da vidim da li znanje delis detaljno i do kraja, e, za to sve pohvale.</p>
+        <div class="tst-name"><b>Tatjana Matic</b></div></div>
+      <div class="tst rv"><div class="tst-stars">★★★★★</div>
+        <p>Pre svega želim da ti puno zahvalim što si nam omogućio ovaj čas edukacije (da zapravo spoznam koliko ne znam) I da excel nije samo sum, if….</p>
+        <p>Predobar cas, puno znajai dobrih fora sam pokupila. Mnogo mi znači za poslovanje pošto radim u računovodstvu i planiram da još dublje zadjem u tu terminologiju.</p>
+        <p>Jos jednom hvala puno i nastaviću da te pratim i kradem zanat od tebe.</p>
+        <div class="tst-name"><b>Radmila Nedeljkovic</b></div></div>
+      <div class="tst rv"><div class="tst-stars">★★★★★</div>
+        <p>Svidja mi se ideja masterclass-ova. Tu nesebicno delite svoje znanje, ne znam nikoga ko je tako neposredan, uvek spreman da pomogne, sa kvalitetnim treninzima i savetima. U iščekivanju budućih druženja,</p>
+        <p>Pozdrav za celu Outliers ekipu</p>
+        <div class="tst-name"><b>Biljana Pajić</b></div></div>
+      <div class="tst rv"><div class="tst-stars">★★★★★</div>
+        <p>Vas Masterclass mi je pomogao da postanem svesna svog neznanja.</p>
+        <p>Kao nekoga ko je dugi niz godina aktivno koristio excel, pa napravio visegodisnju pauzu, raduje me sto cu se jednim delom podsetiti, a drugim delom i nauciti mnogo novih stvari. Narocito se radujem BI-ju.</p>
+        <p>Dopalo mi se to sto ste pokazali kako efikasno moze da se napravi baza od eksportovanih fajlova. Promet tekuceg racuna u csv formatu i njegovo sredjuvanje mi je uvek bio rak-rana.</p>
+        <p>Pratim Vas preko Instagrama. Izlazete koncizno. Drzite paznju. Posedujete Vau efekat, citajuci komentare. Ne bih Vam nista ni dodala, ni oduzela, ni promenila.</p>
+        <p>Zelim Vam sve najbolje!</p>
+        <div class="tst-name"><b>Dijana Jovic</b></div></div>
+      <div class="tst rv"><div class="tst-stars">★★★★★</div>
+        <p>Masterclass je bio fenomenalan. Bio sam na par jako kvalitetnih Excel kurseva u proslosti ali to je prosto ne uporedivo sa onim sto ti i tvoj tim radite.</p>
+        <p>Imate moju veliku podrsku.</p>
+        <div class="tst-name"><b>Marko Savovic</b></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BIO ============ -->
+<section class="sec bio">
+  <div class="wrap bio-in">
+    <div class="rv">
+      <div class="bio-photo">
+        <div class="bio-stage">
+          <svg class="bio-bars" viewBox="0 0 200 150" preserveAspectRatio="none" aria-hidden="true">
+            <rect x="7"   y="92" width="26" height="58"  rx="4" fill="rgba(236,237,229,.14)"/>
+            <rect x="39"  y="74" width="26" height="76"  rx="4" fill="rgba(236,237,229,.17)"/>
+            <rect x="71"  y="52" width="26" height="98"  rx="4" fill="rgba(236,237,229,.2)"/>
+            <rect x="103" y="62" width="26" height="88"  rx="4" fill="rgba(236,237,229,.17)"/>
+            <rect x="135" y="32" width="26" height="118" rx="4" fill="rgba(236,237,229,.22)"/>
+            <rect x="167" y="14" width="26" height="136" rx="4" fill="rgba(225,242,94,.26)"/>
+            <!-- linija trenda preko vrhova stubica -->
+            <polyline points="20,92 52,74 84,52 116,62 148,32 180,14" fill="none"
+                      stroke="rgba(225,242,94,.55)" stroke-width="2" vector-effect="non-scaling-stroke"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="bio-plane" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M97 6 3 45l37 13z"   fill="#e1f25e"/>
+            <path d="M97 6 40 58l7 36z"   fill="#c6da4d"/>
+            <path d="M40 58l7 36 17-19z"  fill="#a3b83c"/>
+          </svg>
+          <img class="bio-man" src="https://excelgrasic.com/wp-content/uploads/2023/11/aleksandar-grasic-o-predavacu.png" alt="Aleksandar Grašić">
+          <div class="bio-chip">
+            <img src="https://excelgrasic.com/wp-content/uploads/2023/11/mvp-logo.png" alt="Microsoft MVP">
+            <span>Prvi i jedini Excel<br>Microsoft MVP u Srbiji</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rv">
+      <h2>Upoznajte Aleksandra</h2>
+      <p class="bio-sub">osnivača <span class="nb">Outliers-a:</span></p>
+      <ul class="bio-list">
+        <li><span class="bullet"></span><span><b>Inovator u analizi podataka:</b> Aleksandar je pokrenuo Outliers kako bi pomogao profesionalcima i preduzećima da donose odluke zasnovane na podacima.</span></li>
+        <li><span class="bullet"></span><span><b>Uticajni lider:</b> Sa svojim timom kroz Outliers platformu edukuje preko 10.000 profesionalaca iz više od 500 kompanija koji su unapredili svoje veštine u analitici podataka pod njegovim vođstvom.</span></li>
+        <li><span class="bullet"></span><span><b>Priznati ekspert:</b> Jedan od samo 3.000 dobitnika Microsoft MVP nagrade u svetu. Okupio zajednicu od preko 400.000 profesionalaca širom sveta.</span></li>
+        <li><span class="bullet"></span><span><b>Bogato iskustvo:</b> Aleksandar ima značajno profesionalno iskustvo u fintech industriji, mobilnom bankarstvu i akademskom sektoru.</span></li>
+        <li><span class="bullet"></span><span><b>Doprinos zajednici:</b> Aktivan u preduzetništvu, i član različitih udruženja za promociju preduzetništva i profesionalnog razvoja u Srbiji i regionu.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRIJAVA ============ -->
+<section class="sec signup on-dark" id="prijava">
+  <div class="wrap signup-in">
+    <p class="signup-kicker">Savladaj AI i radi <span class="hl nb">5-10x brže.</span></p>
+    <h2>Prijavi se na besplatan Masterclass:</h2>
+    <p class="signup-lead">Otkrij kako da brže sređuješ podatke, pripremaš analize i praviš izveštaje kojima ljudi mogu da veruju. Za 90 minuta dobićeš jasan postupak koji povezuje alate koje već koristiš sa AI mogućnostima koje ti mogu uštedeti sate rada.</p>
+
+    <div class="ticket">
+      <div class="tk-stub">
+        <span class="tk-d" id="tk-d">00</span>
+        <span class="tk-m" id="tk-m">-</span>
+        <span class="tk-t" id="tk-t">00:00</span>
+      </div>
+      <span class="tk-cut top" aria-hidden="true"></span>
+      <span class="tk-cut bot" aria-hidden="true"></span>
+      <div class="tk-body">
+        <span class="tk-kicker"><span class="dot"></span>Besplatan ulaz</span>
+        <h3>Productivity Masterclass</h3>
+        <p class="tk-meta">Online · 90 minuta · snimak dostupan 48 sati</p>
+        <ul class="tk-list">
+          <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span>Kako da uz AI brže pišeš formule, sređuješ podatke i automatizuješ ručni rad</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span>Kako da povežeš Excel, Power BI i AI u pouzdan proces za redovne izveštaje</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span>Gotovi šabloni i postupci koje već narednog dana možeš da primeniš na poslu</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cd-wrap">
+      <p class="cd-urg"><span class="dot"></span>Prijave se zatvaraju za</p>
+      <div class="cd" id="cd-form">
+        <div class="cd-box"><div class="cd-num" data-d>00</div><div class="cd-lab">dana</div></div>
+        <div class="cd-box"><div class="cd-num" data-h>00</div><div class="cd-lab">sati</div></div>
+        <div class="cd-box"><div class="cd-num" data-m>00</div><div class="cd-lab">minuta</div></div>
+        <div class="cd-box"><div class="cd-num" data-s>00</div><div class="cd-lab">sekundi</div></div>
+      </div>
+    </div>
+
+    <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span><span class="arw" aria-hidden="true">&#8594;</span></button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)">
+    <p>© <span id="yr"></span> Outliers - Excel Grašić. Sva prava zadržana.</p>
+    <div class="foot-right">
+      <p class="foot-by">powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- sticky CTA (mobilni) -->
+<div class="sticky-cta" id="sticky-cta">
+  <div class="sc-txt"><b>Besplatan Masterclass</b><span id="sc-date"></span></div>
+  <button class="btn-sm" type="button" data-open-optin>Prijavi se</button>
+</div>
+
+<!-- ============ OPTIN MODAL ============ -->
+<div class="modal" id="optin-modal" role="dialog" aria-modal="true" aria-labelledby="optin-title" hidden>
+  <div class="modal-bg" data-close-optin></div>
+  <div class="modal-card">
+    <button class="modal-x" type="button" data-close-optin aria-label="Zatvori prijavu">&#10005;</button>
+    <h3 id="optin-title">Prijavi se na besplatan Masterclass</h3>
+    <p class="fb-sub">Popuni formu i dobijaš pristup linku na mejl.</p>
+    <div class="form-slot">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+      <span>Termin: <b id="slot-date"></b></span>
+    </div>
+    <div class="form-err" id="form-err"></div>
+    <form id="mc-form" novalidate>
+      <div class="fld">
+        <label for="fullname">Ime i prezime *</label>
+        <input id="fullname" name="fullname" type="text" autocomplete="name" placeholder="npr. Ana Anić" required>
+        <p class="fld-err"></p>
+      </div>
+      <div class="fld">
+        <label for="email">Email *</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="ime@primer.com" required>
+        <p class="fld-err"></p>
+      </div>
+      <div class="fld">
+        <label for="phone">Broj telefona *</label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+381 60 123 4567" required>
+        <p class="fld-hint">Pozivni broj smo popunili automatski - izmeni ga ako nije tvoj.</p>
+        <p class="fld-err"></p>
+      </div>
+      <div class="fld-row">
+        <div class="fld">
+          <label for="field5">Pozicija na poslu *</label>
+          <input id="field5" name="field[5]" type="text" autocomplete="organization-title" placeholder="npr. Finansijski analitičar" required>
+          <p class="fld-err"></p>
+        </div>
+        <div class="fld">
+          <label for="field12">Zemlja *</label>
+          <input id="field12" name="field[12]" type="text" autocomplete="country-name" placeholder="npr. Srbija" required>
+          <p class="fld-err"></p>
+        </div>
+      </div>
+      <button class="btn btn-wide" type="submit" id="mc-submit"><span>KLIKNI OVDE I PRIJAVI SE SADA</span><span class="arw" aria-hidden="true">&#8594;</span></button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  var C = window.MC;
+
+  /* ---------- datumi u tekstu ---------- */
+  document.getElementById('lead-date').textContent = 'koji organizujemo u ' + C.datumTekst;
+  document.getElementById('slot-date').textContent = C.datumTekst;
+  var MESECI = ['jan','feb','mar','apr','maj','jun','jul','avg','sep','okt','nov','dec'];
+  var iso = C.datumISO;   /* 2026-11-20T19:00:00+01:00 - citamo doslovno, bez konverzije */
+  document.getElementById('tk-d').textContent = String(+iso.slice(8, 10));
+  document.getElementById('tk-m').textContent = MESECI[+iso.slice(5, 7) - 1];
+  document.getElementById('tk-t').textContent = iso.slice(11, 16);
+  document.getElementById('sc-date').textContent = C.datumTekst;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---------- countdown ---------- */
+  var target = new Date(C.datumISO).getTime();
+  var boxes = [document.getElementById('cd-hero'), document.getElementById('cd-form')].filter(Boolean);
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function tick(){
+    var diff = target - Date.now();
+    if (diff < 0) diff = 0;
+    var d = Math.floor(diff / 864e5),
+        h = Math.floor(diff % 864e5 / 36e5),
+        m = Math.floor(diff % 36e5 / 6e4),
+        s = Math.floor(diff % 6e4 / 1e3);
+    boxes.forEach(function(b){
+      b.querySelector('[data-d]').textContent = pad(d);
+      b.querySelector('[data-h]').textContent = pad(h);
+      b.querySelector('[data-m]').textContent = pad(m);
+      var sb = b.querySelector('[data-s]'), cell = sb.parentNode;
+      if (sb.textContent !== pad(s)) {
+        sb.textContent = pad(s);
+        cell.classList.remove('tick'); void cell.offsetWidth; cell.classList.add('tick');
+      }
+    });
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ---------- reveal on scroll ---------- */
+  var rv = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e, i){
+        if (e.isIntersecting) {
+          var el = e.target;
+          setTimeout(function(){ el.classList.add('in'); }, Math.min(i * 60, 240));
+          io.unobserve(el);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .12 });
+    rv.forEach(function(el){ io.observe(el); });
+  } else {
+    rv.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- optin modal ---------- */
+  var modal = document.getElementById('optin-modal'), lastFocus = null;
+
+  function openOptin(){
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    modal.classList.add('open');
+    document.body.classList.add('no-scroll');
+    /* pozivni broj i zemlja se popunjavaju sami, korisnik ih moze izmeniti */
+    if (!fTel.value) fTel.value = pozivni + ' ';
+    if (!fZem.value) fZem.value = ZEMLJE[zemljaKod][1];
+    var first = modal.querySelector('input');
+    if (first) setTimeout(function(){ first.focus(); }, 70);
+  }
+  function closeOptin(){
+    modal.classList.remove('open');
+    modal.hidden = true;
+    document.body.classList.remove('no-scroll');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-open-optin]'), function(el){
+    el.addEventListener('click', function(e){ e.preventDefault(); openOptin(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-close-optin]'), function(el){
+    el.addEventListener('click', closeOptin);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeOptin();
+  });
+  /* fokus ostaje u modalu dok je otvoren */
+  modal.addEventListener('keydown', function(e){
+    if (e.key !== 'Tab') return;
+    var f = modal.querySelectorAll('button, input, a[href]');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  /* ---------- sticky CTA (mobilni) ---------- */
+  var sticky = document.getElementById('sticky-cta'), prijava = document.getElementById('prijava');
+  window.addEventListener('scroll', function(){
+    var past = window.scrollY > window.innerHeight * .7;
+    var atForm = prijava.getBoundingClientRect().top < window.innerHeight;
+    sticky.classList.toggle('show', past && !atForm);
+  }, { passive: true });
+
+  /* ---------- UTM capture (prosledjuje se dalje kroz funnel) ---------- */
+  function utmString(){
+    var p = new URLSearchParams(location.search), keep = [];
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid'].forEach(function(k){
+      var v = p.get(k); if (v) keep.push(k + '=' + encodeURIComponent(v));
+    });
+    return keep.join('&');
+  }
+
+  /* ---------- pozivni broj i zemlja iz podesavanja uredjaja ---------- */
+  var ZEMLJE = {
+    RS:['+381','Srbija'],        BA:['+387','Bosna i Hercegovina'], HR:['+385','Hrvatska'],
+    ME:['+382','Crna Gora'],     MK:['+389','Severna Makedonija'],  SI:['+386','Slovenija'],
+    AL:['+355','Albanija'],      BG:['+359','Bugarska'],            RO:['+40','Rumunija'],
+    HU:['+36','Mađarska'],       GR:['+30','Grčka'],                DE:['+49','Nemačka'],
+    AT:['+43','Austrija'],       CH:['+41','Švajcarska'],           IT:['+39','Italija'],
+    FR:['+33','Francuska'],      ES:['+34','Španija'],              PT:['+351','Portugal'],
+    NL:['+31','Holandija'],      BE:['+32','Belgija'],              LU:['+352','Luksemburg'],
+    GB:['+44','Velika Britanija'], IE:['+353','Irska'],             SE:['+46','Švedska'],
+    NO:['+47','Norveška'],       DK:['+45','Danska'],               FI:['+358','Finska'],
+    PL:['+48','Poljska'],        CZ:['+420','Češka'],               SK:['+421','Slovačka'],
+    US:['+1','SAD'],             CA:['+1','Kanada'],                AU:['+61','Australija'],
+    AE:['+971','UAE'],           TR:['+90','Turska']
+  };
+  var ZONE = {
+    'Europe/Belgrade':'RS','Europe/Sarajevo':'BA','Europe/Zagreb':'HR','Europe/Podgorica':'ME',
+    'Europe/Skopje':'MK','Europe/Ljubljana':'SI','Europe/Tirane':'AL','Europe/Sofia':'BG',
+    'Europe/Bucharest':'RO','Europe/Budapest':'HU','Europe/Athens':'GR','Europe/Berlin':'DE',
+    'Europe/Vienna':'AT','Europe/Zurich':'CH','Europe/Rome':'IT','Europe/Paris':'FR',
+    'Europe/Madrid':'ES','Europe/Lisbon':'PT','Europe/Amsterdam':'NL','Europe/Brussels':'BE',
+    'Europe/Luxembourg':'LU','Europe/London':'GB','Europe/Dublin':'IE','Europe/Stockholm':'SE',
+    'Europe/Oslo':'NO','Europe/Copenhagen':'DK','Europe/Helsinki':'FI','Europe/Warsaw':'PL',
+    'Europe/Prague':'CZ','Europe/Bratislava':'SK','Europe/Istanbul':'TR','Asia/Dubai':'AE',
+    'Australia/Sydney':'AU','Australia/Melbourne':'AU'
+  };
+
+  function detektujZemlju(){
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (tz && ZONE[tz]) return ZONE[tz];
+      if (tz && tz.indexOf('America/') === 0) return 'US';
+    } catch (e) {}
+    var langs = (navigator.languages || [navigator.language || '']);
+    for (var i = 0; i < langs.length; i++) {
+      var m = String(langs[i]).match(/[-_]([A-Za-z]{2})$/);
+      if (m && ZEMLJE[m[1].toUpperCase()]) return m[1].toUpperCase();
+    }
+    return 'RS';
+  }
+
+  var zemljaKod = detektujZemlju(), pozivni = ZEMLJE[zemljaKod][0];
+
+  /* ---------- validacija ---------- */
+  var form  = document.getElementById('mc-form'),
+      btn   = document.getElementById('mc-submit'),
+      err   = document.getElementById('form-err'),
+      fIme  = document.getElementById('fullname'),
+      fMail = document.getElementById('email'),
+      fTel  = document.getElementById('phone'),
+      fPos  = document.getElementById('field5'),
+      fZem  = document.getElementById('field12');
+
+  var SLOVO = 'A-Za-zÀ-ÖØ-öø-ÿČĆŽŠĐĆčćžšđ';
+  var IME_RE   = new RegExp('^[' + SLOVO + "]{2,}(?:[-' ][" + SLOVO + ']{2,})+$');
+  var MAIL_RE  = /^[\w.!#$%&'*+/=?^`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
+
+  function polje(input){ return input.closest('.fld'); }
+  function greska(input, poruka){
+    var f = polje(input);
+    f.classList.remove('ok');
+    f.classList.add('err');
+    f.querySelector('.fld-err').textContent = poruka;
+    return false;
+  }
+  function uredu(input){
+    var f = polje(input);
+    f.classList.remove('err');
+    f.classList.add('ok');
+    return true;
+  }
+
+  /* prvo slovo svake reci veliko, visestruki razmaci u jedan */
+  function srediIme(v){
+    return v.replace(/\s+/g, ' ').trim().split(' ').map(function(rec){
+      return rec.split('-').map(function(d){
+        return d ? d.charAt(0).toLocaleUpperCase('sr-RS') + d.slice(1).toLocaleLowerCase('sr-RS') : d;
+      }).join('-');
+    }).join(' ');
+  }
+
+  /* sve u cifre, pozivni na pocetku, lokalna nula posle pozivnog otpada */
+  function srediTelefon(v){
+    var t = String(v).replace(/[^\d+]/g, '');
+    if (t.indexOf('00') === 0) t = '+' + t.slice(2);
+    if (t.charAt(0) !== '+') t = pozivni + t.replace(/^0+/, '');
+    else {
+      var kod = t.match(/^\+(\d{1,3})/);
+      if (kod) t = '+' + kod[1] + t.slice(kod[0].length).replace(/^0+/, '');
+    }
+    return t;
+  }
+
+  function proveriIme(){
+    var v = srediIme(fIme.value);
+    if (!v) return greska(fIme, 'Upiši ime i prezime.');
+    if (/\d/.test(v)) return greska(fIme, 'Ime i prezime ne mogu da sadrže brojeve.');
+    if (v.split(' ').length < 2) return greska(fIme, 'Upiši i ime i prezime, razdvojeno razmakom.');
+    if (!IME_RE.test(v)) return greska(fIme, 'Koristi samo slova, npr. Ana Anić.');
+    fIme.value = v;
+    return uredu(fIme);
+  }
+  function proveriMail(){
+    var v = fMail.value.trim().toLowerCase();
+    if (!v) return greska(fMail, 'Upiši svoju email adresu.');
+    if (!MAIL_RE.test(v)) return greska(fMail, 'Ovo ne liči na ispravnu adresu - proveri da li fali @ ili deo posle tačke.');
+    fMail.value = v;
+    return uredu(fMail);
+  }
+  function proveriTel(){
+    var v = srediTelefon(fTel.value);
+    if (v === pozivni || !v.replace('+', '')) return greska(fTel, 'Upiši svoj broj telefona.');
+    if (!/^\+[1-9]\d{7,14}$/.test(v)) return greska(fTel, 'Broj nije ispravan - unesi ga sa pozivnim brojem, npr. ' + pozivni + ' 60 123 4567.');
+    fTel.value = v;
+    return uredu(fTel);
+  }
+  function proveriTekst(input, poruka){
+    if (input.value.trim().length < 2) return greska(input, poruka);
+    input.value = input.value.trim();
+    return uredu(input);
+  }
+
+  [[fIme, proveriIme], [fMail, proveriMail], [fTel, proveriTel],
+   [fPos, function(){ return proveriTekst(fPos, 'Upiši svoju poziciju.'); }],
+   [fZem, function(){ return proveriTekst(fZem, 'Upiši zemlju iz koje si.'); }]
+  ].forEach(function(par){
+    var input = par[0], proveri = par[1];
+    input.addEventListener('blur', function(){ if (input.value.trim()) proveri(); });
+    input.addEventListener('input', function(){ polje(input).classList.remove('err'); });
+  });
+
+  /* ---------- submit u ActiveCampaign ---------- */
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    err.style.display = 'none';
+
+    var provere = [proveriIme(), proveriMail(), proveriTel(),
+                   proveriTekst(fPos, 'Upiši svoju poziciju.'),
+                   proveriTekst(fZem, 'Upiši zemlju iz koje si.')];
+    if (provere.indexOf(false) !== -1) {
+      var prvo = form.querySelector('.fld.err input');
+      if (prvo) prvo.focus();
+      return;
+    }
+
+    var delovi = fIme.value.split(' ');
+    var ime = delovi.shift(), prezime = delovi.join(' ');
+    var email = fMail.value;
+
+    var fd = new FormData();
+    fd.append('firstname', ime);
+    fd.append('lastname', prezime);
+    fd.append('email', email);
+    fd.append('phone', fTel.value);
+    fd.append('field[5]', fPos.value);
+    fd.append('field[12]', fZem.value);
+
+    /* AC obavezna hidden polja */
+    fd.append('u', C.ac.u);
+    fd.append('f', C.ac.f);
+    fd.append('s', '');
+    fd.append('c', '0');
+    fd.append('m', '0');
+    fd.append('act', 'sub');
+    fd.append('v', '2');
+    fd.append('or', C.ac.or);
+
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'ŠALJEMO PRIJAVU...';
+
+    fetch(C.ac.endpoint, { method: 'POST', body: fd, mode: 'no-cors' })
+      .catch(function(){ /* no-cors uvek vrati opaque odgovor */ })
+      .finally(function(){
+        /* Meta / TikTok Lead event ako je piksel ucitan */
+        if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch(e){} }
+        if (typeof ttq === 'object' && ttq.track) { try { ttq.track('SubmitForm'); } catch(e){} }
+
+        var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email);
+        var u = utmString(); if (u) qs += '&' + u;
+        location.href = C.nextUrl + '?' + qs;
+      });
+  });
+})();
+</script>
+</body>
+</html>
