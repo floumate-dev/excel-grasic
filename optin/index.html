@@ -159,7 +159,8 @@ p{color:var(--ink)}
   padding:clamp(46px,6vw,84px) 20px clamp(52px,6vw,92px);max-width:1180px;margin:0 auto}
 .hero-copy,.hero-media{display:flex;flex-direction:column;justify-content:space-between}
 .hero h1{margin:0 0 18px}
-.hero-copy .btn{min-height:66px;padding-inline:26px;font-weight:800}
+/* Na desktopu se sa tajmerom poravnava i donji rub senke od 4px. */
+.hero-copy .btn{bottom:4px;min-height:66px;padding-inline:26px;font-weight:800}
 .hero-lead{font-size:clamp(.98rem,1.4vw,1.06rem)}
 .hero-lead strong{color:var(--cream);font-weight:600}
 
@@ -437,7 +438,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .hero-copy,.hero-media{display:contents}
   .hero-copy h1{order:2;margin:0 0 24px}
   .hero-media .vsl-shell{order:3;margin-bottom:20px}
-  .hero-copy .btn{order:4;align-self:stretch}
+  .hero-copy .btn{order:4;align-self:stretch;bottom:auto}
   .hero-media .cd-wrap{order:6;margin-top:18px}
   .hero-lead{order:7;margin-top:28px}
   .hero-list{order:8}
