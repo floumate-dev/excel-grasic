@@ -37,10 +37,10 @@
    KONFIGURACIJA - menja se samo ovde
    ============================================================ */
 window.MC = {
-  /* Datum i vreme webinara (ISO, CET/CEST offset). TODO: potvrditi sa klijentom. */
-  datumISO:   "2026-11-20T19:00:00+01:00",
-  datumTekst: "četvrtak, 20.11. u 19h",
-  datumKratko:"20.11. u 19h",
+  /* Datum i vreme webinara (ISO, CET/CEST offset). */
+  datumISO:   "2026-11-19T19:00:00+01:00",
+  datumTekst: "četvrtak, 19.11. u 19 h",
+  datumKratko:"19.11. u 19 h",
   trajanje:   "90 minuta",
 
   /* Gde ide posetilac nakon prijave */
@@ -476,15 +476,15 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 <section class="hero on-dark">
   <div class="hero-in">
     <div class="hero-copy">
-      <span class="pill"><span class="dot"></span>Besplatan online Masterclass</span>
-      <h1>Poveži Excel, Power BI i AI i završi posao <span class="hl nb">5-10x brže</span></h1>
-      <p class="hero-lead">Na <strong>besplatnom online <span class="nb">Masterclass-u</span></strong> <strong id="lead-date"></strong>, u trajanju od samo <strong>90 minuta</strong>, videćeš kroz konkretne poslovne primere:</p>
+      <span class="pill"><span class="dot"></span>Besplatan Black Friday masterclass</span>
+      <h1>Da li želiš da svoj posao završavaš <span class="hl nb">5-10x brže?</span></h1>
+      <p class="hero-lead">Vidimo se <strong><span class="nb">onlajn</span></strong> u <strong id="lead-date"></strong>. Za <strong>90 minuta</strong> pokazaću ti kako uz Excel, Power BI i AI pripremam izveštaj za kraj meseca.</p>
       <ol class="hero-list">
-        <li><span class="num">1</span><span>Kako da uz AI brže pišeš formule, <strong>sređuješ podatke, automatizuješ ručni rad i pripremaš materijal za analizu</strong></span></li>
-        <li><span class="num">2</span><span>Kako da povežeš Excel, Power BI i AI u <strong>pouzdan proces za redovne izveštaje za menadžment</strong></span></li>
-        <li><span class="num">3</span><span>Kako da <strong>proveriš rezultate AI alata, uočiš greške i zadržiš kontrolu nad podacima</strong> i poslovnim odlukama</span></li>
+        <li><span class="num">1</span><span>Sredi datume u tabeli i uz pomoć <span class="nb">AI-ja</span> <strong>napiši formulu koja ti treba.</strong></span></li>
+        <li><span class="num">2</span><span>Poveži Excel tabelu sa <span class="nb">Power BI-jem</span> da sledećeg meseca <strong>samo učitaš nove podatke.</strong></span></li>
+        <li><span class="num">3</span><span>Proveri da li je formula koju je napisao AI <strong>obuhvatila sve redove</strong> pre nego što pošalješ izveštaj.</span></li>
       </ol>
-      <button class="btn" type="button" data-open-optin><span>Klikni ovde i prijavi se sada</span><span class="arw" aria-hidden="true">→</span></button>
+      <button class="btn" type="button" data-open-optin><span>Prijavi se besplatno</span><span class="arw" aria-hidden="true">→</span></button>
     </div>
 
     <div class="hero-media">
@@ -837,10 +837,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   var C = window.MC;
 
   /* ---------- datumi u tekstu ---------- */
-  document.getElementById('lead-date').textContent = 'koji organizujemo u ' + C.datumTekst;
+  document.getElementById('lead-date').textContent = C.datumTekst;
   document.getElementById('slot-date').textContent = C.datumTekst;
   var MESECI = ['jan','feb','mar','apr','maj','jun','jul','avg','sep','okt','nov','dec'];
-  var iso = C.datumISO;   /* 2026-11-20T19:00:00+01:00 - citamo doslovno, bez konverzije */
+  var iso = C.datumISO;   /* Citamo doslovno, bez konverzije. */
   document.getElementById('tk-d').textContent = String(+iso.slice(8, 10));
   document.getElementById('tk-m').textContent = MESECI[+iso.slice(5, 7) - 1];
   document.getElementById('tk-t').textContent = iso.slice(11, 16);
