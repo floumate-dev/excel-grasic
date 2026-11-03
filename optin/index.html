@@ -155,12 +155,11 @@ p{color:var(--ink)}
   background-size:68px 44px;mask-image:radial-gradient(ellipse 90% 75% at 50% 25%,#000 20%,transparent 78%)}
 .hero::after{content:"";position:absolute;width:620px;height:620px;right:-180px;top:-240px;border-radius:50%;
   background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
-.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(28px,4vw,60px);align-items:start;
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(28px,4vw,60px);
   padding:clamp(46px,6vw,84px) 20px clamp(52px,6vw,92px);max-width:1180px;margin:0 auto}
-.pill{display:inline-flex;align-items:center;gap:9px;background:rgba(225,242,94,.12);border:1px solid rgba(225,242,94,.34);
-  color:var(--lime);font-size:.72rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;padding:9px 16px;border-radius:999px}
-.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(225,242,94,.6);animation:pulse 2.2s infinite}
-.hero h1{margin:20px 0 18px}
+.hero-copy,.hero-media{display:flex;flex-direction:column;justify-content:space-between}
+.hero h1{margin:0 0 18px}
+.hero-copy .btn{min-height:66px;padding-inline:26px;font-weight:800}
 .hero-lead{font-size:clamp(.98rem,1.4vw,1.06rem)}
 .hero-lead strong{color:var(--cream);font-weight:600}
 
@@ -436,8 +435,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   /* mobilni redosled: naslov → video → CTA → timer → tekst → lista */
   .hero-in{display:flex;flex-direction:column;align-items:stretch;gap:0;padding-top:46px}
   .hero-copy,.hero-media{display:contents}
-  .hero-copy .pill{order:1;align-self:flex-start}
-  .hero-copy h1{order:2;margin:18px 0 24px}
+  .hero-copy h1{order:2;margin:0 0 24px}
   .hero-media .vsl-shell{order:3;margin-bottom:20px}
   .hero-copy .btn{order:4;align-self:stretch}
   .hero-media .cd-wrap{order:6;margin-top:18px}
@@ -476,7 +474,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 <section class="hero on-dark">
   <div class="hero-in">
     <div class="hero-copy">
-      <span class="pill"><span class="dot"></span>Besplatan Black Friday masterclass</span>
       <h1>Da li želiš da svoj posao završavaš <span class="hl nb">5-10x brže?</span></h1>
       <p class="hero-lead">Vidimo se <strong><span class="nb">onlajn</span></strong> u <strong id="lead-date"></strong>. Za <strong>90 minuta</strong> pokazaću ti kako uz Excel, Power BI i AI pripremam izveštaj za kraj meseca.</p>
       <ol class="hero-list">
@@ -484,7 +481,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <li><span class="num">2</span><span>Poveži Excel tabelu sa <span class="nb">Power BI-jem</span> da sledećeg meseca <strong>samo učitaš nove podatke.</strong></span></li>
         <li><span class="num">3</span><span>Proveri da li je formula koju je napisao AI <strong>obuhvatila sve redove</strong> pre nego što pošalješ izveštaj.</span></li>
       </ol>
-      <button class="btn" type="button" data-open-optin><span>Prijavi se besplatno</span><span class="arw" aria-hidden="true">→</span></button>
+      <button class="btn btn-wide" type="button" data-open-optin><span>PRIJAVI SE BESPLATNO</span></button>
     </div>
 
     <div class="hero-media">
