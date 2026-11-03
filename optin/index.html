@@ -269,9 +269,10 @@ p{color:var(--ink)}
 /* ============================================================
    PRESS (cream traka)
    ============================================================ */
-.press{background:var(--cream)}
-.press-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.press-card{display:flex;flex-direction:column;gap:16px;background:var(--white);border-radius:14px;padding:22px;
+.press{background:var(--cream);padding-block:clamp(28px,3vw,40px)}
+.press .sec-head{margin-bottom:clamp(18px,2vw,24px)}
+.press-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.press-card{display:flex;flex-direction:column;gap:8px;background:var(--white);border-radius:14px;padding:clamp(10px,1.5vw,16px);
   text-decoration:none;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease}
 .press-card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(0,77,58,.1)}
 .press-card img{height:26px;width:auto;object-fit:contain;object-position:left}
@@ -450,8 +451,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .gift{order:9;margin-top:6px}
   .vsl-shell::before{transform:translate(9px,9px)}
   .bio-in{grid-template-columns:1fr}
-  .press-grid{grid-template-columns:repeat(2,1fr)}
   .tst-grid{columns:2}
+}
+@media (max-width:900px){
+  .press-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:680px){
   .grid-2,.ben{grid-template-columns:1fr}
@@ -642,7 +645,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <span class="arrow">Pogledaj profil →</span></a>
       <a class="press-card rv" href="https://www.youtube.com/watch?v=c5qYMXmu_lk" target="_blank" rel="noopener">
         <img src="https://excelgrasic.com/wp-content/uploads/2024/08/png-clipart-procredit-group-public-joint-company-procredit-bank-finance-bank-text-service__1___1_-removebg-preview-1-e1726930799560.png" alt="ProCredit Bank">
-        <span>Razgovor sa osnivačem edukativne platforme Outliers i <span class="nb">Microsoft MVP-em</span></span>
+        <span>Razgovor sa osnivačem edukativne platforme Outliers i Microsoft <span class="nb">MVP-em</span></span>
         <span class="arrow">Pogledaj →</span></a>
     </div>
   </div>
