@@ -155,12 +155,15 @@ p{color:var(--ink)}
   background-size:68px 44px;mask-image:radial-gradient(ellipse 90% 75% at 50% 25%,#000 20%,transparent 78%)}
 .hero::after{content:"";position:absolute;width:620px;height:620px;right:-180px;top:-240px;border-radius:50%;
   background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
-.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(28px,4vw,60px);
-  padding:clamp(46px,6vw,84px) 20px clamp(52px,6vw,92px);max-width:1180px;margin:0 auto}
+.hero-in,.mid-cta{--column-gap:clamp(28px,4vw,60px);--cta-width:calc((100% - var(--column-gap)) * .52);
+  max-width:1180px;margin-inline:auto;padding-inline:20px}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:var(--cta-width) 1fr;gap:var(--column-gap);
+  padding-block:clamp(46px,6vw,84px) clamp(52px,6vw,92px)}
 .hero-copy,.hero-media{display:flex;flex-direction:column;justify-content:space-between}
 .hero h1{margin:0 0 18px}
+.hero-copy .btn,.mid-cta .btn{min-height:66px;padding-inline:26px;font-weight:800}
 /* Na desktopu se sa tajmerom poravnava i donji rub senke od 4px. */
-.hero-copy .btn{bottom:4px;min-height:66px;padding-inline:26px;font-weight:800}
+.hero-copy .btn{bottom:4px}
 .hero-lead{font-size:clamp(.98rem,1.4vw,1.06rem)}
 .hero-lead strong{color:var(--cream);font-weight:600}
 
@@ -261,6 +264,7 @@ p{color:var(--ink)}
 /* poziv na akciju ispod benefita */
 .mid-cta{text-align:center;margin-top:clamp(30px,4vw,42px)}
 .mid-cta p{font-size:1.02rem;color:var(--ink-2);margin-bottom:18px}
+.mid-cta .btn{width:var(--cta-width)}
 
 /* ============================================================
    PRESS (cream traka)
@@ -439,6 +443,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .hero-copy h1{order:2;margin:0 0 24px}
   .hero-media .vsl-shell{order:3;margin-bottom:20px}
   .hero-copy .btn{order:4;align-self:stretch;bottom:auto}
+  .mid-cta{--cta-width:100%}
   .hero-media .cd-wrap{order:6;margin-top:18px}
   .hero-lead{order:7;margin-top:28px}
   .hero-list{order:8}
@@ -461,9 +466,9 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .tk-cut{display:none}
   .cd-box{padding:11px 4px}
   .modal-card{padding:24px 20px}
-  .modal-card .btn,.signup-in .btn,.mid-cta .btn{font-size:.92rem;padding:17px 14px;gap:0;white-space:nowrap}
-  .modal-card .btn .arw,.signup-in .btn .arw,.mid-cta .btn .arw{display:none}
-  .mid-cta .btn{width:100%}
+  .modal-card .btn,.signup-in .btn{font-size:.92rem;padding:17px 14px;gap:0;white-space:nowrap}
+  .modal-card .btn .arw,.signup-in .btn .arw{display:none}
+  .mid-cta .btn{padding-inline:14px}
   .sticky-cta{display:flex}
   body{padding-bottom:64px}
 }
@@ -581,12 +586,14 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <p>Saznaćeš kako da <strong>odlučuješ brže i pametnije</strong> uz bitne strateške uvide pomoću AI umesto da sve radiš ručno.</p></div>
       <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
         <p>Dobićeš <strong>realne primere koje možeš odmah da probaš</strong> i da iskoristiš već sutra jer ovo je zaista masterclass i želimo da odeš sa praktičnim znanjem.</p></div>
+      <div class="ben-item rv"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
+        <p>Ako si menadžer ili šef tima, pokazaću ti kako da <strong>povećaš njihovu produktivnost</strong> i omogućiš im da efikasnije, brže i lakše izvršavaju svoje zadatke.</p></div>
     </div>
+  </div>
 
-    <div class="mid-cta rv">
-      <p>Sve ovo za 90 minuta, potpuno besplatno.</p>
-      <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span><span class="arw" aria-hidden="true">&#8594;</span></button>
-    </div>
+  <div class="mid-cta rv">
+    <p>Sve ovo za 90 minuta, potpuno besplatno.</p>
+    <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span></button>
   </div>
 </section>
 
