@@ -7,12 +7,41 @@ hostuje se bilo gde (Vercel, Netlify, S3, Cloudflare Pages).
 |---|---|---|
 | `optin/index.html` | Landing + prijava u popupu (ActiveCampaign) | - |
 | `application.html` | Bridge: VSL + anketa | 62% |
-| `thankyou.html` | Potvrda + kalendar | 100% |
+| `thankyou.html` | Potvrda + dva koraka | 100% |
 
 Tok: `/optin/` → (AC submit) → `application.html?firstname=…&email=…&utm_*` → anketa → `thankyou.html`
 
 Landing zivi u `optin/index.html` da bi adresa bila `/excel-grasic/optin` bez nastavka `.html`.
 Koreni `index.html` je samo preusmerenje na `optin/` i prosledjuje UTM parametre.
+
+Uzivo:
+[optin](https://floumate-dev.github.io/excel-grasic/optin) ·
+[application](https://floumate-dev.github.io/excel-grasic/application.html) ·
+[thankyou](https://floumate-dev.github.io/excel-grasic/thankyou.html)
+
+## Prvi put na projektu
+
+```bash
+git clone https://github.com/floumate-dev/excel-grasic.git
+cd excel-grasic
+```
+
+Pa pokreni Claude Code u tom folderu. On sam procita `CLAUDE.md`, gde pise sta
+sme da se menja, gde koji tekst stoji i sta se proverava pre pusha.
+
+Rad bez Claude Code-a radi isto, samo rucno:
+
+```bash
+python3 tools/serve.py      # pregled na http://localhost:8731/optin/
+python3 tools/provera.py    # obavezno pre pusha
+```
+
+`tools/provera.py` hvata polomljen HTML, izgubljen `id` koji JavaScript trazi,
+dugi dash i pokvareno kodiranje. Isto to se pokrece i na GitHubu posle svakog
+pusha, pa ako nesto promakne stize mejl sa greskom.
+
+**Push ide pravo u produkciju.** Grana `main` je ono sto klijent vidi, stranica
+se osvezi za minut-dva. Nema staginga. Ako nesto pukne: `git revert <hash>` pa push.
 
 ## Konfiguracija
 
