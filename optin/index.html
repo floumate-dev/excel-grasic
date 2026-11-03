@@ -155,13 +155,13 @@ p{color:var(--ink)}
   background-size:68px 44px;mask-image:radial-gradient(ellipse 90% 75% at 50% 25%,#000 20%,transparent 78%)}
 .hero::after{content:"";position:absolute;width:620px;height:620px;right:-180px;top:-240px;border-radius:50%;
   background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
-.hero-in,.mid-cta{--column-gap:clamp(28px,4vw,60px);--cta-width:calc((100% - var(--column-gap)) * .52);
+.hero-in,.cta-row{--column-gap:clamp(28px,4vw,60px);--cta-width:calc((100% - var(--column-gap)) * .52);
   max-width:1180px;margin-inline:auto;padding-inline:20px}
 .hero-in{position:relative;z-index:2;display:grid;grid-template-columns:var(--cta-width) 1fr;gap:var(--column-gap);
   padding-block:clamp(46px,6vw,84px) clamp(52px,6vw,92px)}
 .hero-copy,.hero-media{display:flex;flex-direction:column;justify-content:space-between}
 .hero h1{margin:0 0 18px}
-.hero-copy .btn,.mid-cta .btn{min-height:66px;padding-inline:26px;font-weight:800}
+.hero-copy .btn,.cta-row .btn{min-height:66px;padding-inline:26px;font-weight:800}
 /* Na desktopu se sa tajmerom poravnava i donji rub senke od 4px. */
 .hero-copy .btn{bottom:4px}
 .hero-lead{font-size:clamp(.98rem,1.4vw,1.06rem)}
@@ -262,9 +262,10 @@ p{color:var(--ink)}
 .ben-item p{font-size:.95rem;margin:0}
 .ben-item strong{color:var(--green);font-weight:600}
 /* poziv na akciju ispod benefita */
-.mid-cta{text-align:center;margin-top:clamp(30px,4vw,42px)}
+.cta-row{text-align:center}
+.mid-cta{margin-top:clamp(30px,4vw,42px)}
 .mid-cta p{font-size:1.02rem;color:var(--ink-2);margin-bottom:18px}
-.mid-cta .btn{width:var(--cta-width)}
+.cta-row .btn{width:var(--cta-width)}
 
 /* ============================================================
    PRESS (cream traka)
@@ -367,7 +368,7 @@ p{color:var(--ink)}
 .tk-list svg{width:16px;height:16px;stroke:var(--leaf);fill:none;stroke-width:2.8;flex:0 0 16px;
   margin-top:3px;stroke-linecap:round;stroke-linejoin:round}
 .signup-in .cd-wrap{max-width:430px;margin:clamp(22px,3vw,30px) auto 0}
-.signup-in .btn{margin-top:18px;min-width:min(100%,430px)}
+.signup .cta-row{position:relative;z-index:2;margin-top:18px}
 .modal-card h3{color:var(--green);margin-bottom:6px}
 .form-intro{font-size:.88rem;color:var(--ink-2);margin-bottom:16px}
 .bio-sub{font-size:clamp(1.05rem,1.8vw,1.3rem);color:var(--ink-2);margin-top:6px}
@@ -445,7 +446,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .hero-copy h1{order:2;margin:0 0 24px}
   .hero-media .vsl-shell{order:3;margin-bottom:20px}
   .hero-copy .btn{order:4;align-self:stretch;bottom:auto}
-  .mid-cta{--cta-width:100%}
+  .cta-row{--cta-width:100%}
   .hero-media .cd-wrap{order:6;margin-top:18px}
   .hero-lead{order:7;margin-top:28px}
   .hero-list{order:8}
@@ -470,9 +471,9 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .tk-cut{display:none}
   .cd-box{padding:11px 4px}
   .modal-card{padding:24px 20px}
-  .modal-card .btn,.signup-in .btn{font-size:.92rem;padding:17px 14px;gap:0;white-space:nowrap}
-  .modal-card .btn .arw,.signup-in .btn .arw{display:none}
-  .mid-cta .btn{padding-inline:14px}
+  .modal-card .btn{font-size:.92rem;padding:17px 14px;gap:0;white-space:nowrap}
+  .modal-card .btn .arw{display:none}
+  .cta-row .btn{padding-inline:14px}
   .sticky-cta{display:flex}
   body{padding-bottom:64px}
 }
@@ -595,7 +596,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     </div>
   </div>
 
-  <div class="mid-cta rv">
+  <div class="mid-cta cta-row rv">
     <p>Sve ovo za 90 minuta, potpuno besplatno.</p>
     <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span></button>
   </div>
@@ -769,7 +770,9 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       </div>
     </div>
 
-    <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span><span class="arw" aria-hidden="true">&#8594;</span></button>
+  </div>
+  <div class="cta-row">
+    <button class="btn" type="button" data-open-optin><span>KLIKNI OVDE I PRIJAVI SE SADA</span></button>
   </div>
 </section>
 
