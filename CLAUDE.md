@@ -6,6 +6,7 @@ Tri samostalne HTML stranice, bez build koraka. Menja se uglavnom **tekst**.
 ```
 optin/index.html     landing, prijava se otvara u popupu
 optin-2/index.html   druga verzija landinga (A/B), menja se nezavisno od prve
+utisci/              screenshotovi mejlova, koriste ih obe verzije landinga
 application.html     bridge: video pa slot za anketu
 thankyou.html        potvrda: video pa dva koraka
 index.html           samo preusmerenje na /optin/
@@ -35,6 +36,10 @@ ne valja ni to; preformuliši rečenicu da rod ne bude potreban.
 stranice. Nikad ručno po tekstu - vrednosti se ubacuju JavaScriptom.
 
 **6. Ne menjaj `.gitignore`, workflow fajlove ni `tools/`** bez izričitog traženja.
+
+**7. Slike u `utisci/` su obrađene - ne menjaj ih.** Na svakoj je mejl adresa
+pošiljaoca zamućena. Ako dodaješ nov utisak, zamuti adresu pre nego što ga
+ubaciš, i dodaj ga u `id="ut-grid"` na obe verzije landinga.
 
 ---
 
@@ -83,7 +88,7 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Tri stavke u herou | `optin/index.html` | `class="hero-list"` |
 | Sekciju o problemima | `optin/index.html` | `class="prob-row"` |
 | Benefite | `optin/index.html` | `class="ben-item"` |
-| Utiske | `optin/index.html` | `class="tst"` |
+| Redosled utisaka | `optin/index.html` | `id="ut-grid"` |
 | Bio Aleksandra | `optin/index.html` | `class="bio-list"` |
 | Tekst u popupu za prijavu | `optin/index.html` | `id="optin-modal"` |
 | Poruke o greškama u formi | `optin/index.html` | `function proveri` |

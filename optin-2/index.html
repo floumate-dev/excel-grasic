@@ -286,13 +286,36 @@ p{color:var(--ink)}
 /* ============================================================
    TESTIMONIJALI
    ============================================================ */
-.tst-grid{columns:3;column-gap:16px}
-.tst{break-inside:avoid;position:relative;background:var(--mint);border-radius:var(--r);padding:26px 24px 22px;margin-bottom:16px}
-.tst::before{content:"”";position:absolute;top:2px;right:18px;font-size:4.2rem;line-height:1;color:rgba(0,77,58,.12);font-family:Georgia,serif}
-.tst-stars{color:var(--leaf);font-size:.82rem;letter-spacing:2px;margin-bottom:12px}
-.tst p{font-size:.9rem;line-height:1.62;margin:0 0 16px;color:var(--ink)}
-.tst-name{padding-top:14px;border-top:1px solid rgba(0,77,58,.12)}
-.tst-name b{font-size:.88rem;font-weight:600;color:var(--green)}
+.ut-note{text-align:center;font-size:.88rem;color:var(--ink-2);margin:0 0 clamp(22px,2.6vw,32px)}
+.ut-note svg{width:15px;height:15px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;vertical-align:-3px;margin-right:7px}
+.ut-grid{columns:3;column-gap:16px}
+.ut{display:block;width:100%;break-inside:avoid;margin:0 0 16px;padding:0;position:relative;cursor:zoom-in;
+  background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  box-shadow:0 10px 26px rgba(0,16,12,.07);
+  transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease,border-color .2s ease}
+.ut:hover{transform:translateY(-3px);border-color:var(--leaf);box-shadow:0 18px 40px rgba(0,77,58,.14)}
+.ut img{display:block;width:100%;height:auto}
+.ut .lupa{position:absolute;right:10px;bottom:10px;width:30px;height:30px;border-radius:50%;background:var(--green);
+  display:grid;place-items:center;opacity:0;transform:scale(.85);transition:opacity .2s ease,transform .2s ease}
+.ut:hover .lupa,.ut:focus-visible .lupa{opacity:1;transform:scale(1)}
+.ut .lupa svg{width:15px;height:15px;stroke:var(--lime);fill:none;stroke-width:2.4;stroke-linecap:round}
+
+/* uvecanje utiska */
+.lb{position:fixed;inset:0;z-index:120;background:rgba(0,16,12,.93)}
+.lb[hidden]{display:none}
+.lb-stage{position:absolute;inset:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:66px 72px 24px}
+.lb-stage img{display:block;max-width:1100px;width:100%;height:auto;border-radius:10px;background:var(--white);
+  box-shadow:0 30px 70px rgba(0,0,0,.5)}
+.lb-x,.lb-str{position:absolute;z-index:2;width:42px;height:42px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(236,237,229,.22);background:rgba(236,237,229,.1);display:grid;place-items:center;
+  transition:background .16s ease,border-color .16s ease}
+.lb-x:hover,.lb-str:hover{background:rgba(225,242,94,.18);border-color:var(--lime)}
+.lb-x svg,.lb-str svg{width:18px;height:18px;stroke:var(--cream);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.lb-x{top:14px;right:16px}
+.lb-prev{left:16px;top:50%;transform:translateY(-50%)}
+.lb-next{right:16px;top:50%;transform:translateY(-50%)}
+.lb-broj{position:absolute;z-index:2;top:24px;left:50%;transform:translateX(-50%);font-size:.8rem;
+  color:rgba(236,237,229,.72);font-variant-numeric:tabular-nums}
 
 /* ============================================================
    BIO
@@ -455,14 +478,20 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .gift{order:9;margin-top:6px}
   .vsl-shell::before{transform:translate(9px,9px)}
   .bio-in{grid-template-columns:1fr}
-  .tst-grid{columns:2}
+  .ut-grid{columns:2}
 }
 @media (max-width:900px){
   .press-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:680px){
   .grid-2,.ben{grid-template-columns:1fr}
-  .tst-grid{columns:1}
+  /* na telefonu mejl ostaje citljiv: slika u punoj sirini, stranica se prevlaci */
+  .lb-stage{padding:58px 0 14px;align-items:flex-start;justify-content:flex-start}
+  .lb-stage img{width:760px;max-width:none;border-radius:0}
+  .lb-prev{left:10px}
+  .lb-next{right:10px}
+  .lb-prev,.lb-next{width:36px;height:36px;background:rgba(0,16,12,.6)}
+  .ut-grid{columns:1}
   .fld-row{grid-template-columns:1fr}
   .ticket{grid-template-columns:1fr}
   .tk-stub{flex-direction:row;align-items:baseline;gap:12px;padding:16px 20px;border-radius:20px 20px 0 0}
@@ -660,38 +689,60 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       <h2>Pročitajte utiske prisutnih sa prethodnih Masterclassova koji su naučili kako da primene znanje i unaprede svoje karijere</h2>
       <p>Saznajte kako smo pomogli drugima da se izdvoje na tržištu rada i uštede sate na dnevnom nivou.</p>
     </div>
-    <div class="tst-grid">
-      <div class="tst rv"><div class="tst-stars">★★★★★</div>
-        <p>Zadovoljstvo <span class="nb">Masterclass-om</span> je ogromno.</p>
-        <p>U svega 45min dobila sam gotov proizvod, nacin kako da ogromne fajlove koji prevazilaze dati broj redova u excelu, rasporedim/grupisem i od njih napravim izvestaj I isti dinmicki vizualizujem.</p>
-        <p>Masterclass sam odslusala sa koleginicom, pa smo obe razmenile utiske vec narednog dana koji su bili sjajni, a I podelila sa kolegama koji nisu slusali predavanje.</p>
-        <p>Prezentovano na masterclassu cu primeniti vec danas na izvestaju koji je sutra na dnevnom redu za prezentovanje.</p>
-        <div class="tst-name"><b>Natasa Tupajic</b></div></div>
-      <div class="tst rv"><div class="tst-stars">★★★★★</div>
-        <p>Zdravo, i hvala na masteru, kao i na svakom mejlu i podsetniku.</p>
-        <p>Mnogo mi se dopao nacin na koji radis, neposredan, nema nervoze u glasu, i sto pitas kako bi mi resili odredjeni zadatak.</p>
-        <p>Posebno mi je vazno bilo da vidim da li znanje delis detaljno i do kraja, e, za to sve pohvale.</p>
-        <div class="tst-name"><b>Tatjana Matic</b></div></div>
-      <div class="tst rv"><div class="tst-stars">★★★★★</div>
-        <p>Pre svega želim da ti puno zahvalim što si nam omogućio ovaj čas edukacije (da zapravo spoznam koliko ne znam) I da excel nije samo sum, if….</p>
-        <p>Predobar cas, puno znajai dobrih fora sam pokupila. Mnogo mi znači za poslovanje pošto radim u računovodstvu i planiram da još dublje zadjem u tu terminologiju.</p>
-        <p>Jos jednom hvala puno i nastaviću da te pratim i kradem zanat od tebe.</p>
-        <div class="tst-name"><b>Radmila Nedeljkovic</b></div></div>
-      <div class="tst rv"><div class="tst-stars">★★★★★</div>
-        <p>Svidja mi se ideja masterclass-ova. Tu nesebicno delite svoje znanje, ne znam nikoga ko je tako neposredan, uvek spreman da pomogne, sa kvalitetnim treninzima i savetima. U iščekivanju budućih druženja,</p>
-        <p>Pozdrav za celu Outliers ekipu</p>
-        <div class="tst-name"><b>Biljana Pajić</b></div></div>
-      <div class="tst rv"><div class="tst-stars">★★★★★</div>
-        <p>Vas Masterclass mi je pomogao da postanem svesna svog neznanja.</p>
-        <p>Kao nekoga ko je dugi niz godina aktivno koristio excel, pa napravio visegodisnju pauzu, raduje me sto cu se jednim delom podsetiti, a drugim delom i nauciti mnogo novih stvari. Narocito se radujem BI-ju.</p>
-        <p>Dopalo mi se to sto ste pokazali kako efikasno moze da se napravi baza od eksportovanih fajlova. Promet tekuceg racuna u csv formatu i njegovo sredjuvanje mi je uvek bio rak-rana.</p>
-        <p>Pratim Vas preko Instagrama. Izlazete koncizno. Drzite paznju. Posedujete Vau efekat, citajuci komentare. Ne bih Vam nista ni dodala, ni oduzela, ni promenila.</p>
-        <p>Zelim Vam sve najbolje!</p>
-        <div class="tst-name"><b>Dijana Jovic</b></div></div>
-      <div class="tst rv"><div class="tst-stars">★★★★★</div>
-        <p>Masterclass je bio fenomenalan. Bio sam na par jako kvalitetnih Excel kurseva u proslosti ali to je prosto ne uporedivo sa onim sto ti i tvoj tim radite.</p>
-        <p>Imate moju veliku podrsku.</p>
-        <div class="tst-name"><b>Marko Savovic</b></div></div>
+    <p class="ut-note rv"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg>Klikni na bilo koji utisak da ga uvećaš.</p>
+    <div class="ut-grid" id="ut-grid">
+      <button class="ut rv" type="button" data-i="0" aria-label="Uvećaj utisak - Jovana Radosavljević">
+        <img src="../utisci/jovana-radosavljevic.png" alt="Utisak sa Masterclassa - Jovana Radosavljević" width="818" height="633" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="1" aria-label="Uvećaj utisak - Irena Lučić">
+        <img src="../utisci/irena-lucic.png" alt="Utisak sa Masterclassa - Irena Lučić" width="1070" height="596" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="2" aria-label="Uvećaj utisak - Bojan Drobnjak">
+        <img src="../utisci/bojan-drobnjak.png" alt="Utisak sa Masterclassa - Bojan Drobnjak" width="1061" height="768" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="3" aria-label="Uvećaj utisak - Farah Al Bustanji">
+        <img src="../utisci/farah-al-bustanji.png" alt="Utisak sa Masterclassa - Farah Al Bustanji" width="1055" height="681" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="4" aria-label="Uvećaj utisak - Katerina Petkovska">
+        <img src="../utisci/katerina-petkovska.png" alt="Utisak sa Masterclassa - Katerina Petkovska" width="1062" height="530" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="5" aria-label="Uvećaj utisak - Tatjana Korceba-Huić">
+        <img src="../utisci/tatjana-korceba-huic.png" alt="Utisak sa Masterclassa - Tatjana Korceba-Huić" width="1057" height="476" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="6" aria-label="Uvećaj utisak - Jelena Miladić">
+        <img src="../utisci/jelena-miladic.png" alt="Utisak sa Masterclassa - Jelena Miladić" width="1026" height="417" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="7" aria-label="Uvećaj utisak - Branka Panić">
+        <img src="../utisci/branka-panic.png" alt="Utisak sa Masterclassa - Branka Panić" width="1077" height="498" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="8" aria-label="Uvećaj utisak - Lejla Hasković">
+        <img src="../utisci/lejla-haskovic.png" alt="Utisak sa Masterclassa - Lejla Hasković" width="1043" height="500" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="9" aria-label="Uvećaj utisak - Jozefina Beke-Trivunac">
+        <img src="../utisci/jozefina-beke-trivunac.png" alt="Utisak sa Masterclassa - Jozefina Beke-Trivunac" width="1077" height="410" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="10" aria-label="Uvećaj utisak - Slađana Bukvić Pendo">
+        <img src="../utisci/sladjana-bukvic-pendo.png" alt="Utisak sa Masterclassa - Slađana Bukvić Pendo" width="1076" height="360" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="11" aria-label="Uvećaj utisak - Marko Nikolić">
+        <img src="../utisci/marko-nikolic.png" alt="Utisak sa Masterclassa - Marko Nikolić" width="1012" height="241" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
+      <button class="ut rv" type="button" data-i="12" aria-label="Uvećaj utisak - Narcisa Marinov">
+        <img src="../utisci/narcisa-marinov.png" alt="Utisak sa Masterclassa - Narcisa Marinov" width="775" height="256" loading="lazy" decoding="async">
+        <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+      </button>
     </div>
   </div>
 </section>
@@ -1136,6 +1187,70 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         var u = utmString(); if (u) qs += '&' + u;
         location.href = C.nextUrl + '?' + qs;
       });
+  });
+})();
+</script>
+
+<!-- uvecanje utiska -->
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Uvećan utisak">
+  <p class="lb-broj"><span id="lb-broj">1 / 13</span></p>
+  <button class="lb-x" type="button" aria-label="Zatvori"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <button class="lb-str lb-prev" type="button" aria-label="Prethodni"><svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg></button>
+  <button class="lb-str lb-next" type="button" aria-label="Sledeći"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></button>
+  <div class="lb-stage"><img id="lb-img" src="" alt=""></div>
+</div>
+
+<script>
+/* uvecanje utisaka: klik, strelice, Esc */
+(function () {
+  var grid = document.getElementById('ut-grid');
+  var lb = document.getElementById('lb');
+  if (!grid || !lb) return;
+
+  var slike = [].slice.call(grid.querySelectorAll('img'));
+  var lbImg = document.getElementById('lb-img');
+  var lbBroj = document.getElementById('lb-broj');
+  var stage = lb.querySelector('.lb-stage');
+  var tren = 0, vratiNa = null;
+
+  function prikazi(i) {
+    tren = (i + slike.length) % slike.length;
+    lbImg.src = slike[tren].src;
+    lbImg.alt = slike[tren].alt;
+    lbBroj.textContent = (tren + 1) + ' / ' + slike.length;
+    stage.scrollTop = 0;
+    stage.scrollLeft = 0;
+  }
+
+  function otvori(i, dugme) {
+    vratiNa = dugme || null;
+    prikazi(i);
+    lb.hidden = false;
+    document.body.classList.add('no-scroll');
+    lb.querySelector('.lb-x').focus();
+  }
+
+  function zatvori() {
+    lb.hidden = true;
+    document.body.classList.remove('no-scroll');
+    if (vratiNa) vratiNa.focus();
+  }
+
+  grid.addEventListener('click', function (e) {
+    var d = e.target.closest('.ut');
+    if (d) otvori(parseInt(d.getAttribute('data-i'), 10), d);
+  });
+  lb.querySelector('.lb-x').addEventListener('click', zatvori);
+  lb.querySelector('.lb-prev').addEventListener('click', function () { prikazi(tren - 1); });
+  lb.querySelector('.lb-next').addEventListener('click', function () { prikazi(tren + 1); });
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb || e.target === stage) zatvori();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') zatvori();
+    else if (e.key === 'ArrowLeft') prikazi(tren - 1);
+    else if (e.key === 'ArrowRight') prikazi(tren + 1);
   });
 })();
 </script>
