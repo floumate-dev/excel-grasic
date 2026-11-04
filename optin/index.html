@@ -483,12 +483,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 }
 @media (max-width:680px){
   .grid-2,.ben{grid-template-columns:1fr}
-  /* na telefonu mejl ostaje citljiv: slika u punoj sirini, stranica se prevlaci */
-  .lb-stage{padding:58px 0 14px;align-items:flex-start;justify-content:flex-start}
-  .lb-stage img{width:760px;max-width:none;border-radius:0}
-  .lb-prev{left:10px}
-  .lb-next{right:10px}
-  .lb-prev,.lb-next{width:36px;height:36px;background:rgba(0,16,12,.6)}
+  /* na telefonu se utisci ne uvecavaju - mejlovi stoje jedan ispod drugog */
+  .ut{cursor:default;box-shadow:0 6px 18px rgba(0,16,12,.06)}
+  .ut:hover{transform:none;border-color:var(--line);box-shadow:0 6px 18px rgba(0,16,12,.06)}
+  .ut .lupa,.ut-note{display:none}
   .ut-grid{columns:1}
   .fld-row{grid-template-columns:1fr}
   .ticket{grid-template-columns:1fr}
@@ -1200,6 +1198,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   if (!grid || !lb) return;
 
   var slike = [].slice.call(grid.querySelectorAll('img'));
+  var dugmad = [].slice.call(grid.querySelectorAll('.ut'));
+  var telefon = window.matchMedia('(max-width:680px)');
   var lbImg = document.getElementById('lb-img');
   var lbBroj = document.getElementById('lb-broj');
   var stage = lb.querySelector('.lb-stage');
@@ -1228,7 +1228,18 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     if (vratiNa) vratiNa.focus();
   }
 
+  /* na telefonu uvecanje ne radi - dugmad se gase da ne hvataju ni dodir ni tab */
+  function osveziRezim() {
+    var iskljuci = telefon.matches;
+    dugmad.forEach(function (d) { d.disabled = iskljuci; });
+    if (iskljuci && !lb.hidden) zatvori();
+  }
+  osveziRezim();
+  if (telefon.addEventListener) telefon.addEventListener('change', osveziRezim);
+  else telefon.addListener(osveziRezim);
+
   grid.addEventListener('click', function (e) {
+    if (telefon.matches) return;
     var d = e.target.closest('.ut');
     if (d) otvori(parseInt(d.getAttribute('data-i'), 10), d);
   });
