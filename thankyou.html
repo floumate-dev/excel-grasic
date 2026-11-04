@@ -256,11 +256,53 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  /* ---------- vokativ ---------- *
+   * Ime u obracanju uvek ide u vokativ: Dusan -> Dusane, Milos -> Milose.
+   * Kad pravilo nije sigurno (zenska imena, strana imena), ime ostaje kakvo
+   * jeste - bolje nominativ nego pogresan oblik.                           */
+  function vokativ(ulaz){
+    var m = String(ulaz || '').trim().split(/\s+/)[0];
+    if (m.length < 2) return m;
+
+    var malo = m.toLocaleLowerCase('sr-RS');
+
+    /* imena koja u vokativu ostaju ista */
+    if (' ines nives karmen dolores ingrid doris iris nikol ester rut '
+        .indexOf(' ' + malo + ' ') > -1) return m;
+
+    /* nepostojano a i slicni izuzeci */
+    var IZUZECI = {
+      'petar': 'Petre', 'aleksandar': 'Aleksandre', 'dimitar': 'Dimitre',
+      'mitar': 'Mitre', 'pavao': 'Pavle'
+    };
+    if (IZUZECI[malo]) return IZUZECI[malo];
+
+    var zadnje = malo.charAt(malo.length - 1);
+
+    /* Milica -> Milice, Danica -> Danice */
+    if (malo.length > 4 && malo.slice(-3) === 'ica') return m.slice(0, -1) + 'e';
+
+    /* Ana, Marija, Nikola, Marko, Pavle, Đorđe - ostaju isti */
+    if ('aeiou'.indexOf(zadnje) > -1) return m;
+
+    /* Andrej -> Andreju, Matej -> Mateju */
+    if (zadnje === 'j') return m + 'u';
+
+    /* Vuk -> Vuče, Predrag -> Predraže */
+    if (zadnje === 'k') return m.slice(0, -1) + 'če';
+    if (zadnje === 'g') return m.slice(0, -1) + 'že';
+    if (zadnje === 'h') return m.slice(0, -1) + 'še';
+
+    /* Dušan -> Dušane, Miloš -> Miloše, Ivan -> Ivane */
+    return m + 'e';
+  }
+
   /* ---------- pozdrav po imenu ---------- */
   var ime = (p.get('firstname') || p.get('ime') || '').trim();
   if (ime) {
-    ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1);
-    document.getElementById('hello').textContent = ime + ', vidimo se uskoro.';
+    /* DUSAN i dusan -> Dušan, da vokativ ne izadje nakaradan */
+    ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1).toLocaleLowerCase('sr-RS');
+    document.getElementById('hello').textContent = vokativ(ime) + ', vidimo se uskoro.';
   }
 
   /* ---------- video ---------- */
