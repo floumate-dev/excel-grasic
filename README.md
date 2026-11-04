@@ -6,6 +6,7 @@ hostuje se bilo gde (Vercel, Netlify, S3, Cloudflare Pages).
 | Fajl | Uloga | Progres traka |
 |---|---|---|
 | `optin/index.html` | Landing + prijava u popupu (ActiveCampaign) | - |
+| `optin-2/index.html` | Druga verzija landinga (A/B test) | - |
 | `application.html` | Bridge: VSL + anketa | 62% |
 | `thankyou.html` | Potvrda + dva koraka | 100% |
 
@@ -16,6 +17,7 @@ Koreni `index.html` je samo preusmerenje na `optin/` i prosledjuje UTM parametre
 
 Uzivo:
 [optin](https://floumate-dev.github.io/excel-grasic/optin) ·
+[optin-2](https://floumate-dev.github.io/excel-grasic/optin-2) ·
 [application](https://floumate-dev.github.io/excel-grasic/application.html) ·
 [thankyou](https://floumate-dev.github.io/excel-grasic/thankyou.html)
 

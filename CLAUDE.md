@@ -5,6 +5,7 @@ Tri samostalne HTML stranice, bez build koraka. Menja se uglavnom **tekst**.
 
 ```
 optin/index.html     landing, prijava se otvara u popupu
+optin-2/index.html   druga verzija landinga (A/B), menja se nezavisno od prve
 application.html     bridge: video pa slot za anketu
 thankyou.html        potvrda: video pa dva koraka
 index.html           samo preusmerenje na /optin/
@@ -62,6 +63,7 @@ Tek onda commit i push.
 `git push` na granu `main` i stranica je uživo za minut-dva:
 
 - https://floumate-dev.github.io/excel-grasic/optin
+- https://floumate-dev.github.io/excel-grasic/optin-2
 - https://floumate-dev.github.io/excel-grasic/application.html
 - https://floumate-dev.github.io/excel-grasic/thankyou.html
 

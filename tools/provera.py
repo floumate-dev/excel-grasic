@@ -28,6 +28,12 @@ OBAVEZNO = {
         'id="mc-submit"', 'id="form-err"', 'data-open-optin', 'id="cd-form"',
         'id="tk-d"', 'id="tk-m"', 'id="tk-t"', 'id="yr"',
     ],
+    'optin-2/index.html': [
+        'window.MC', 'id="optin-modal"', 'id="mc-form"', 'id="fullname"',
+        'id="email"', 'id="phone"', 'id="field5"', 'id="field12"',
+        'id="mc-submit"', 'id="form-err"', 'data-open-optin', 'id="cd-form"',
+        'id="tk-d"', 'id="tk-m"', 'id="tk-t"', 'id="yr"',
+    ],
     'application.html': [
         'window.MC', 'id="vsl"', 'id="hello"', 'id="survey-box"',
         'id="fill"', 'id="track-lab"', 'id="open-survey"', 'id="yr"',
