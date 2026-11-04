@@ -285,8 +285,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     /* Ana, Marija, Nikola, Marko, Pavle, Đorđe - ostaju isti */
     if ('aeiou'.indexOf(zadnje) > -1) return m;
 
-    /* Andrej -> Andreju, Matej -> Mateju */
-    if (zadnje === 'j') return m + 'u';
+    /* Andrej, Matej, Nikolaj - ostaju isti */
+    if (zadnje === 'j') return m;
 
     /* Vuk -> Vuče, Predrag -> Predraže */
     if (zadnje === 'k') return m.slice(0, -1) + 'če';
