@@ -38,9 +38,11 @@ stranice. Nikad ručno po tekstu - vrednosti se ubacuju JavaScriptom.
 
 **6. Ne menjaj `.gitignore`, workflow fajlove ni `tools/`** bez izričitog traženja.
 
-**7. Slike u `utisci/` su obrađene - ne menjaj ih.** Na svakoj je mejl adresa
-pošiljaoca zamućena. Ako dodaješ nov utisak, zamuti adresu pre nego što ga
-ubaciš, i dodaj ga u `id="ut-grid"` na obe verzije landinga.
+**7. Slike u `utisci/` su obrađene - ne menjaj ih.** Na svakoj su zamućeni
+mejl adresa i prezime, i u zaglavlju i u potpisu; vidi se samo ime. Zato i
+fajl i `alt` nose samo ime. Ako dodaješ nov utisak, zamuti isto to pre nego
+što ga ubaciš, imenuj ga po imenu osobe i dodaj ga u `id="ut-grid"` na obe
+verzije landinga. Originali stoje u `utisci-izvor/` i ne idu na sajt.
 
 ---
 
