@@ -159,8 +159,7 @@ p,li{text-wrap:pretty}
   font-size:.78rem;font-weight:600;text-decoration:none;text-align:center;line-height:1.2;
   transition:background .16s ease,border-color .16s ease,transform .16s ease}
 .mbtn:hover{background:rgba(225,242,94,.16);border-color:var(--lime);transform:translateY(-1px)}
-.mbtn svg{width:14px;height:14px;flex:0 0 14px;stroke:currentColor;fill:none;stroke-width:2;
-  stroke-linecap:round;stroke-linejoin:round}
+.mbtn .ik{width:15px;height:15px;flex:0 0 15px}
 /* program koji po adresi najverovatnije koristi */
 .mbtn.pred{border-color:var(--lime);background:rgba(225,242,94,.17);color:var(--lime)}
 .sent{display:block;margin-top:11px;font-size:.8rem;color:rgba(236,237,229,.6);text-align:center}
@@ -199,10 +198,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 }
 @media (max-width:680px){
   .vsl-shell::before{transform:translate(9px,9px)}
-  /* uska kartica: bez koverti, da "Apple Mail" stane u jedan red */
-  .mail-btns{gap:6px}
-  .mbtn{font-size:.72rem;padding:12px 4px;gap:0}
-  .mbtn svg{display:none}
+  /* uska kartica: ostaju same ikonice, ime programa cita citac ekrana */
+  .mbtn{padding:13px 4px}
+  .mbtn .ik{width:19px;height:19px;flex:0 0 19px}
+  .mbtn span{display:none}
 }
 </style>
 </head>
@@ -232,9 +231,9 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <p>Poslali smo ti potvrdu prijave. Odgovori nam jednom rečju - <b>primljeno</b>. Time mejl program vidi da se dopisuješ sa nama, pa pristupni link i podsetnik idu pravo u Inbox umesto u Promocije.</p>
         <div class="act">
           <div class="mail-btns">
-            <a class="mbtn" id="open-mail" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg> Gmail</a>
-            <a class="mbtn" id="open-outlook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg> Outlook</a>
-            <a class="mbtn" id="open-apple"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg> Apple Mail</a>
+            <a class="mbtn" id="open-mail" target="_blank" rel="noopener" aria-label="Odgovori iz Gmaila"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ea4335" d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.911.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg><span>Gmail</span></a>
+            <a class="mbtn" id="open-outlook" target="_blank" rel="noopener" aria-label="Odgovori iz Outlooka"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><rect x="10" y="4.2" width="13.6" height="15.6" rx="1.6" fill="#2b88d8"/><path fill="#fff" d="M13.4 8h7.6v1.7h-7.6zm0 3.4h7.6v1.7h-7.6zm0 3.4h5.2v1.7h-5.2z"/><rect x="0" y="2.4" width="12.6" height="19.2" rx="2.4" fill="#0a4c92"/><ellipse cx="6.3" cy="12" rx="3.4" ry="4.3" fill="none" stroke="#fff" stroke-width="2.3"/></svg><span>Outlook</span></a>
+            <a class="mbtn" id="open-apple" aria-label="Odgovori iz Apple Mail-a"><svg class="ik" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ecede5" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span>Apple Mail</span></a>
           </div>
           <span class="sent" id="sent-to"></span>
         </div>
