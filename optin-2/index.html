@@ -288,18 +288,20 @@ p{color:var(--ink)}
    ============================================================ */
 .ut-note{text-align:center;font-size:.88rem;color:var(--ink-2);margin:0 0 clamp(22px,2.6vw,32px)}
 .ut-note svg{width:15px;height:15px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;vertical-align:-3px;margin-right:7px}
-.sl{position:relative}
+.sl{position:relative;--kartaH:400px;--gore:16px}
+/* gornja i donja margina postoje da senka kartica ne bude odsecena */
 .ut-grid{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
-  padding:4px 4px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+  padding:var(--gore) 6px 46px;margin-bottom:-34px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
 .ut-grid::-webkit-scrollbar{display:none}
-.ut{flex:0 0 clamp(280px,30%,400px);scroll-snap-align:start;height:400px;
+.ut{flex:0 0 clamp(280px,30%,400px);scroll-snap-align:start;height:var(--kartaH);
   display:block;margin:0;padding:0;position:relative;cursor:zoom-in;
   background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
-  box-shadow:0 10px 26px rgba(0,16,12,.07);
+  box-shadow:0 14px 34px rgba(0,16,12,.09);
   transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease,border-color .2s ease}
-.ut:hover{transform:translateY(-3px);border-color:var(--leaf);box-shadow:0 18px 40px rgba(0,77,58,.14)}
-/* mejl se secka od vrha - zaglavlje i prve recenice nose poruku */
-.ut img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.ut:hover{transform:translateY(-3px);border-color:var(--leaf);box-shadow:0 20px 44px rgba(0,77,58,.15)}
+/* mejl se secka od gornjeg levog ugla, da pocetak svakog reda ostane citljiv */
+.ut img{display:block;width:100%;height:100%;object-fit:cover;object-position:left top}
 /* blagi prelaz na dnu, da se vidi da tekst ide dalje */
 .ut .fade{position:absolute;left:0;right:0;bottom:0;height:86px;pointer-events:none;
   background:linear-gradient(to bottom,rgba(255,255,255,0),var(--white) 88%)}
@@ -308,7 +310,7 @@ p{color:var(--ink)}
 .ut .vise::after{content:" \2192"}
 
 /* strelice i tackice */
-.sl-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;
+.sl-nav{position:absolute;top:calc(var(--gore) + var(--kartaH) / 2);transform:translateY(-50%);z-index:3;width:44px;height:44px;
   border-radius:50%;cursor:pointer;background:var(--green);border:0;display:grid;place-items:center;
   box-shadow:0 10px 26px rgba(0,16,12,.26);transition:background .16s ease,opacity .16s ease}
 .sl-nav:hover{background:var(--leaf)}
