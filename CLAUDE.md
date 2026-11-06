@@ -6,6 +6,7 @@ Tri samostalne HTML stranice, bez build koraka. Menja se uglavnom **tekst**.
 ```
 optin/index.html     landing, prijava se otvara u popupu
 optin-2/index.html   druga verzija landinga (A/B), menja se nezavisno od prve
+                     utisci su ovde slajder, na optin stranici su zid
 utisci/              screenshotovi mejlova, koriste ih obe verzije landinga
 application.html     bridge: video pa slot za anketu
 thankyou.html        potvrda: video pa dva koraka

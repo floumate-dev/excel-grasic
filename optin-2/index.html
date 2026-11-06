@@ -288,13 +288,38 @@ p{color:var(--ink)}
    ============================================================ */
 .ut-note{text-align:center;font-size:.88rem;color:var(--ink-2);margin:0 0 clamp(22px,2.6vw,32px)}
 .ut-note svg{width:15px;height:15px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;vertical-align:-3px;margin-right:7px}
-.ut-grid{columns:3;column-gap:16px}
-.ut{display:block;width:100%;break-inside:avoid;margin:0 0 16px;padding:0;position:relative;cursor:zoom-in;
+.sl{position:relative}
+.ut-grid{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  padding:4px 4px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+.ut-grid::-webkit-scrollbar{display:none}
+.ut{flex:0 0 clamp(280px,30%,400px);scroll-snap-align:start;height:400px;
+  display:block;margin:0;padding:0;position:relative;cursor:zoom-in;
   background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;
   box-shadow:0 10px 26px rgba(0,16,12,.07);
   transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease,border-color .2s ease}
 .ut:hover{transform:translateY(-3px);border-color:var(--leaf);box-shadow:0 18px 40px rgba(0,77,58,.14)}
-.ut img{display:block;width:100%;height:auto}
+/* mejl se secka od vrha - zaglavlje i prve recenice nose poruku */
+.ut img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+/* blagi prelaz na dnu, da se vidi da tekst ide dalje */
+.ut .fade{position:absolute;left:0;right:0;bottom:0;height:86px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),var(--white) 88%)}
+.ut .vise{position:absolute;left:0;right:0;bottom:14px;text-align:center;
+  font-size:.78rem;font-weight:600;color:var(--green);pointer-events:none}
+.ut .vise::after{content:" \2192"}
+
+/* strelice i tackice */
+.sl-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:44px;height:44px;
+  border-radius:50%;cursor:pointer;background:var(--green);border:0;display:grid;place-items:center;
+  box-shadow:0 10px 26px rgba(0,16,12,.26);transition:background .16s ease,opacity .16s ease}
+.sl-nav:hover{background:var(--leaf)}
+.sl-nav:disabled{opacity:.28;cursor:default}
+.sl-nav svg{width:18px;height:18px;stroke:var(--lime);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.sl-prev{left:-16px}
+.sl-next{right:-16px}
+.sl-dots{display:flex;justify-content:center;gap:7px;margin-top:22px}
+.sl-dots button{width:8px;height:8px;padding:0;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(0,77,58,.2);transition:background .18s ease,width .18s ease}
+.sl-dots button.tu{width:22px;border-radius:5px;background:var(--green)}
 .ut .lupa{position:absolute;right:10px;bottom:10px;width:30px;height:30px;border-radius:50%;background:var(--green);
   display:grid;place-items:center;opacity:0;transform:scale(.85);transition:opacity .2s ease,transform .2s ease}
 .ut:hover .lupa,.ut:focus-visible .lupa{opacity:1;transform:scale(1)}
@@ -478,7 +503,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .gift{order:9;margin-top:6px}
   .vsl-shell::before{transform:translate(9px,9px)}
   .bio-in{grid-template-columns:1fr}
-  .ut-grid{columns:2}
+  .sl-prev{left:-8px}
+  .sl-next{right:-8px}
 }
 @media (max-width:900px){
   .press-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -486,10 +512,14 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 @media (max-width:680px){
   .grid-2,.ben{grid-template-columns:1fr}
   /* na telefonu se utisci ne uvecavaju - mejlovi stoje jedan ispod drugog */
-  .ut{cursor:default;box-shadow:0 6px 18px rgba(0,16,12,.06)}
+  .ut{cursor:default;box-shadow:0 6px 18px rgba(0,16,12,.06);
+    flex:0 0 100%;height:auto}
   .ut:hover{transform:none;border-color:var(--line);box-shadow:0 6px 18px rgba(0,16,12,.06)}
-  .ut .lupa,.ut-note{display:none}
-  .ut-grid{columns:1}
+  /* na telefonu jedan mejl po ekranu, ceo, bez seckanja */
+  .ut img{height:auto;object-fit:fill}
+  .ut .lupa,.ut-note,.ut .fade,.ut .vise{display:none}
+  .ut-grid{align-items:flex-start}
+  .sl-nav{display:none}
   .fld-row{grid-template-columns:1fr}
   .ticket{grid-template-columns:1fr}
   .tk-stub{flex-direction:row;align-items:baseline;gap:12px;padding:16px 20px;border-radius:20px 20px 0 0}
@@ -687,56 +717,85 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       <h2>Pročitajte utiske prisutnih sa prethodnih Masterclassova koji su naučili kako da primene znanje i unaprede svoje karijere</h2>
       <p>Saznajte kako smo pomogli drugima da se izdvoje na tržištu rada i uštede sate na dnevnom nivou.</p>
     </div>
-    <p class="ut-note rv"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg>Klikni na bilo koji utisak da ga uvećaš.</p>
+    <p class="ut-note rv"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg>Prevuci kroz utiske, klikni na bilo koji da ga uvećaš.</p>
+    <div class="sl rv">
+    <button class="sl-nav sl-prev" type="button" aria-label="Prethodni utisci"><svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg></button>
+    <button class="sl-nav sl-next" type="button" aria-label="Sledeći utisci"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></button>
     <div class="ut-grid" id="ut-grid">
       <button class="ut rv" type="button" data-i="0" aria-label="Uvećaj utisak - Jovana Radosavljević">
         <img src="../utisci/jovana-radosavljevic.png" alt="Utisak sa Masterclassa - Jovana Radosavljević" width="818" height="633" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="1" aria-label="Uvećaj utisak - Irena Lučić">
         <img src="../utisci/irena-lucic.png" alt="Utisak sa Masterclassa - Irena Lučić" width="1070" height="596" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="2" aria-label="Uvećaj utisak - Bojan Drobnjak">
         <img src="../utisci/bojan-drobnjak.png" alt="Utisak sa Masterclassa - Bojan Drobnjak" width="1061" height="768" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="3" aria-label="Uvećaj utisak - Farah Al Bustanji">
         <img src="../utisci/farah-al-bustanji.png" alt="Utisak sa Masterclassa - Farah Al Bustanji" width="1055" height="681" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="4" aria-label="Uvećaj utisak - Katerina Petkovska">
         <img src="../utisci/katerina-petkovska.png" alt="Utisak sa Masterclassa - Katerina Petkovska" width="1062" height="530" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="5" aria-label="Uvećaj utisak - Tatjana Korceba-Huić">
         <img src="../utisci/tatjana-korceba-huic.png" alt="Utisak sa Masterclassa - Tatjana Korceba-Huić" width="1057" height="476" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="6" aria-label="Uvećaj utisak - Jelena Miladić">
         <img src="../utisci/jelena-miladic.png" alt="Utisak sa Masterclassa - Jelena Miladić" width="1026" height="417" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="7" aria-label="Uvećaj utisak - Branka Panić">
         <img src="../utisci/branka-panic.png" alt="Utisak sa Masterclassa - Branka Panić" width="1077" height="498" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="8" aria-label="Uvećaj utisak - Lejla Hasković">
         <img src="../utisci/lejla-haskovic.png" alt="Utisak sa Masterclassa - Lejla Hasković" width="1043" height="500" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="9" aria-label="Uvećaj utisak - Jozefina Beke-Trivunac">
         <img src="../utisci/jozefina-beke-trivunac.png" alt="Utisak sa Masterclassa - Jozefina Beke-Trivunac" width="1077" height="410" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="10" aria-label="Uvećaj utisak - Slađana Bukvić Pendo">
         <img src="../utisci/sladjana-bukvic-pendo.png" alt="Utisak sa Masterclassa - Slađana Bukvić Pendo" width="1076" height="360" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
       <button class="ut rv" type="button" data-i="11" aria-label="Uvećaj utisak - Marko Nikolić">
         <img src="../utisci/marko-nikolic.png" alt="Utisak sa Masterclassa - Marko Nikolić" width="1012" height="241" loading="lazy" decoding="async">
+        <span class="fade" aria-hidden="true"></span>
+        <span class="vise">Pročitaj ceo mejl</span>
         <span class="lupa" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
       </button>
+    </div>
+    <div class="sl-dots" id="sl-dots"></div>
     </div>
   </div>
 </section>
@@ -1259,6 +1318,77 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     else if (e.key === 'ArrowLeft') prikazi(tren - 1);
     else if (e.key === 'ArrowRight') prikazi(tren + 1);
   });
+})();
+</script>
+
+<script>
+/* slider sa utiscima: strelice, tackice, prevlacenje */
+(function () {
+  var traka = document.getElementById('ut-grid');
+  if (!traka) return;
+  var sl = traka.parentNode;
+  var nazad = sl.querySelector('.sl-prev');
+  var napred = sl.querySelector('.sl-next');
+  var kutijaTackica = document.getElementById('sl-dots');
+  var karte = [].slice.call(traka.querySelectorAll('.ut'));
+  var tackice = [];
+  var cekanje = null;
+
+  function korak() {
+    if (karte.length < 2) return traka.clientWidth;
+    return karte[1].offsetLeft - karte[0].offsetLeft;
+  }
+
+  /* koliko kartica stane u vidik, pa koliko ima polozaja za listanje */
+  function polozaja() {
+    var staje = Math.max(1, Math.round(traka.clientWidth / korak()));
+    return Math.max(1, karte.length - staje + 1);
+  }
+
+  function napraviTackice() {
+    var n = polozaja();
+    if (tackice.length === n) return;
+    kutijaTackica.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var t = document.createElement('button');
+      t.type = 'button';
+      t.setAttribute('aria-label', 'Utisak ' + (i + 1));
+      t.addEventListener('click', (function (j) {
+        return function () { traka.scrollTo({ left: j * korak(), behavior: 'smooth' }); };
+      })(i));
+      kutijaTackica.appendChild(t);
+    }
+    tackice = [].slice.call(kutijaTackica.children);
+  }
+
+  function osvezi() {
+    napraviTackice();
+    var i = Math.min(tackice.length - 1, Math.max(0, Math.round(traka.scrollLeft / korak())));
+    tackice.forEach(function (t, j) { t.classList.toggle('tu', j === i); });
+    /* traka ima 4px unutrasnje margine, pa pocetak nije tacno na nuli */
+    var kraj = traka.scrollWidth - traka.clientWidth;
+    var luft = 14;
+    nazad.disabled = traka.scrollLeft <= luft;
+    napred.disabled = traka.scrollLeft >= kraj - luft;
+  }
+
+  nazad.addEventListener('click', function () {
+    traka.scrollBy({ left: -korak(), behavior: 'smooth' });
+  });
+  napred.addEventListener('click', function () {
+    traka.scrollBy({ left: korak(), behavior: 'smooth' });
+  });
+  traka.addEventListener('scroll', function () {
+    clearTimeout(cekanje);
+    cekanje = setTimeout(osvezi, 70);
+  }, { passive: true });
+  window.addEventListener('resize', function () {
+    clearTimeout(cekanje);
+    cekanje = setTimeout(osvezi, 120);
+  }, { passive: true });
+
+  osvezi();
+  window.addEventListener('load', osvezi);
 })();
 </script>
 </body>
