@@ -20,8 +20,12 @@ window.MC = {
   /* Video u heroju. TODO: zameniti ID-em pravog videa za ovu stranicu. */
   vimeoId:     "1193208786",
 
-  /* Adresa sa koje smo poslali potvrdu - pise na kartici i trazi se u Gmailu. */
+  /* Adresa sa koje smo poslali potvrdu - na nju ide i odgovor. */
   posiljalac:  "office@excelgrasic.com",
+
+  /* Sta se unapred upise u odgovor kada se otvori mejl program. */
+  odgovorNaslov: "Primljeno",
+  odgovorTekst:  "Primljeno",
 
   /* Link za prijavu koji ucesnik kopira i prosledjuje. Prazno = racuna se sam. */
   prijavaUrl:  "",
@@ -149,6 +153,16 @@ p,li{text-wrap:pretty}
 .step .act{margin-top:auto;padding-top:20px}
 .step .btn{width:100%;font-size:.88rem;padding:14px 18px}
 .step .btn .arw{display:none}
+.mail-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mbtn{display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 8px;border-radius:999px;
+  border:1px solid rgba(236,237,229,.2);background:rgba(236,237,229,.07);color:var(--cream);
+  font-size:.78rem;font-weight:600;text-decoration:none;text-align:center;line-height:1.2;
+  transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.mbtn:hover{background:rgba(225,242,94,.16);border-color:var(--lime);transform:translateY(-1px)}
+.mbtn svg{width:14px;height:14px;flex:0 0 14px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+/* program koji po adresi najverovatnije koristi */
+.mbtn.pred{border-color:var(--lime);background:rgba(225,242,94,.17);color:var(--lime)}
 .sent{display:block;margin-top:11px;font-size:.8rem;color:rgba(236,237,229,.6);text-align:center}
 .sent b{color:var(--cream);font-weight:600;word-break:break-all}
 /* polje sa linkom koji se kopira */
@@ -185,6 +199,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 }
 @media (max-width:680px){
   .vsl-shell::before{transform:translate(9px,9px)}
+  /* uska kartica: bez koverti, da "Apple Mail" stane u jedan red */
+  .mail-btns{gap:6px}
+  .mbtn{font-size:.72rem;padding:12px 4px;gap:0}
+  .mbtn svg{display:none}
 }
 </style>
 </head>
@@ -211,9 +229,13 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       <div class="step">
         <span class="n">Korak 1</span>
         <h3>Odgovori na mejl</h3>
-        <p>Poslali smo ti potvrdu prijave. Otvori je i odgovori jednom rečju - <b>primljeno</b>. Time mejl program vidi da se dopisuješ sa nama, pa pristupni link i podsetnik idu pravo u Inbox umesto u Promocije.</p>
+        <p>Poslali smo ti potvrdu prijave. Odgovori nam jednom rečju - <b>primljeno</b>. Time mejl program vidi da se dopisuješ sa nama, pa pristupni link i podsetnik idu pravo u Inbox umesto u Promocije.</p>
         <div class="act">
-          <a class="btn" id="open-mail" target="_blank" rel="noopener"><span>OTVORI MEJL</span><span class="arw" aria-hidden="true">&#8594;</span></a>
+          <div class="mail-btns">
+            <a class="mbtn" id="open-mail" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg> Gmail</a>
+            <a class="mbtn" id="open-outlook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg> Outlook</a>
+            <a class="mbtn" id="open-apple"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg> Apple Mail</a>
+          </div>
           <span class="sent" id="sent-to"></span>
         </div>
       </div>
@@ -317,15 +339,26 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   } else {
     sent.textContent = 'Stiže sa adrese ' + C.posiljalac;
   }
-  /* Gmail korisnike vodimo pravo na pretragu naseg mejla, ostale na njihov mejl program */
+  /* Tri dugmeta otvaraju odgovor vec napisan: Gmail i Outlook u pregledacu,
+     Apple Mail (tj. podrazumevani program na uredjaju) preko mailto. */
+  var zaKoga = encodeURIComponent(C.posiljalac);
+  var naslov = encodeURIComponent(C.odgovorNaslov || 'Primljeno');
+  var tekst = encodeURIComponent(C.odgovorTekst || 'Primljeno');
+
+  document.getElementById('open-mail').href =
+    'https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=' + zaKoga + '&su=' + naslov + '&body=' + tekst;
+  document.getElementById('open-outlook').href =
+    'https://outlook.live.com/mail/0/deeplink/compose?to=' + zaKoga + '&subject=' + naslov + '&body=' + tekst;
+  document.getElementById('open-apple').href =
+    'mailto:' + C.posiljalac + '?subject=' + naslov + '&body=' + tekst;
+
+  /* program koji po domenu adrese najverovatnije koristi dobija naglasak */
   var dom = mail.split('@')[1] || '';
-  var linkMejl = 'https://mail.google.com/mail/u/0/#search/from%3A' + encodeURIComponent(C.posiljalac);
-  if (/^(outlook|hotmail|live|msn)\./.test(dom)) {
-    linkMejl = 'https://outlook.live.com/mail/0/';
-  } else if (/^yahoo\./.test(dom)) {
-    linkMejl = 'https://mail.yahoo.com/';
-  }
-  document.getElementById('open-mail').href = linkMejl;
+  var pred = null;
+  if (/^(gmail|googlemail)\./.test(dom)) pred = 'open-mail';
+  else if (/^(outlook|hotmail|live|msn)\./.test(dom)) pred = 'open-outlook';
+  else if (/^(icloud|me|mac)\./.test(dom)) pred = 'open-apple';
+  if (pred) document.getElementById(pred).classList.add('pred');
 
   /* ---------- korak 2: kopiranje linka za prijavu ---------- */
   var polje = document.getElementById('share-url'), dugme = document.getElementById('copy-btn');
