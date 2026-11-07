@@ -95,6 +95,7 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Bio Aleksandra | `optin/index.html` | `class="bio-list"` |
 | Tekst u popupu za prijavu | `optin/index.html` | `id="optin-modal"` |
 | Poruke o greškama u formi | `optin/index.html` | `function proveri` |
+| Spisak pozivnih brojeva | `optin/index.html` | `var ZEMLJE` |
 | Tekst na bridge stranici | `application.html` | `class="sub"`, `class="step"` |
 | Tekst na potvrdi | `thankyou.html` | `class="step"` |
 | Reč koja se upiše u odgovor | `thankyou.html` | `odgovorNaslov`, `odgovorTekst` u `window.MC` |
