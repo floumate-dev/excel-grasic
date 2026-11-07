@@ -40,8 +40,10 @@ window.MC = {
   /* Termini koje posetilac bira u formi. Prvi nosi odbrojavanje i ulaznicu.
      Dodavanje treceg termina: samo jos jedan red ovde, forma ga sama pokupi. */
   termini: [
-    { iso: "2026-11-26T19:00:00+01:00", dan: "četvrtak, 26.11.", kratko: "26.11.", sat: "19 h" },
-    { iso: "2026-11-30T19:00:00+01:00", dan: "ponedeljak, 30.11.", kratko: "30.11.", sat: "19 h" }
+    { iso: "2026-11-26T19:00:00+01:00", dan: "četvrtak, 26.11.", kratko: "26.11.", sat: "19 h",
+      aeventWtl: "kHbfJwMUv2CqhGO", aeventWebinarId: "85170335868" },
+    { iso: "2026-11-30T19:00:00+01:00", dan: "ponedeljak, 30.11.", kratko: "30.11.", sat: "19 h",
+      aeventWtl: "sTlwUYlMg63WGWw", aeventWebinarId: "85402964220" }
   ],
   trajanje:   "90 minuta",
 
@@ -58,6 +60,13 @@ window.MC = {
     /* TODO: ID polja u ActiveCampaignu koje prima izabrani termin,
        npr. "18" za field[18]. Dok je prazno, termin se ne salje u AC. */
     poljeTermin: ""
+  },
+
+  /* AEvent registracija (Zoom webinar sa licnim linkom). Svaki termin ima svoju
+     kampanju (aeventWtl) i Zoom webinar (aeventWebinarId) gore u `termini`.
+     Domen stranice mora biti na whitelisti u AEventu, inace AEvent odbija prijavu. */
+  aevent: {
+    endpoint: "https://44084705.aevent.online/registration"
   }
 };
 </script>
@@ -1185,7 +1194,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     var l = document.createElement('label');
     l.className = 'termin' + (i === 0 ? ' tu' : '');
     l.innerHTML =
-      '<input type="radio" name="termin" value="' + (t.dan + ' u ' + t.sat) + '"' +
+      '<input type="radio" name="termin" data-i="' + i + '" value="' + (t.dan + ' u ' + t.sat) + '"' +
       (i === 0 ? ' checked' : '') + '>' +
       '<span class="krug" aria-hidden="true"></span>' +
       '<span class="tx"><span class="t-dan"></span><span class="t-sat"></span></span>';
@@ -1204,6 +1213,11 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   function izabraniTermin(){
     var r = izbor.querySelector('input:checked');
     return r ? r.value : '';
+  }
+  /* ceo objekat izabranog termina iz window.MC (za AEvent wtl i webinarid) */
+  function izabraniTerminObj(){
+    var r = izbor.querySelector('input:checked');
+    return r ? C.termini[+r.getAttribute('data-i')] : null;
   }
 
   var SLOVO = 'A-Za-zÀ-ÖØ-öø-ÿČĆŽŠĐĆčćžšđ';
@@ -1344,8 +1358,34 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     btn.disabled = true;
     btn.querySelector('span').textContent = 'ŠALJEMO PRIJAVU...';
 
-    fetch(C.ac.endpoint, { method: 'POST', body: fd, mode: 'no-cors' })
-      .catch(function(){ /* no-cors uvek vrati opaque odgovor */ })
+    var slanja = [
+      fetch(C.ac.endpoint, { method: 'POST', body: fd, mode: 'no-cors' })
+        .catch(function(){ /* no-cors uvek vrati opaque odgovor */ })
+    ];
+
+    /* AEvent: registracija na izabrani termin, AEvent pravi licni Zoom link */
+    var t = izabraniTerminObj();
+    if (C.aevent && C.aevent.endpoint && t && t.aeventWtl && t.aeventWebinarId) {
+      var ae = new FormData();
+      ae.append('wtl', t.aeventWtl);
+      ae.append('webinarid', t.aeventWebinarId);
+      ae.append('name', fIme.value);
+      ae.append('email', email);
+      /* AEvent ocekuje samo cifre sa pozivnim, bez "+" */
+      ae.append('phone', srediTelefon(fTel.value).replace(/\D/g, ''));
+      ae.append('lp', location.href.split('?')[0]);
+      slanja.push(
+        fetch(C.aevent.endpoint, { method: 'POST', body: ae, mode: 'no-cors',
+                                   referrerPolicy: 'no-referrer-when-downgrade' })
+          .catch(function(){})
+      );
+    }
+
+    /* cekamo oba slanja, ali najvise 5 s, da posetilac ne ostane zaglavljen */
+    Promise.race([
+      Promise.all(slanja),
+      new Promise(function(res){ setTimeout(res, 5000); })
+    ])
       .finally(function(){
         /* Meta / TikTok Lead event ako je piksel ucitan */
         if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch(e){} }
