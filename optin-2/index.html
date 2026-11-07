@@ -461,9 +461,10 @@ p{color:var(--ink)}
 .tel{display:flex;align-items:stretch;background:var(--white);border:1px solid var(--line);
   border-radius:12px;transition:border-color .15s ease,box-shadow .15s ease}
 .tel:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,77,58,.1)}
-.tel select{flex:0 0 auto;max-width:146px;border:0;border-right:1px solid var(--line);
+.tel select{flex:0 0 auto;max-width:118px;border:0;border-right:1px solid var(--line);
   border-radius:12px 0 0 12px;background:var(--cream);color:var(--green);cursor:pointer;
-  font-family:var(--font);font-size:.92rem;font-weight:600;padding:14px 10px 14px 14px;
+  font-family:var(--font),"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  font-size:.92rem;font-weight:600;padding:14px 10px 14px 14px;
   text-overflow:ellipsis;-webkit-appearance:none;appearance:none;
   background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004d3a' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center;background-size:13px;padding-right:30px}
@@ -1150,12 +1151,20 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 
   /* padajuci spisak pozivnih brojeva - unapred stoji onaj iz podesavanja uredjaja */
   var fPoz = document.getElementById('pozivni');
+  /* zastavica se pravi od ISO oznake zemlje: RS -> dva regionalna slova */
+  function zastava(kod){
+    return kod.replace(/./g, function(c){
+      return String.fromCodePoint(127397 + c.charCodeAt(0));
+    });
+  }
   Object.keys(ZEMLJE)
     .sort(function(a, b){ return ZEMLJE[a][1].localeCompare(ZEMLJE[b][1], 'sr'); })
     .forEach(function(kod){
       var o = document.createElement('option');
       o.value = kod;
-      o.textContent = ZEMLJE[kod][0] + ' ' + ZEMLJE[kod][1];
+      o.textContent = zastava(kod) + '  ' + ZEMLJE[kod][0];
+      /* ime zemlje ostaje za pregledace koji ne crtaju zastavice */
+      o.title = ZEMLJE[kod][1];
       fPoz.appendChild(o);
     });
   fPoz.value = zemljaKod;
