@@ -37,10 +37,12 @@
    KONFIGURACIJA - menja se samo ovde
    ============================================================ */
 window.MC = {
-  /* Datum i vreme webinara (ISO, CET/CEST offset). */
-  datumISO:   "2026-11-26T19:00:00+01:00",
-  datumTekst: "četvrtak, 26.11. u 19 h",
-  datumKratko:"26.11. u 19 h",
+  /* Termini koje posetilac bira u formi. Prvi nosi odbrojavanje i ulaznicu.
+     Dodavanje treceg termina: samo jos jedan red ovde, forma ga sama pokupi. */
+  termini: [
+    { iso: "2026-11-26T19:00:00+01:00", dan: "četvrtak, 26.11.", kratko: "26.11.", sat: "19 h" },
+    { iso: "2026-11-30T19:00:00+01:00", dan: "ponedeljak, 30.11.", kratko: "30.11.", sat: "19 h" }
+  ],
   trajanje:   "90 minuta",
 
   /* Gde ide posetilac nakon prijave */
@@ -51,7 +53,11 @@ window.MC = {
     endpoint: "https://excelgrasic.activehosted.com/proc.php",
     u: "6AE5C8B7002DE",
     f: "35",
-    or: "83103e39-76f2-40ee-b0ac-55e0142fe058"
+    or: "83103e39-76f2-40ee-b0ac-55e0142fe058",
+
+    /* TODO: ID polja u ActiveCampaignu koje prima izabrani termin,
+       npr. "18" za field[18]. Dok je prazno, termin se ne salje u AC. */
+    poljeTermin: ""
   }
 };
 </script>
@@ -391,6 +397,8 @@ p{color:var(--ink)}
   background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 80% at 50% 50%,#000 10%,transparent 76%)}
 .signup-in{position:relative;z-index:2;max-width:760px;margin:0 auto;text-align:center}
 .signup-lead{margin:16px auto 0;max-width:60ch;font-size:1rem;color:rgba(236,237,229,.86)}
+.signup-slots{margin:14px auto 0;max-width:60ch;font-size:.92rem;color:rgba(236,237,229,.7);text-wrap:balance}
+.signup-slots b{color:var(--lime);font-weight:600}
 /* ULAZNICA - nosi datum, sadrzaj i benefite na jednom mestu */
 .ticket{position:relative;display:grid;grid-template-columns:138px 1fr;text-align:left;
   background:var(--white);border-radius:20px;margin-top:clamp(28px,4vw,44px);
@@ -400,6 +408,7 @@ p{color:var(--ink)}
   display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .tk-d{font-size:clamp(2.7rem,5vw,3.5rem);font-weight:600;line-height:.92;color:var(--green);
   letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.tk-d2{font-size:1rem;font-weight:600;color:var(--leaf);line-height:1;margin-top:5px}
 .tk-m{font-size:.76rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-top:7px}
 .tk-t{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);width:100%;
   font-size:1.02rem;font-weight:600;color:var(--green);font-variant-numeric:tabular-nums}
@@ -426,11 +435,25 @@ p{color:var(--ink)}
 .bio-sub{font-size:clamp(1.05rem,1.8vw,1.3rem);color:var(--ink-2);margin-top:6px}
 .signup-kicker{font-size:clamp(1rem,1.8vw,1.2rem);color:rgba(236,237,229,.85);margin-bottom:12px;font-weight:500}
 .modal-card .fb-sub{font-size:.88rem;color:var(--ink-2);margin-bottom:22px}
-.form-slot{display:flex;gap:10px;align-items:center;background:var(--cream);border-radius:12px;padding:13px 15px;margin-bottom:20px;font-size:.89rem;color:var(--green)}
-.form-slot svg{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:1.8;flex:0 0 18px}
-.form-slot b{font-weight:600}
+.termini{display:grid;gap:10px}
+.termin{position:relative;display:flex;align-items:center;gap:12px;cursor:pointer;
+  background:var(--white);border:1px solid var(--line);border-radius:12px;padding:13px 15px;
+  transition:border-color .16s ease,background .16s ease}
+.termin:hover{border-color:var(--leaf)}
+.termin input{position:absolute;opacity:0;width:0;height:0}
+.termin .krug{flex:0 0 18px;height:18px;border-radius:50%;border:2px solid var(--line);
+  display:grid;place-items:center;transition:border-color .16s ease}
+.termin .krug::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);
+  transform:scale(0);transition:transform .16s cubic-bezier(.22,1,.36,1)}
+.termin .tx{display:flex;flex-direction:column;gap:2px;line-height:1.25}
+.termin .t-dan{font-size:.93rem;font-weight:600;color:var(--green)}
+.termin .t-sat{font-size:.78rem;color:var(--ink-2)}
+.termin.tu{border-color:var(--green);background:var(--mint)}
+.termin.tu .krug{border-color:var(--green)}
+.termin.tu .krug::after{transform:scale(1)}
+.termin input:focus-visible ~ .krug{box-shadow:0 0 0 3px rgba(0,77,58,.22)}
 .fld{margin-bottom:14px}
-.fld label{display:block;font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin-bottom:7px}
+.fld > label,.fld > .lab{display:block;font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin-bottom:7px}
 .fld input{width:100%;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 15px;
   color:var(--ink);font-family:var(--font);font-size:.97rem;transition:border-color .15s ease,box-shadow .15s ease}
 .fld input::placeholder{color:#a8b2ae}
@@ -576,7 +599,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <p>Sa Masterclassa odlaziš sa <strong>gotovim šablonima, praktičnim primerima i jasnim postupkom</strong> koji već narednog dana možeš da primeniš na poslu.</p>
       </div>
       <div class="cd-wrap">
-        <p class="cd-urg"><span class="dot"></span>Masterclass počinje za</p>
+        <p class="cd-urg"><span class="dot"></span>Prvi termin počinje za</p>
         <div class="cd" id="cd-hero">
           <div class="cd-box"><div class="cd-num" data-d>00</div><div class="cd-lab">dana</div></div>
           <div class="cd-box"><div class="cd-num" data-h>00</div><div class="cd-lab">sati</div></div>
@@ -854,10 +877,12 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     <p class="signup-kicker">Savladaj AI i radi <span class="hl nb">5-10x brže.</span></p>
     <h2>Prijavi se na besplatan Masterclass:</h2>
     <p class="signup-lead">Otkrij kako da brže sređuješ podatke, pripremaš analize i praviš izveštaje kojima ljudi mogu da veruju. Za 90 minuta dobićeš jasan postupak koji povezuje alate koje već koristiš sa AI mogućnostima koje ti mogu uštedeti sate rada.</p>
+    <p class="signup-slots">Masterclass držimo dva puta: <b id="slot-dates"></b>. Termin biraš pri prijavi.</p>
 
     <div class="ticket">
       <div class="tk-stub">
         <span class="tk-d" id="tk-d">00</span>
+        <span class="tk-d2" id="tk-d2"></span>
         <span class="tk-m" id="tk-m">-</span>
         <span class="tk-t" id="tk-t">00:00</span>
       </div>
@@ -876,7 +901,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     </div>
 
     <div class="cd-wrap">
-      <p class="cd-urg"><span class="dot"></span>Prijave se zatvaraju za</p>
+      <p class="cd-urg"><span class="dot"></span>Prvi termin počinje za</p>
       <div class="cd" id="cd-form">
         <div class="cd-box"><div class="cd-num" data-d>00</div><div class="cd-lab">dana</div></div>
         <div class="cd-box"><div class="cd-num" data-h>00</div><div class="cd-lab">sati</div></div>
@@ -910,10 +935,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     <button class="modal-x" type="button" data-close-optin aria-label="Zatvori prijavu">&#10005;</button>
     <h3 id="optin-title">Prijavi se na besplatan Masterclass</h3>
     <p class="fb-sub">Popuni formu i dobijaš pristup linku na mejl.</p>
-    <div class="form-slot">
-      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
-      <span>Termin: <b id="slot-date"></b></span>
-    </div>
     <div class="form-err" id="form-err"></div>
     <form id="mc-form" novalidate>
       <div class="fld">
@@ -932,17 +953,15 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <p class="fld-hint">Pozivni broj smo popunili automatski - izmeni ga ako nije tvoj.</p>
         <p class="fld-err"></p>
       </div>
-      <div class="fld-row">
-        <div class="fld">
-          <label for="field5">Pozicija na poslu *</label>
-          <input id="field5" name="field[5]" type="text" autocomplete="organization-title" placeholder="npr. Finansijski analitičar" required>
-          <p class="fld-err"></p>
-        </div>
-        <div class="fld">
-          <label for="field12">Zemlja *</label>
-          <input id="field12" name="field[12]" type="text" autocomplete="country-name" placeholder="npr. Srbija" required>
-          <p class="fld-err"></p>
-        </div>
+      <div class="fld">
+        <label for="field5">Pozicija na poslu *</label>
+        <input id="field5" name="field[5]" type="text" autocomplete="organization-title" placeholder="npr. Finansijski analitičar" required>
+        <p class="fld-err"></p>
+      </div>
+      <div class="fld">
+        <span class="lab" id="termin-label">Koji termin ti više odgovara? *</span>
+        <div class="termini" id="termin-izbor" role="radiogroup" aria-labelledby="termin-label"></div>
+        <p class="fld-err"></p>
       </div>
       <button class="btn btn-wide" type="submit" id="mc-submit"><span>KLIKNI OVDE I PRIJAVI SE SADA</span><span class="arw" aria-hidden="true">&#8594;</span></button>
     </form>
@@ -953,15 +972,30 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 (function(){
   var C = window.MC;
 
-  /* ---------- datumi u tekstu ---------- */
-  document.getElementById('lead-date').textContent = C.datumTekst;
-  document.getElementById('slot-date').textContent = C.datumTekst;
+  /* ---------- termini u tekstu ---------- */
+  var prvi = C.termini[0];
+  /* Prvi termin nosi odbrojavanje i ulaznicu. */
+  C.datumISO = prvi.iso;
+  C.datumTekst = prvi.dan + ' u ' + prvi.sat;
+
+  function spoji(kljuc){
+    return C.termini.map(function(t){ return t[kljuc]; }).join(' ili ');
+  }
+  /* "cetvrtak, 26.11. ili ponedeljak, 30.11. u 19 h" */
+  document.getElementById('lead-date').textContent = spoji('dan') + ' u ' + prvi.sat;
+  document.getElementById('sc-date').textContent = spoji('kratko') + ' u ' + prvi.sat;
+  /* poslednjem datumu skidamo tacku da ne stoji uz zarez: "30.11, oba u 19 h" */
+  document.getElementById('slot-dates').textContent =
+    C.termini.map(function(t){ return t.dan; }).join(' i ').replace(/\.$/, '')
+    + ', oba u ' + prvi.sat;
+
   var MESECI = ['jan','feb','mar','apr','maj','jun','jul','avg','sep','okt','nov','dec'];
-  var iso = C.datumISO;   /* Citamo doslovno, bez konverzije. */
+  var iso = prvi.iso;   /* Citamo doslovno, bez konverzije. */
   document.getElementById('tk-d').textContent = String(+iso.slice(8, 10));
+  document.getElementById('tk-d2').textContent =
+    'ili ' + C.termini.slice(1).map(function(t){ return String(+t.iso.slice(8, 10)); }).join(' / ');
   document.getElementById('tk-m').textContent = MESECI[+iso.slice(5, 7) - 1];
   document.getElementById('tk-t').textContent = iso.slice(11, 16);
-  document.getElementById('sc-date').textContent = C.datumTekst;
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   /* ---------- countdown ---------- */
@@ -1013,9 +1047,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     modal.hidden = false;
     modal.classList.add('open');
     document.body.classList.add('no-scroll');
-    /* pozivni broj i zemlja se popunjavaju sami, korisnik ih moze izmeniti */
+    /* pozivni broj se popunjava sam, korisnik ga moze izmeniti */
     if (!fTel.value) fTel.value = pozivni + ' ';
-    if (!fZem.value) fZem.value = ZEMLJE[zemljaKod][1];
     var first = modal.querySelector('input');
     if (first) setTimeout(function(){ first.focus(); }, 70);
   }
@@ -1113,7 +1146,31 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       fMail = document.getElementById('email'),
       fTel  = document.getElementById('phone'),
       fPos  = document.getElementById('field5'),
-      fZem  = document.getElementById('field12');
+      izbor = document.getElementById('termin-izbor');
+
+  /* ---------- dugmad za termine, pravljena iz window.MC ---------- */
+  C.termini.forEach(function(t, i){
+    var l = document.createElement('label');
+    l.className = 'termin' + (i === 0 ? ' tu' : '');
+    l.innerHTML =
+      '<input type="radio" name="termin" value="' + (t.dan + ' u ' + t.sat) + '"' +
+      (i === 0 ? ' checked' : '') + '>' +
+      '<span class="krug" aria-hidden="true"></span>' +
+      '<span class="tx"><span class="t-dan"></span><span class="t-sat"></span></span>';
+    l.querySelector('.t-dan').textContent = t.dan;
+    l.querySelector('.t-sat').textContent = t.sat + ' \u00b7 onlajn \u00b7 ' + C.trajanje;
+    izbor.appendChild(l);
+  });
+  izbor.addEventListener('change', function(){
+    [].forEach.call(izbor.querySelectorAll('.termin'), function(l){
+      l.classList.toggle('tu', l.querySelector('input').checked);
+    });
+    izbor.closest('.fld').classList.remove('err');
+  });
+  function izabraniTermin(){
+    var r = izbor.querySelector('input:checked');
+    return r ? r.value : '';
+  }
 
   var SLOVO = 'A-Za-zÀ-ÖØ-öø-ÿČĆŽŠĐĆčćžšđ';
   var IME_RE   = new RegExp('^[' + SLOVO + "]{2,}(?:[-' ][" + SLOVO + ']{2,})+$');
@@ -1185,8 +1242,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }
 
   [[fIme, proveriIme], [fMail, proveriMail], [fTel, proveriTel],
-   [fPos, function(){ return proveriTekst(fPos, 'Upiši svoju poziciju.'); }],
-   [fZem, function(){ return proveriTekst(fZem, 'Upiši zemlju iz koje si.'); }]
+   [fPos, function(){ return proveriTekst(fPos, 'Upiši svoju poziciju.'); }]
   ].forEach(function(par){
     var input = par[0], proveri = par[1];
     input.addEventListener('blur', function(){ if (input.value.trim()) proveri(); });
@@ -1198,9 +1254,15 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     e.preventDefault();
     err.style.display = 'none';
 
+    var termin = izabraniTermin();
+    if (!termin) {
+      var polje_t = izbor.closest('.fld');
+      polje_t.classList.add('err');
+      polje_t.querySelector('.fld-err').textContent = 'Izaberi termin koji ti odgovara.';
+    }
+
     var provere = [proveriIme(), proveriMail(), proveriTel(),
-                   proveriTekst(fPos, 'Upiši svoju poziciju.'),
-                   proveriTekst(fZem, 'Upiši zemlju iz koje si.')];
+                   proveriTekst(fPos, 'Upiši svoju poziciju.'), !!termin];
     if (provere.indexOf(false) !== -1) {
       var prvo = form.querySelector('.fld.err input');
       if (prvo) prvo.focus();
@@ -1217,7 +1279,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     fd.append('email', email);
     fd.append('phone', fTel.value);
     fd.append('field[5]', fPos.value);
-    fd.append('field[12]', fZem.value);
+    if (C.ac.poljeTermin) fd.append('field[' + C.ac.poljeTermin + ']', termin);
 
     /* AC obavezna hidden polja */
     fd.append('u', C.ac.u);
@@ -1239,7 +1301,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch(e){} }
         if (typeof ttq === 'object' && ttq.track) { try { ttq.track('SubmitForm'); } catch(e){} }
 
-        var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email);
+        var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email)
+               + '&termin=' + encodeURIComponent(termin);
         var u = utmString(); if (u) qs += '&' + u;
         location.href = C.nextUrl + '?' + qs;
       });

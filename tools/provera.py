@@ -24,15 +24,17 @@ PRAZNI = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
 OBAVEZNO = {
     'optin/index.html': [
         'window.MC', 'id="optin-modal"', 'id="mc-form"', 'id="fullname"',
-        'id="email"', 'id="phone"', 'id="field5"', 'id="field12"',
+        'id="email"', 'id="phone"', 'id="field5"', 'id="termin-izbor"',
         'id="mc-submit"', 'id="form-err"', 'data-open-optin', 'id="cd-form"',
-        'id="tk-d"', 'id="tk-m"', 'id="tk-t"', 'id="yr"',
+        'id="tk-d"', 'id="tk-d2"', 'id="tk-m"', 'id="tk-t"',
+        'id="slot-dates"', 'id="yr"',
     ],
     'optin-2/index.html': [
         'window.MC', 'id="optin-modal"', 'id="mc-form"', 'id="fullname"',
-        'id="email"', 'id="phone"', 'id="field5"', 'id="field12"',
+        'id="email"', 'id="phone"', 'id="field5"', 'id="termin-izbor"',
         'id="mc-submit"', 'id="form-err"', 'data-open-optin', 'id="cd-form"',
-        'id="tk-d"', 'id="tk-m"', 'id="tk-t"', 'id="yr"',
+        'id="tk-d"', 'id="tk-d2"', 'id="tk-m"', 'id="tk-t"',
+        'id="slot-dates"', 'id="yr"',
     ],
     'application.html': [
         'window.MC', 'id="vsl"', 'id="hello"', 'id="survey-box"',

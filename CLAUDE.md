@@ -98,6 +98,7 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Tekst na bridge stranici | `application.html` | `class="sub"`, `class="step"` |
 | Tekst na potvrdi | `thankyou.html` | `class="step"` |
 | Reč koja se upiše u odgovor | `thankyou.html` | `odgovorNaslov`, `odgovorTekst` u `window.MC` |
+| Termine (datum i sat) | `optin/index.html`, `optin-2/index.html` | `termini` u `window.MC` |
 | Datum, video, linkove | sve tri | `window.MC` |
 
 ---
@@ -106,7 +107,9 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 
 Ovo čeka podatke od klijenta, ne diraj dok ne stignu:
 
-- datum je placeholder `20.11.2026 19:00` u `window.MC` na sve tri stranice
+- **ID polja u ActiveCampaignu za izabrani termin** - `ac.poljeTermin` u
+  `window.MC` je prazan, pa termin ne stiže u AC. Dok se ne upiše (npr. `"18"`
+  za `field[18]`), prijava radi ali se ne zna ko je izabrao koji termin.
 - video na application i thankyou stranici vrti isti snimak kao landing
 - slot za anketu na application stranici je prazan (`id="survey-box"`)
 - glavni pasus na application stranici je lorem ipsum
