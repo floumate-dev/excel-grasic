@@ -113,8 +113,11 @@ Svaki termin u `termini` nosi svoju AEvent kampanju i Zoom webinar:
 | 26.11. | `kHbfJwMUv2CqhGO` | `85170335868` |
 | 30.11. | `sTlwUYlMg63WGWw` | `85402964220` |
 
-Šalje se: `wtl`, `webinarid`, `name`, `email`, `phone` (samo cifre sa pozivnim) i `lp`
-(adresa stranice). Domen stranice mora biti na whitelisti u AEventu, inače AEvent odbija
+Pre slanja forma sa `aevent.dataUrl` uzme **token** za izabranu kampanju (isto radi AEventov
+skript). Bez tokena AEvent prijavu šalje na CAPTCHA korak i ona se nikad ne završi.
+
+Šalje se: `token`, `wtl`, `webinarid`, `name`, `email`, `phone` (samo cifre sa pozivnim),
+`timezone`, `location` i `lp` (adresa stranice). Domen stranice mora biti na whitelisti u AEventu, inače AEvent odbija
 prijavu. Redirect na `application.html` čeka oba slanja, najviše 5 sekundi.
 
 ## Assets
