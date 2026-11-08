@@ -100,6 +100,12 @@ img{max-width:100%;display:block}
 a{color:inherit}
 .wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 20px}
 .sec{padding:clamp(60px,8vw,108px) 0;scroll-margin-top:84px}
+
+/* GHL ubacuje ovaj kod u svoj kontejner ogranicene sirine, pa okolo ostaje belo.
+   Sekcije se zato razvlace na punu sirinu prozora, bez obzira na roditelja. */
+.hero,.sec,.sec ~ footer{width:100vw;max-width:100vw;
+  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+html{overflow-x:hidden}
 /* naslovi se prelamaju u redove priblizno jednake duzine, nikad jedna rec u redu */
 h1,h2,h3{font-weight:500;letter-spacing:-.025em;line-height:1.1;text-wrap:balance}
 h1{font-size:clamp(2.1rem,5.2vw,3.35rem)}
