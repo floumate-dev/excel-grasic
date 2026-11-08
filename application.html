@@ -25,7 +25,11 @@ window.MC = {
   vimeoId:    "1193208786",
 
   /* Koliko je prijava popunjena, u procentima. */
-  progres:    62
+  progres:    62,
+
+  /* Meta piksel ("Novi Pixel Grasic"). Osnovni kod piksela ide u GHL
+     Head tracking code; ovde se samo dodaju email i ime za bolje prepoznavanje. */
+  pixelId:    "448307616997442"
 };
 </script>
 
@@ -354,7 +358,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   if (typeof fbq === 'function') {
     try {
       var em = (p.get('email') || '').trim().toLowerCase();
-      if (em) fbq('init', 'PIXEL_ID', { em: em, fn: ime.toLowerCase() });   /* TODO: pravi PIXEL_ID */
+      if (em && C.pixelId) fbq('init', C.pixelId, { em: em, fn: ime.toLowerCase() });
       fbq('track', 'CompleteRegistration');
     } catch (e) {}
   }
