@@ -68,7 +68,9 @@ window.MC = {
      kampanju (aeventWtl) i Zoom webinar (aeventWebinarId) gore u `termini`.
      Domen stranice mora biti na whitelisti u AEventu, inace AEvent odbija prijavu. */
   aevent: {
-    endpoint: "https://44084705.aevent.online/registration"
+    endpoint: "https://44084705.aevent.online/registration",
+    /* odavde se pre slanja uzima token; bez tokena AEvent trazi CAPTCHA i prijava se ne zavrsi */
+    dataUrl:  "https://44084705.aevent.online/getdata"
   }
 };
 </script>
@@ -1374,17 +1376,30 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     /* AEvent: registracija na izabrani termin, AEvent pravi licni Zoom link */
     var t = izabraniTerminObj();
     if (C.aevent && C.aevent.endpoint && t && t.aeventWtl && t.aeventWebinarId) {
-      var ae = new FormData();
-      ae.append('wtl', t.aeventWtl);
-      ae.append('webinarid', t.aeventWebinarId);
-      ae.append('name', fIme.value);
-      ae.append('email', email);
-      /* AEvent ocekuje samo cifre sa pozivnim, bez "+" */
-      ae.append('phone', srediTelefon(fTel.value).replace(/\D/g, ''));
-      ae.append('lp', location.href.split('?')[0]);
+      var aeIme = fIme.value,
+          aeTel = srediTelefon(fTel.value).replace(/\D/g, ''),  /* AEvent: samo cifre sa pozivnim, bez "+" */
+          aeTz  = '';
+      try { aeTz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+
+      /* 1) token za izabranu kampanju (isto radi AEventov skript), 2) prijava sa tokenom */
       slanja.push(
-        fetch(C.aevent.endpoint, { method: 'POST', body: ae, mode: 'no-cors',
-                                   referrerPolicy: 'no-referrer-when-downgrade' })
+        fetch(C.aevent.dataUrl + '?wtl=' + encodeURIComponent(t.aeventWtl) + '&page=registration&type=json')
+          .then(function(r){ return r.json(); })
+          .then(function(d){ return (d && d.token) || ''; }, function(){ return ''; })
+          .then(function(token){
+            var ae = new URLSearchParams();
+            if (token) ae.append('token', token);
+            ae.append('wtl', t.aeventWtl);
+            ae.append('webinarid', t.aeventWebinarId);
+            ae.append('name', aeIme);
+            ae.append('email', email);
+            ae.append('phone', aeTel);
+            if (aeTz) ae.append('timezone', aeTz);
+            ae.append('location', location.href);
+            ae.append('lp', location.href.split('?')[0]);
+            return fetch(C.aevent.endpoint, { method: 'POST', body: ae, mode: 'no-cors',
+                                              referrerPolicy: 'no-referrer-when-downgrade' });
+          })
           .catch(function(){})
       );
     }
