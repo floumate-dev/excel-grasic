@@ -79,6 +79,11 @@ window.MC = {
     api:    "https://excel-grasic-referral.vercel.app/api/signup",
     param:  "r",
     kljuc:  "excelg_ref"
+  },
+
+  /* Make: posle prijave sva polja iz popupa idu na ovaj webhook (scenario upisuje u GHL) */
+  make: {
+    webhook: "https://hook.eu1.make.com/dc4of33nmiswye9w1q6v828aw5w4k4iv"
   }
 };
 </script>
@@ -1428,14 +1433,39 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 
     /* Referral: upis prijave (i preporuke, ako je dosla preko necijeg linka) */
     var ref = refKod();
-    if (C.referral && C.referral.api) {
-      slanja.push(
-        fetch(C.referral.api, {
+    var referral = (C.referral && C.referral.api)
+      ? fetch(C.referral.api, {
           method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: email, name: fIme.value, ref: ref, phone: srediTelefon(fTel.value) })
-        }).catch(function(){})
-      );
-    }
+        }).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; })
+      : Promise.resolve({});
+
+    /* Make: sva polja iz popupa + licni referral link idu u CRM (GHL custom polja).
+       Salje se posle referral odgovora, da bi link bio u istoj poruci. */
+    slanja.push(referral.then(function(rf){
+      if (!C.make || !C.make.webhook) return;
+      var mk = new URLSearchParams(), q = new URLSearchParams(location.search);
+      mk.append('event', 'optin');
+      mk.append('first_name', ime);
+      mk.append('last_name', prezime);
+      mk.append('full_name', fIme.value);
+      mk.append('email', email);
+      mk.append('phone', srediTelefon(fTel.value));
+      mk.append('pozicija', fPos.value);
+      mk.append('termin', termin);
+      mk.append('termin_datum', (t && t.kratko) || '');
+      mk.append('termin_iso', (t && t.iso) || '');
+      mk.append('referral_link', (rf && rf.shareUrl) || '');
+      mk.append('dashboard_link', (rf && rf.dashboardUrl) || '');
+      mk.append('referred_by', ref);
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(function(k){
+        mk.append(k, q.get(k) || '');
+      });
+      mk.append('page_url', location.href.split('?')[0]);
+      mk.append('submitted_at', new Date().toISOString());
+      return fetch(C.make.webhook, { method: 'POST', body: mk, mode: 'no-cors', keepalive: true })
+        .catch(function(){});
+    }));
 
     /* cekamo sva slanja, ali najvise 5 s, da posetilac ne ostane zaglavljen */
     Promise.race([
