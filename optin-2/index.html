@@ -1458,6 +1458,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       mk.append('referral_link', (rf && rf.shareUrl) || '');
       mk.append('dashboard_link', (rf && rf.dashboardUrl) || '');
       mk.append('referred_by', ref);
+      /* izvor prijave iz linka: ?source=instagram&specificsource=bio
+         (referral linkovi nose source=referral). Bez source -> utm_source. */
+      mk.append('optin_source', q.get('source') || q.get('utm_source') || '');
+      mk.append('optin_specific_source', q.get('specificsource') || '');
       ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(function(k){
         mk.append(k, q.get(k) || '');
       });
