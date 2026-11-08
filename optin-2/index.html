@@ -71,6 +71,14 @@ window.MC = {
     endpoint: "https://44084705.aevent.online/registration",
     /* odavde se pre slanja uzima token; bez tokena AEvent trazi CAPTCHA i prijava se ne zavrsi */
     dataUrl:  "https://44084705.aevent.online/getdata"
+  },
+
+  /* Referral: ko dodje preko licnog linka (?r=KOD), prijava se racuna osobi koja ga je poslala.
+     Prijava se upisuje posle uspesne provere forme; dashboard je na istom domenu kao api. */
+  referral: {
+    api:    "https://excel-grasic-referral.vercel.app/api/signup",
+    param:  "r",
+    kljuc:  "excelg_ref"
   }
 };
 </script>
@@ -1117,6 +1125,20 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }, { passive: true });
 
   /* ---------- UTM capture (prosledjuje se dalje kroz funnel) ---------- */
+  /* ---------- referral kod iz linka (?r=KOD) ----------
+     Pamti se za ovaj tab, pa vazi i ako posetilac prvo klikne po stranici. */
+  function refKod(){
+    var R = C.referral || {}, kod = '';
+    try { kod = new URLSearchParams(location.search).get(R.param || 'r') || ''; } catch(e){}
+    kod = kod.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+    try {
+      if (kod.length >= 4) sessionStorage.setItem(R.kljuc, kod);
+      else kod = sessionStorage.getItem(R.kljuc) || '';
+    } catch(e){ if (kod.length < 4) kod = ''; }
+    return kod;
+  }
+  refKod();
+
   function utmString(){
     var p = new URLSearchParams(location.search), keep = [];
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid'].forEach(function(k){
@@ -1404,7 +1426,18 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       );
     }
 
-    /* cekamo oba slanja, ali najvise 5 s, da posetilac ne ostane zaglavljen */
+    /* Referral: upis prijave (i preporuke, ako je dosla preko necijeg linka) */
+    var ref = refKod();
+    if (C.referral && C.referral.api) {
+      slanja.push(
+        fetch(C.referral.api, {
+          method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, name: fIme.value, ref: ref, phone: srediTelefon(fTel.value) })
+        }).catch(function(){})
+      );
+    }
+
+    /* cekamo sva slanja, ali najvise 5 s, da posetilac ne ostane zaglavljen */
     Promise.race([
       Promise.all(slanja),
       new Promise(function(res){ setTimeout(res, 5000); })
@@ -1417,6 +1450,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email)
                + '&termin=' + encodeURIComponent(termin);
         var u = utmString(); if (u) qs += '&' + u;
+        if (ref) qs += '&ref=' + encodeURIComponent(ref);
         location.href = C.nextUrl + '?' + qs;
       });
   });

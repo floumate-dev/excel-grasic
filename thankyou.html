@@ -27,8 +27,15 @@ window.MC = {
   odgovorNaslov: "Primljeno",
   odgovorTekst:  "Primljeno",
 
-  /* Link za prijavu koji ucesnik kopira i prosledjuje. Prazno = racuna se sam. */
+  /* Link za prijavu koji ucesnik kopira i prosledjuje. Prazno = racuna se sam.
+     Koristi se samo kad licni referral link nije dostupan (stranica otvorena bez prijave). */
   prijavaUrl:  "",
+
+  /* Referral: licni link (?r=KOD) i dashboard sa brojem prijava preko njega. */
+  referral: {
+    api:      "https://excel-grasic-referral.vercel.app/api/signup",
+    dodatak:  "specificsource=referral_thank_you"
+  },
 
   /* Opciono: link ka grupi ili zajednici. Prazno = sekcija se ne prikazuje. */
   zajednicaUrl: ""
@@ -164,6 +171,8 @@ p,li{text-wrap:pretty}
 .mbtn.pred{border-color:var(--lime);background:rgba(225,242,94,.17);color:var(--lime)}
 .sent{display:block;margin-top:11px;font-size:.8rem;color:rgba(236,237,229,.6);text-align:center}
 .sent b{color:var(--cream);font-weight:600;word-break:break-all}
+.sent[hidden]{display:none}
+.sent a{color:var(--lime);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 /* polje sa linkom koji se kopira */
 .copy{display:flex;gap:8px;align-items:stretch}
 .copy input{flex:1;min-width:0;background:rgba(0,16,12,.5);border:1px solid rgba(236,237,229,.16);
@@ -247,6 +256,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
             <input id="share-url" type="text" readonly aria-label="Link za prijavu">
             <button type="button" id="copy-btn">Kopiraj link</button>
           </div>
+          <span class="sent" id="ref-note" hidden>Koliko se ljudi prijavilo preko tvog linka prati na <a id="ref-dash" target="_blank" rel="noopener">svojoj stranici</a>.</span>
         </div>
       </div>
     </div>
@@ -363,6 +373,32 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   var polje = document.getElementById('share-url'), dugme = document.getElementById('copy-btn');
   var link = C.prijavaUrl || location.origin + location.pathname.replace(/[^/]*$/, '') + 'optin/';
   polje.value = link;
+
+  /* licni referral link: isti mejl uvek dobija isti link */
+  var R = C.referral || {};
+  if (R.api && mail) {
+    polje.value = 'Pripremam tvoj link...';
+    var refIme = [(p.get('firstname') || ''), (p.get('lastname') || '')].join(' ').trim();
+    fetch(R.api, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: mail, name: refIme, ref: (p.get('ref') || '').trim() })
+    })
+      .then(function(r){ if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+      .then(function(d){
+        if (!d || !d.shareUrl) throw new Error('nema linka');
+        var dod = String(R.dodatak || '').replace(/^[?&]/, '');
+        link = d.shareUrl + (dod ? (d.shareUrl.indexOf('?') > -1 ? '&' : '?') + dod : '');
+        polje.value = link;
+        if (d.dashboardUrl) {
+          document.getElementById('ref-dash').href = d.dashboardUrl;
+          document.getElementById('ref-note').hidden = false;
+        }
+      })
+      .catch(function(e){
+        console.error('[referral]', e);
+        polje.value = link;
+      });
+  }
 
   dugme.addEventListener('click', function(){
     function uspeh(){
