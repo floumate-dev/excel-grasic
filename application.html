@@ -454,21 +454,9 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     document.getElementById('survey').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
-  /* ---------- Meta: CompleteRegistration jednom po osobi ----------
-     Prijava je zavrsena na optinu; ova strana se otvara sama posle nje.
-     Osvezavanje strane ne salje dogadjaj ponovo. */
-  if (typeof fbq === 'function') {
-    try {
-      var crKljuc = 'mc_cr_' + (p.get('email') || '').trim().toLowerCase();
-      var poslato = false;
-      try { poslato = localStorage.getItem(crKljuc) === '1'; } catch (e) {}
-      if (!poslato) {
-        fbq('track', 'CompleteRegistration');
-        try { localStorage.setItem(crKljuc, '1'); } catch (e) {}
-      }
-    } catch (e) {}
-  }
-  if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch (e) {} }
+  /* Ova strana salje samo PageView, gore uz init piksela.
+     Dogadjaj se salje tek kad neko zaista popuni anketu - vidi
+     SubmitApplication na kraju ankete. */
 })();
 
 /* ============================================================
@@ -576,8 +564,23 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     } catch (e) {}
   }
 
+  /* Meta: SubmitApplication tek kad je anketa stvarno popunjena.
+     Jednom po osobi, da ponovljeno popunjavanje ne naduva brojku. */
+  function piksel(){
+    try {
+      var kljuc = 'mc_sa_' + (p.get('email') || '').trim().toLowerCase();
+      var vec = false;
+      try { vec = localStorage.getItem(kljuc) === '1'; } catch (e) {}
+      if (vec) return;
+      if (typeof fbq === 'function') fbq('track', 'SubmitApplication');
+      if (typeof ttq === 'object' && ttq.track) ttq.track('SubmitForm');
+      try { localStorage.setItem(kljuc, '1'); } catch (e) {}
+    } catch (e) {}
+  }
+
   function gotovo(){
     posalji();
+    piksel();
     fill.style.width = '100%';
     var dalje2 = C.nextUrl + location.search;
     kutija.innerHTML =
