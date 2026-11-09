@@ -399,7 +399,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <div class="q-opts" id="q-opts"></div>
         <div class="q-nav">
           <button class="q-back" type="button" id="q-back" hidden>Nazad</button>
-          <button class="btn" type="button" id="q-next" hidden><span>DALJE</span></button>
+          <button class="btn" type="button" id="q-next" disabled><span>DALJE</span></button>
         </div>
       </div>
     </div>
@@ -554,8 +554,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     });
 
     nazad.hidden = mesto === 0;
-    dalje.hidden = !vise;
-    if (vise) dalje.disabled = uzeto.length === 0;
+    dalje.disabled = uzeto.length === 0;
   }
 
   function biraj(q, vrednost){
@@ -577,7 +576,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     } else {
       odgovori[q.id] = [vrednost];
       crtaj();
-      setTimeout(napred, 170);
     }
   }
 
