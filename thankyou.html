@@ -288,8 +288,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   /* ---------- vokativ imena (srpski pravopis) ----------
-     Petar -> Petre, Andrej -> Andreju, Vuk -> Vuče, Predrag -> Predraže,
-     Miloš -> Miloše, Milica -> Milice, Dušan -> Dušane; Ana, Marko, Nikola ostaju.
+     Petar -> Petre, Vuk -> Vuče, Predrag -> Predraže,
+     Miloš -> Miloše, Milica -> Milice, Dušan -> Dušane; Ana, Marko, Nikola, Andrej ostaju.
      Kad pravilo nije sigurno (zenska imena na suglasnik, strana imena, cirilica),
      ime ostaje kakvo je upisano - bolje "Ines" nego "Inese". */
   function vokativ(ulaz){
@@ -317,8 +317,9 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       if (k.length > 4 && k.slice(-3) === 'ica') return ime.slice(0, -1) + 'e';  /* Milica -> Milice, Ivica -> Ivice */
       return ime;                                                               /* Ana, Nikola, Marko, Đorđe */
     }
-    if (z2 === 'lj' || z2 === 'nj' || z2 === 'dž') return ime + 'u';
-    if (z === 'j' || z === 'č' || z === 'ć' || z === 'đ') return ime + 'u';     /* Andrej -> Andreju */
+    /* Andrej, Matej, Nikolaj (i retka na -č, -ć, -đ, -lj, -nj, -dž) ostaju ista */
+    if (z2 === 'lj' || z2 === 'nj' || z2 === 'dž') return ime;
+    if (z === 'j' || z === 'č' || z === 'ć' || z === 'đ') return ime;
     if (z === 'k') return ime.slice(0, -1) + 'če';                               /* Vuk -> Vuče */
     if (z === 'g') return ime.slice(0, -1) + 'že';                               /* Predrag -> Predraže */
     if (z === 'h') return ime.slice(0, -1) + 'še';
