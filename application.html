@@ -43,45 +43,77 @@ window.MC = {
   anketa: {
     webhook: "https://hook.eu1.make.com/9h8hqfmcgeb12w3bdl1bfd3b5t4eeulv",
     pitanja: [
-      { id: "za_koga", tekst: "Za koga razmatraš edukaciju?",
-        opcije: ["Za sebe", "Za svoj tim", "I za sebe i za tim", "Još uvek nisam siguran/a"] },
+      { id: "oblast_rada", tekst: "Koja je Vaša trenutna oblast rada?",
+        opcije: ["Finansije, računovodstvo i kontroling",
+                 "Administracija i operacije",
+                 "Prodaja, nabavka i logistika",
+                 "Menadžment i rukovođenje",
+                 "Analitika i IT",
+                 "HR i razvoj zaposlenih",
+                 "Preduzetništvo",
+                 "Student / trenutno ne radim",
+                 "Drugo"] },
 
-      { id: "pozicija", tekst: "Čime se trenutno baviš?",
-        opcije: ["Studiram ili sam na prvom poslu", "Administracija", "Finansije i kontroling",
-                 "Prodaja i nabavka", "HR", "Analitika i IT", "Menadžment",
-                 "Preduzetništvo", "Drugo"] },
+      { id: "pozicija", tekst: "Koja opcija najbolje opisuje Vašu trenutnu poziciju?",
+        opcije: ["Zaposleni / stručnjak",
+                 "Menadžer ili vođa tima",
+                 "Direktor / rukovodilac sektora",
+                 "Vlasnik kompanije / preduzetnik",
+                 "HR / L&D stručnjak",
+                 "Student / tražim posao",
+                 "Drugo"] },
 
-      { id: "industrija", tekst: "U kojoj industriji radiš?",
-        opcije: ["Finansije i osiguranje", "Proizvodnja", "Trgovina i distribucija", "IT",
-                 "Profesionalne usluge", "Javni sektor i obrazovanje", "Drugo",
-                 "Trenutno ne radim"] },
+      { id: "ai_koriscenje", tekst: "Da li koristite AI u svom svakodnevnom radu?",
+        opcije: ["Da, svakodnevno",
+                 "Da, nekoliko puta nedeljno",
+                 "Da, ali samo povremeno",
+                 "Ne, ali planiram da počnem",
+                 "Ne koristim AI"] },
 
-      { id: "oblasti", tekst: "Koje oblasti te najviše zanimaju?",
-        napomena: "Izaberi najviše dve.", max: 2,
-        opcije: ["Excel", "Power Query", "Power Pivot i DAX", "Power BI", "Python i Excel",
-                 "AI u poslovanju", "Microsoft 365", "Word i PowerPoint", "Još uvek nisam siguran/a"] },
+      { id: "ai_znanje", tekst: "Kako biste procenili svoje trenutno znanje o AI?",
+        opcije: ["Početnik sam i tek upoznajem mogućnosti AI-ja",
+                 "Poznajem osnove i koristim jednostavne AI alate",
+                 "Samostalno koristim AI u poslu, ali želim da naučim više",
+                 "Napredan sam korisnik i već koristim AI za složenije zadatke i automatizaciju",
+                 "Nisam siguran/na"] },
 
-      { id: "nivo", tekst: "Koliko ti je znanje u tim oblastima sada?",
-        opcije: ["Tek počinjem", "Znam osnove",
-                 "Redovno koristim alate, ali mnogo toga radim ručno",
-                 "Samostalno radim i želim napredniji nivo", "Ne znam"] },
+      { id: "unapredjenje", tekst: "Šta biste najviše voleli da unapredite u svom radu?",
+        napomena: "Izaberite najviše tri odgovora.", max: 3,
+        opcije: ["Da brže završavam svakodnevne zadatke",
+                 "Da automatizujem ponavljajuće poslove",
+                 "Da bolje analiziram podatke i pravim izveštaje",
+                 "Da unapredim rad svog tima",
+                 "Da steknem veštine za napredovanje ili promenu posla",
+                 "Trenutno istražujem mogućnosti"] },
 
-      { id: "razlog", tekst: "Šta je glavni razlog zbog kog razmatraš edukaciju?",
-        opcije: ["Želim da radim brže i sa manje ručnih koraka",
-                 "Nova pozicija traži znanja koja nemam",
-                 "Želim naprednije znanje i složenije projekte",
-                 "Treba mi jasan redosled učenja", "Razmišljam o promeni karijere",
-                 "Pripremam se za prvi posao",
-                 "Želim znanje za dodatne projekte ili zaradu",
-                 "Za sada istražujem mogućnosti"] },
+      { id: "vaznost",
+        tekst: "Koliko Vam je važno da unapredite svoje znanje i primenu AI-ja u skorije vreme?",
+        opcije: ["Veoma važno, jer imam osećaj da ne uspevam da ispratim sve novosti i mogućnosti koje AI donosi",
+                 "Važno, jer želim uskoro da počnem ozbiljnije da koristim AI",
+                 "Korisno, ali mi trenutno nije prioritet",
+                 "Trenutno samo učim i istražujem mogućnosti"] },
 
-      { id: "kada", tekst: "Kada planiraš da počneš sa učenjem?",
-        opcije: ["U narednih mesec dana", "U naredna tri meseca", "Kasnije",
-                 "Za sada se samo informišem"] },
+      { id: "teme", tekst: "Koje teme biste voleli da bolje savladate?",
+        napomena: "Izaberite najviše tri odgovora.", max: 3,
+        opcije: ["Excel",
+                 "Power Query / Power Pivot",
+                 "Power BI",
+                 "AI i automatizacija",
+                 "Microsoft 365 Copilot",
+                 "Python u Excelu",
+                 "Word i PowerPoint",
+                 "Još nisam siguran/na"] },
 
-      { id: "preporuka",
-        tekst: "Da li želiš da ti posle masterklasa predložimo edukaciju po tvojim odgovorima?",
-        opcije: ["Da, kroz kratak razgovor", "Da, imejlom", "Ne za sada"] }
+      /* Preskace se ako je na pitanju o znanju izabran pocetnicki nivo:
+         ko tek upoznaje AI nema sta da prijavi kao prepreku u primeni. */
+      { id: "prepreka", tekst: "Šta Vas trenutno najviše sprečava da bolje iskoristite AI u svom radu?",
+        uslov: { id: "ai_znanje", osim: ["Početnik sam i tek upoznajem mogućnosti AI-ja"] },
+        opcije: ["Nemam dovoljno vremena da istražujem nove AI alate i njihove mogućnosti",
+                 "Brine me bezbednost i poverljivost kompanijskih podataka koje bih unosio/la u AI alate",
+                 "Nisam siguran/na kako da AI primenim na konkretne poslovne probleme",
+                 "Koristim AI, ali želim da pređem sa jednostavnih upita na napredniju primenu",
+                 "U kompaniji postoje ograničenja za korišćenje AI alata",
+                 "Trenutno nemam posebnih prepreka"] }
     ]
   }
 };
@@ -483,11 +515,23 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 
   function izbor(q){ return odgovori[q.id] || (odgovori[q.id] = []); }
 
+  /* Pitanje sa "uslov" se preskace kad je na ranijem pitanju izabran
+     jedan od odgovora iz "osim". Racuna se svaki put iznova, pa povratak
+     nazad i promena odgovora vrati ili ukloni pitanje kako treba. */
+  function vidljivo(q){
+    var u = q.uslov;
+    if (!u) return true;
+    var dat = (odgovori[u.id] || [])[0];
+    return !dat || (u.osim || []).indexOf(dat) < 0;
+  }
+  function spisak(){ return A.pitanja.filter(vidljivo); }
+
   function crtaj(){
     var q = A.pitanja[i], uzeto = izbor(q), vise = q.max > 1;
 
-    fill.style.width = (i / A.pitanja.length * 100) + '%';
-    broj.textContent = 'Pitanje ' + (i + 1) + ' od ' + A.pitanja.length;
+    var vid = spisak(), mesto = vid.indexOf(q);
+    fill.style.width = (mesto / vid.length * 100) + '%';
+    broj.textContent = 'Pitanje ' + (mesto + 1) + ' od ' + vid.length;
     tekst.textContent = q.tekst;
     nota.hidden = !q.napomena;
     nota.className = 'q-note';
@@ -509,7 +553,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       opcije.appendChild(b);
     });
 
-    nazad.hidden = i === 0;
+    nazad.hidden = mesto === 0;
     dalje.hidden = !vise;
     if (vise) dalje.disabled = uzeto.length === 0;
   }
@@ -526,7 +570,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         /* vec je izabrano koliko sme; reci zasto se nista ne desava */
         nota.hidden = false;
         nota.className = 'q-note pazi';
-        nota.textContent = 'Već su izabrane dve. Otkači jednu pa biraj drugu.';
+        nota.textContent = 'Otkači jedan odgovor pa biraj drugi.';
         return;
       }
       crtaj();
@@ -538,8 +582,16 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }
 
   function napred(){
-    if (i < A.pitanja.length - 1) { i++; crtaj(); }
+    var k = i + 1;
+    while (k < A.pitanja.length && !vidljivo(A.pitanja[k])) k++;
+    if (k < A.pitanja.length) { i = k; crtaj(); }
     else gotovo();
+  }
+
+  function unazad(){
+    var k = i - 1;
+    while (k >= 0 && !vidljivo(A.pitanja[k])) k--;
+    if (k >= 0) { i = k; crtaj(); }
   }
 
   function posalji(){
@@ -553,8 +605,11 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     d.append('phone', (p.get('phone') || '').trim());
     d.append('first_name', (p.get('firstname') || p.get('ime') || '').trim());
     d.append('termin', (p.get('termin') || '').trim());
+    /* Svako pitanje salje se uvek, da mapiranje u scenariju bude stabilno.
+       Preskoceno pitanje ide prazno, pa stari odgovor ne moze da procuri
+       ako se neko vratio i promenio raniji izbor. */
     A.pitanja.forEach(function(q){
-      d.append(q.id, (odgovori[q.id] || []).join(' | '));
+      d.append(q.id, vidljivo(q) ? (odgovori[q.id] || []).join(' | ') : '');
     });
     d.append('page_url', location.href.split('?')[0]);
     d.append('submitted_at', new Date().toISOString());
@@ -593,7 +648,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     setTimeout(function(){ location.href = dalje2; }, 2200);
   }
 
-  nazad.addEventListener('click', function(){ if (i > 0) { i--; crtaj(); } });
+  nazad.addEventListener('click', unazad);
   dalje.addEventListener('click', napred);
   crtaj();
 })();
