@@ -1184,6 +1184,12 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }
   refKod();
 
+  /* vrednost kolacica (Meta _fbp / _fbc) */
+  function kolacic(ime){
+    var m = document.cookie.match('(?:^|; )' + ime + '=([^;]*)');
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+
   function utmString(){
     var p = new URLSearchParams(location.search), keep = [];
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid'].forEach(function(k){
@@ -1473,6 +1479,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 
     /* Referral: upis prijave (i preporuke, ako je dosla preko necijeg linka) */
     var ref = refKod();
+
+    /* Meta: isti event_id ide i u piksel (Lead) i u Conversions API preko Make-a,
+       da Meta prepozna da je to ista prijava i ne broji je dvaput. */
+    var leadId = 'lead_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     var referral = (C.referral && C.referral.api)
       ? fetch(C.referral.api, {
           method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
@@ -1507,6 +1517,12 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         mk.append(k, q.get(k) || '');
       });
       mk.append('page_url', location.href.split('?')[0]);
+      /* za Meta Conversions API (Lead) */
+      mk.append('event_id', leadId);
+      mk.append('event_source_url', location.href);
+      mk.append('fbp', kolacic('_fbp'));
+      mk.append('fbc', kolacic('_fbc') || (q.get('fbclid') ? 'fb.1.' + Date.now() + '.' + q.get('fbclid') : ''));
+      mk.append('user_agent', navigator.userAgent || '');
       mk.append('submitted_at', new Date().toISOString());
       return fetch(C.make.webhook, { method: 'POST', body: mk, mode: 'no-cors', keepalive: true })
         .catch(function(){});
@@ -1519,7 +1535,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     ])
       .finally(function(){
         /* Meta / TikTok Lead event ako je piksel ucitan (osnovni kod piksela je u GHL Head tracking code) */
-        if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch(e){} }
+        if (typeof fbq === 'function') { try { fbq('track', 'Lead', {}, { eventID: leadId }); } catch(e){} }
         if (typeof ttq === 'object' && ttq.track) { try { ttq.track('SubmitForm'); } catch(e){} }
 
         var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email)
