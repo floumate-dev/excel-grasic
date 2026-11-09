@@ -11,6 +11,11 @@ utisci/              screenshotovi mejlova, koriste ih obe verzije landinga
 application.html     bridge: video pa slot za anketu
 thankyou.html        potvrda: video pa dva koraka
 index.html           samo preusmerenje na /optin/
+kalendar/index.html  "dodaj u kalendar" iz mejla: sklopi termin i posalje
+                     posetioca u njegov kalendar; za Apple i ICS sam napravi
+                     .ics fajl u pregledacu, bez servera
+mejl/                blokovi koji se lepe u ActiveCampaign mejlove
+                     (nisu stranice, ne otvaraju se same)
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.
@@ -37,6 +42,11 @@ ne valja ni to; preformuliši rečenicu da rod ne bude potreban.
 stranice. Nikad ručno po tekstu - vrednosti se ubacuju JavaScriptom.
 
 **6. Ne menjaj `.gitignore`, workflow fajlove ni `tools/`** bez izričitog traženja.
+
+**6a. U linkovima za kalendar `z=` ostaje zadnji parametar.** Zoom linkovi u
+sebi nose `?` i `&`, pa `kalendar/index.html` cita vrednost sve do kraja
+adrese. Dodaš li bilo šta posle `z=`, link za pristup se prelomi i ljudi
+dobiju pola adrese u kalendaru.
 
 **7. Slike u `utisci/` su obrađene - ne menjaj ih.** Na svakoj su zamućeni
 mejl adresa i prezime, i u zaglavlju i u potpisu; vidi se samo ime. Zato i
@@ -101,6 +111,8 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Reč koja se upiše u odgovor | `thankyou.html` | `odgovorNaslov`, `odgovorTekst` u `window.MC` |
 | Termine (datum i sat) | `optin/index.html`, `optin-2/index.html` | `termini` u `window.MC` |
 | Datum, video, linkove | sve tri | `window.MC` |
+| Naziv i opis termina u kalendaru | `kalendar/index.html` | `naziv`, `opis` u `window.MC` |
+| Dugmad za kalendar u mejlu | `mejl/kalendar-dugmad-termin-1.html` | ceo fajl |
 
 ---
 

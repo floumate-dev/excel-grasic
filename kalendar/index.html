@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodaj Masterclass u kalendar</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-32x32.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+/* ============================================================
+   KONFIGURACIJA - menja se samo ovde
+
+   Ovu stranicu otvaraju dugmad iz mejla. Ona od parametara iz
+   linka sklopi termin i posalje posetioca u njegov kalendar.
+   Za Apple i ICS sama napravi .ics fajl, bez servera.
+
+   Link iz mejla izgleda tako:
+     .../kalendar/?t=1&k=google&z=%ZOOM_JOIN_LINK%
+
+     t   koji termin (1 ili 2, redom kao u listi ispod)
+     k   koji kalendar (google, apple, outlook, office365, yahoo, ics)
+     z   link za pristup; MORA da bude zadnji parametar u linku,
+         jer se cita sve do kraja adrese - Zoom linkovi u sebi
+         imaju & i ? pa bi se inace prelomili
+   ============================================================ */
+window.MC = {
+  naziv:    "Productivity Masterclass - Outliers",
+  trajanje: 90,                 /* minuta */
+
+  /* Termini, redom. t=1 je prvi red, t=2 drugi.
+     Dodavanje treceg termina: jos jedan red ovde i t=3 u linku. */
+  termini: [
+    { iso: "2026-11-26T19:00:00+01:00", dan: "četvrtak, 26.11.2026." },
+    { iso: "2026-11-30T19:00:00+01:00", dan: "ponedeljak, 30.11.2026." }
+  ],
+
+  /* Tekst koji ulazi u opis termina. {link} se zameni linkom za pristup. */
+  opis: "Vidimo se na Masterclass-u. Pristup je na linku:\n{link}\n\nUključi se 5 minuta ranije.",
+
+  /* Ako link za pristup ne stigne iz mejla, u termin ide ovo. */
+  rezerva: "https://floumate-dev.github.io/excel-grasic/thankyou.html"
+};
+</script>
+
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;background:#ecede5;color:#363636;
+  font:400 16px/1.6 "Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  text-wrap:pretty;
+}
+.karta{
+  width:100%;max-width:420px;background:#fff;border:1px solid #dfe5e2;
+  border-radius:16px;padding:32px 28px;text-align:center;
+}
+h1{margin:0 0 10px;font-size:22px;font-weight:500;line-height:1.25;color:#004d3a}
+p{margin:0 0 20px;color:#6b7570;font-size:15px}
+p:last-child{margin-bottom:0}
+.kad{
+  display:inline-block;margin:0 0 20px;padding:7px 14px;background:#e1eae8;
+  border-radius:999px;font-size:14px;font-weight:700;color:#004d3a
+}
+.cta{
+  display:inline-block;padding:14px 26px;background:#e1f25e;color:#004d3a;
+  border:0;border-radius:16px;font:700 16px/1 "Onest",sans-serif;
+  text-decoration:none;cursor:pointer
+}
+.cta:hover{filter:brightness(.96)}
+.tiho{margin-top:18px;font-size:13px;color:#6b7570}
+.tiho a{color:#004d3a}
+.nb{white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="karta">
+  <h1 id="naslov">Dodajemo termin u tvoj kalendar</h1>
+  <div class="kad" id="kad"></div>
+  <p id="vodic">Ako se ništa ne otvori za par sekundi, klikni na dugme.</p>
+  <button class="cta" id="dugme" type="button">Dodaj u kalendar</button>
+  <p class="tiho" id="tiho"></p>
+</div>
+
+<script>
+(function(){
+  var C = window.MC;
+
+  /* ---------- 1. citanje linka ----------
+     z se cita sirovo, od "z=" do kraja adrese. URLSearchParams ovde
+     ne sluzi: Zoom linkovi nose & i ? pa bi se vrednost prelomila. */
+  var q = location.search || "";
+  var zoom = "";
+  var iz = q.indexOf("&z=");
+  if (iz < 0) iz = q.indexOf("?z=");
+  var mz = iz < 0 ? "" : q.slice(iz + 3);
+  if (mz) {
+    /* ako je neko ipak enkodovao link, vrati ga u normalan oblik */
+    if (/%[0-9A-Fa-f]{2}/.test(mz)) { try { mz = decodeURIComponent(mz); } catch (e) {} }
+    /* samo http(s); ako merge tag nije prosao, ostaje prazno */
+    if (/^https?:\/\//i.test(mz)) zoom = mz;
+  }
+  if (!zoom) zoom = C.rezerva;
+
+  function param(ime){
+    var m = q.match(new RegExp("[?&]" + ime + "=([^&]*)"));
+    return m ? m[1] : "";
+  }
+  var kal = (param("k") || "google").toLowerCase();
+  var br  = parseInt(param("t"), 10);
+  var T   = C.termini[(br >= 1 ? br : 1) - 1] || C.termini[0];
+
+  /* ---------- 2. vreme ---------- */
+  var pocetak = new Date(T.iso);
+  var kraj    = new Date(pocetak.getTime() + C.trajanje * 60000);
+
+  function dva(n){ return (n < 10 ? "0" : "") + n; }
+  function utc(d){                      /* 20261126T180000Z */
+    return d.getUTCFullYear() + dva(d.getUTCMonth() + 1) + dva(d.getUTCDate())
+         + "T" + dva(d.getUTCHours()) + dva(d.getUTCMinutes()) + "00Z";
+  }
+  var opis = C.opis.replace("{link}", zoom);
+
+  /* ---------- 3. linkovi ka kalendarima ---------- */
+  var e = encodeURIComponent;
+  var mape = {
+    google: "https://calendar.google.com/calendar/render?action=TEMPLATE"
+          + "&text="     + e(C.naziv)
+          + "&dates="    + utc(pocetak) + "/" + utc(kraj)
+          + "&details="  + e(opis)
+          + "&location=" + e(zoom),
+
+    outlook: "https://outlook.live.com/calendar/0/deeplink/compose"
+          + "?path=" + e("/calendar/action/compose") + "&rru=addevent"
+          + "&subject="  + e(C.naziv)
+          + "&startdt="  + e(pocetak.toISOString())
+          + "&enddt="    + e(kraj.toISOString())
+          + "&body="     + e(opis)
+          + "&location=" + e(zoom),
+
+    office365: "https://outlook.office.com/calendar/0/deeplink/compose"
+          + "?path=" + e("/calendar/action/compose") + "&rru=addevent"
+          + "&subject="  + e(C.naziv)
+          + "&startdt="  + e(pocetak.toISOString())
+          + "&enddt="    + e(kraj.toISOString())
+          + "&body="     + e(opis)
+          + "&location=" + e(zoom),
+
+    yahoo: "https://calendar.yahoo.com/?v=60"
+          + "&title="  + e(C.naziv)
+          + "&st="     + utc(pocetak)
+          + "&et="     + utc(kraj)
+          + "&desc="   + e(opis)
+          + "&in_loc=" + e(zoom)
+  };
+
+  /* ---------- 4. .ics fajl ---------- */
+  function tekst(s){                    /* escape za TEXT vrednosti */
+    return String(s).replace(/\\/g, "\\\\").replace(/;/g, "\;")
+                    .replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  }
+  function prelomi(red){
+    /* ICS dozvoljava 75 oktet po redu, a kvacice su po dva bajta. Zato se
+       meri u bajtovima i nikad se ne lomi na pola znaka - inace kalendar
+       prikaze smece umesto ž, č, ć, š, đ. */
+    var out = "", tek = "", bajt = 0, limit = 73;
+    for (var i = 0; i < red.length; i++) {
+      var z = red[i];
+      var n = encodeURIComponent(z).replace(/%[0-9A-F]{2}/g, "x").length;
+      if (bajt + n > limit) { out += tek + "\r\n "; tek = ""; bajt = 0; limit = 72; }
+      tek += z; bajt += n;
+    }
+    return out + tek;
+  }
+  function ics(){
+    var uid = utc(pocetak) + "-" + Math.random().toString(36).slice(2, 8) + "@excelgrasic";
+    var redovi = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Excel Grasic//Productivity Masterclass//SR",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      "UID:" + uid,
+      "DTSTAMP:" + utc(new Date()),
+      "DTSTART:" + utc(pocetak),
+      "DTEND:"   + utc(kraj),
+      "SUMMARY:"     + tekst(C.naziv),
+      "DESCRIPTION:" + tekst(opis),
+      "LOCATION:"    + tekst(zoom),
+      "URL:"         + zoom,
+      "BEGIN:VALARM",
+      "TRIGGER:-PT15M",
+      "ACTION:DISPLAY",
+      "DESCRIPTION:" + tekst(C.naziv + " pocinje za 15 minuta"),
+      "END:VALARM",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ];
+    return redovi.map(prelomi).join("\r\n") + "\r\n";
+  }
+
+  /* ---------- 5. akcija ---------- */
+  var dugme = document.getElementById("dugme");
+  var naslov = document.getElementById("naslov");
+  var vodic  = document.getElementById("vodic");
+
+  document.getElementById("kad").textContent = T.dan + " u 19 h";
+  document.getElementById("tiho").innerHTML =
+    'Link za pristup ti ostaje i u mejlu. ' +
+    '<a href="' + zoom.replace(/&/g, "&amp;").replace(/"/g, "&quot;") +
+    '">Otvori ga odmah</a>.';
+
+  function skini(){
+    var blob = new Blob([ics()], { type: "text/calendar;charset=utf-8" });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement("a");
+    a.href = url;
+    a.download = "masterclass-" + utc(pocetak).slice(0, 8) + ".ics";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+  }
+
+  if (mape[kal]) {
+    /* Google, Outlook, Office, Yahoo - samo preusmerenje, stranica se ne vidi */
+    naslov.textContent = "Otvaramo tvoj kalendar";
+    dugme.onclick = function(){ location.href = mape[kal]; };
+    location.replace(mape[kal]);
+  } else {
+    /* Apple i ICS - fajl se pravi ovde */
+    naslov.textContent = "Dodaj Masterclass u kalendar";
+    vodic.textContent  = "Fajl se preuzima sam. Ako ne krene, klikni na dugme pa ga otvori.";
+    dugme.onclick = skini;
+    try { skini(); } catch (err) {}
+  }
+})();
+</script>
+
+</body>
+</html>
