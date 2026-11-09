@@ -41,6 +41,13 @@ window.MC = {
   /* Tekst koji ulazi u opis termina. {link} se zameni linkom za pristup. */
   opis: "Vidimo se na Masterclass-u. Pristup je na linku:\n{link}\n\nUključi se 5 minuta ranije.",
 
+  /* Parametri koji se skidaju sa linka za pristup pre nego sto udje u
+     kalendar. utm_* dolepljuje ActiveCampaign, a= dolepljuje AEvent da bi
+     znao iz koje akcije je neko usao. U kalendaru oba lazu: covek klikne
+     iz kalendara dve nedelje kasnije, ne iz mejla. Ostavi praznu listu
+     ako hoces da link ulazi u kalendar nedirnut. */
+  ocisti: ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "a"],
+
   /* Ako link za pristup ne stigne iz mejla, u termin ide ovo. */
   rezerva: "https://floumate-dev.github.io/excel-grasic/thankyou.html"
 };
@@ -94,6 +101,19 @@ p:last-child{margin-bottom:0}
   /* ---------- 1. citanje linka ----------
      z se cita sirovo, od "z=" do kraja adrese. URLSearchParams ovde
      ne sluzi: Zoom linkovi nose & i ? pa bi se vrednost prelomila. */
+  /* Skida parametre iz C.ocisti sa linka za pristup. Deli se rucno po &
+     jer vrednosti koje AC dolepi umeju da nose razmake i kvacice. */
+  function ocistiLink(u){
+    var lista = C.ocisti || [];
+    if (!lista.length) return u;
+    var t = u.indexOf("?");
+    if (t < 0) return u;
+    var ostaje = u.slice(t + 1).split("&").filter(function(par){
+      return par && lista.indexOf(par.split("=")[0]) < 0;
+    });
+    return ostaje.length ? u.slice(0, t) + "?" + ostaje.join("&") : u.slice(0, t);
+  }
+
   var q = location.search || "";
   var zoom = "";
   var iz = q.indexOf("&z=");
@@ -103,7 +123,7 @@ p:last-child{margin-bottom:0}
     /* ako je neko ipak enkodovao link, vrati ga u normalan oblik */
     if (/%[0-9A-Fa-f]{2}/.test(mz)) { try { mz = decodeURIComponent(mz); } catch (e) {} }
     /* samo http(s); ako merge tag nije prosao, ostaje prazno */
-    if (/^https?:\/\//i.test(mz)) zoom = mz;
+    if (/^https?:\/\//i.test(mz)) zoom = ocistiLink(mz);
   }
   if (!zoom) zoom = C.rezerva;
 

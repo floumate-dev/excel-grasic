@@ -112,6 +112,7 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Termine (datum i sat) | `optin/index.html`, `optin-2/index.html` | `termini` u `window.MC` |
 | Datum, video, linkove | sve tri | `window.MC` |
 | Naziv i opis termina u kalendaru | `kalendar/index.html` | `naziv`, `opis` u `window.MC` |
+| Šta se skida sa linka za pristup | `kalendar/index.html` | `ocisti` u `window.MC` |
 | Dugmad za kalendar u mejlu | `mejl/kalendar-dugmad-termin-1.html` | ceo fajl |
 
 ---
