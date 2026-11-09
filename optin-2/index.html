@@ -1538,7 +1538,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         if (typeof fbq === 'function') { try { fbq('track', 'Lead', {}, { eventID: leadId }); } catch(e){} }
         if (typeof ttq === 'object' && ttq.track) { try { ttq.track('SubmitForm'); } catch(e){} }
 
+        /* ime, mejl i telefon idu dalje kroz link da bi anketa na sledecoj
+           stranici mogla da zalepi odgovore na isti kontakt */
         var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email)
+               + '&phone=' + encodeURIComponent(srediTelefon(fTel.value))
                + '&termin=' + encodeURIComponent(termin);
         var u = utmString(); if (u) qs += '&' + u;
         if (ref) qs += '&ref=' + encodeURIComponent(ref);

@@ -559,8 +559,12 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     poslato = true;
     var d = new URLSearchParams();
     d.append('event', 'anketa');
+    /* mejl, telefon i termin stizu kroz link sa optina; po njima se
+       odgovori lepe na postojeci kontakt umesto da prave novi */
     d.append('email', (p.get('email') || '').trim().toLowerCase());
+    d.append('phone', (p.get('phone') || '').trim());
     d.append('first_name', (p.get('firstname') || p.get('ime') || '').trim());
+    d.append('termin', (p.get('termin') || '').trim());
     A.pitanja.forEach(function(q){
       d.append(q.id, (odgovori[q.id] || []).join(' | '));
     });
