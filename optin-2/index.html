@@ -1130,6 +1130,45 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }, { passive: true });
 
   /* ---------- UTM capture (prosledjuje se dalje kroz funnel) ---------- */
+  /* ---------- vokativ imena (srpski pravopis) ----------
+     Petar -> Petre, Andrej -> Andreju, Vuk -> Vuče, Predrag -> Predraže,
+     Miloš -> Miloše, Milica -> Milice, Dušan -> Dušane; Ana, Marko, Nikola ostaju.
+     Kad pravilo nije sigurno (zenska imena na suglasnik, strana imena, cirilica),
+     ime ostaje kakvo je upisano - bolje "Ines" nego "Inese". */
+  function vokativ(ulaz){
+    var ime = String(ulaz || '').trim().split(/\s+/)[0].split('-')[0];
+    if (ime.length < 2) return ime;
+    ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1).toLocaleLowerCase('sr-RS');
+    var k = ime.toLocaleLowerCase('sr-RS');
+
+    /* nepostojano a i drugi izuzeci */
+    var IZUZECI = { 'petar': 'Petre', 'aleksandar': 'Aleksandre', 'dimitar': 'Dimitre',
+                    'mitar': 'Mitre', 'pavao': 'Pavle', 'đurađ': 'Đurđe', 'djuradj': 'Djurdje' };
+    if (IZUZECI[k]) return IZUZECI[k];
+
+    /* cirilica i strana imena (slova i spojevi kojih nema u srpskoj latinici) */
+    if (!/^[a-zčćđšž]+$/.test(k) || /[qwxy]|ch|th|ph|sh|ck|ee|oo|ou|ea/.test(k)) return ime;
+
+    /* zenska i strana imena na suglasnik ostaju ista */
+    if ((' ines nives karmen doris ingrid iris ester rut edit mirjam nikol nikolet kolet žaklin zaklin '
+       + 'kristin katrin ketrin karin merilin lilijan elizabet margaret margit ivet ivon suzan madlen '
+       + 'karolin izabel anabel dolores beatris rahel agnes kejt dženifer dzenifer džulijet dzulijet oleg ')
+       .indexOf(' ' + k + ' ') > -1) return ime;
+
+    var z = k.slice(-1), z2 = k.slice(-2);
+    if ('aeiou'.indexOf(z) > -1) {
+      if (k.length > 4 && k.slice(-3) === 'ica') return ime.slice(0, -1) + 'e';  /* Milica -> Milice, Ivica -> Ivice */
+      return ime;                                                               /* Ana, Nikola, Marko, Đorđe */
+    }
+    if (z2 === 'lj' || z2 === 'nj' || z2 === 'dž') return ime + 'u';
+    if (z === 'j' || z === 'č' || z === 'ć' || z === 'đ') return ime + 'u';     /* Andrej -> Andreju */
+    if (z === 'k') return ime.slice(0, -1) + 'če';                               /* Vuk -> Vuče */
+    if (z === 'g') return ime.slice(0, -1) + 'že';                               /* Predrag -> Predraže */
+    if (z === 'h') return ime.slice(0, -1) + 'še';
+    if (z === 'c') return ime.slice(0, -1) + 'če';
+    return ime + 'e';                                                            /* Dušan -> Dušane, Miloš -> Miloše */
+  }
+
   /* ---------- referral kod iz linka (?r=KOD) ----------
      Pamti se za ovaj tab, pa vazi i ako posetilac prvo klikne po stranici. */
   function refKod(){
@@ -1449,6 +1488,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       mk.append('first_name', ime);
       mk.append('last_name', prezime);
       mk.append('full_name', fIme.value);
+      mk.append('vokativ', vokativ(ime));
       mk.append('email', email);
       mk.append('phone', srediTelefon(fTel.value));
       mk.append('pozicija', fPos.value);
