@@ -38,8 +38,31 @@ window.MC = {
   },
 
   /* Opciono: link ka grupi ili zajednici. Prazno = sekcija se ne prikazuje. */
-  zajednicaUrl: ""
+  zajednicaUrl: "",
+
+  /* Meta piksel ("Novi Pixel Grasic"). Osnovni kod je u kodu stranice, ne dodaje se u GHL. */
+  pixelId:    "448307616997442"
 };
+</script>
+<script>
+/* Meta piksel: osnovni kod + PageView. ID je u window.MC.pixelId.
+   Ako je piksel vec ucitan (npr. preko GHL tracking koda), ne ucitava se drugi put. */
+(function(){
+  var C = window.MC || {};
+  if (!C.pixelId || typeof window.fbq === 'function') return;
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  /* email i ime iz linka (application, thank you) za bolje prepoznavanje kod Mete */
+  var p = new URLSearchParams(location.search), ud = {};
+  var em = (p.get('email') || '').trim().toLowerCase(), fn = (p.get('firstname') || '').trim().toLowerCase();
+  if (em) ud.em = em;
+  if (fn) ud.fn = fn;
+  fbq('init', C.pixelId, ud);
+  fbq('track', 'PageView');
+})();
 </script>
 
 <style>
@@ -423,7 +446,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }
 
   /* ---------- konverzija ---------- */
-  if (typeof fbq === 'function') { try { fbq('track', 'CompleteRegistration'); } catch (e) {} }
   if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch (e) {} }
 })();
 </script>

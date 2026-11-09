@@ -114,4 +114,4 @@ Ovo čeka podatke od klijenta, ne diraj dok ne stignu:
 - video na application i thankyou stranici vrti isti snimak kao landing
 - slot za anketu na application stranici je prazan (`id="survey-box"`)
 - glavni pasus na application stranici je lorem ipsum
-- piksel: ID je u `window.MC.pixelId` na application stranici; osnovni kod piksela se dodaje u GHL (Head tracking code)
+- piksel: osnovni kod je u kodu optin-2, application i thankyou (ID u `window.MC.pixelId`). Ne dodaje se u GHL Head tracking code. Lead ide na optinu, CompleteRegistration samo na application (jednom po osobi). Treba potvrda media buyera koji događaj koristi za optimizaciju.
