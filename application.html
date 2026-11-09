@@ -43,7 +43,7 @@ window.MC = {
   anketa: {
     webhook: "https://hook.eu1.make.com/9h8hqfmcgeb12w3bdl1bfd3b5t4eeulv",
     pitanja: [
-      { id: "oblast_rada", tekst: "Koja je Vaša trenutna oblast rada?",
+      { id: "oblast_rada", tekst: "Koja je tvoja trenutna oblast rada?",
         opcije: ["Finansije, računovodstvo i kontroling",
                  "Administracija i operacije",
                  "Prodaja, nabavka i logistika",
@@ -54,7 +54,7 @@ window.MC = {
                  "Student / trenutno ne radim",
                  "Drugo"] },
 
-      { id: "pozicija", tekst: "Koja opcija najbolje opisuje Vašu trenutnu poziciju?",
+      { id: "pozicija", tekst: "Koja opcija najbolje opisuje tvoju trenutnu poziciju?",
         opcije: ["Zaposleni / stručnjak",
                  "Menadžer ili vođa tima",
                  "Direktor / rukovodilac sektora",
@@ -63,22 +63,22 @@ window.MC = {
                  "Student / tražim posao",
                  "Drugo"] },
 
-      { id: "ai_koriscenje", tekst: "Da li koristite AI u svom svakodnevnom radu?",
+      { id: "ai_koriscenje", tekst: "Da li koristiš AI u svom svakodnevnom radu?",
         opcije: ["Da, svakodnevno",
                  "Da, nekoliko puta nedeljno",
                  "Da, ali samo povremeno",
                  "Ne, ali planiram da počnem",
                  "Ne koristim AI"] },
 
-      { id: "ai_znanje", tekst: "Kako biste procenili svoje trenutno znanje o AI?",
+      { id: "ai_znanje", tekst: "Kako stojiš sa znanjem o AI?",
         opcije: ["Početnik sam i tek upoznajem mogućnosti AI-ja",
                  "Poznajem osnove i koristim jednostavne AI alate",
                  "Samostalno koristim AI u poslu, ali želim da naučim više",
                  "Napredan sam korisnik i već koristim AI za složenije zadatke i automatizaciju",
                  "Nisam siguran/na"] },
 
-      { id: "unapredjenje", tekst: "Šta biste najviše voleli da unapredite u svom radu?",
-        napomena: "Izaberite najviše tri odgovora.", max: 3,
+      { id: "unapredjenje", tekst: "Šta najviše želiš da unaprediš u svom radu?",
+        napomena: "Izaberi najviše tri odgovora.", max: 3,
         opcije: ["Da brže završavam svakodnevne zadatke",
                  "Da automatizujem ponavljajuće poslove",
                  "Da bolje analiziram podatke i pravim izveštaje",
@@ -87,14 +87,14 @@ window.MC = {
                  "Trenutno istražujem mogućnosti"] },
 
       { id: "vaznost",
-        tekst: "Koliko Vam je važno da unapredite svoje znanje i primenu AI-ja u skorije vreme?",
+        tekst: "Koliko ti je važno da unaprediš svoje znanje i primenu AI-ja u skorije vreme?",
         opcije: ["Veoma važno, jer imam osećaj da ne uspevam da ispratim sve novosti i mogućnosti koje AI donosi",
                  "Važno, jer želim uskoro da počnem ozbiljnije da koristim AI",
                  "Korisno, ali mi trenutno nije prioritet",
                  "Trenutno samo učim i istražujem mogućnosti"] },
 
-      { id: "teme", tekst: "Koje teme biste voleli da bolje savladate?",
-        napomena: "Izaberite najviše tri odgovora.", max: 3,
+      { id: "teme", tekst: "Koje teme želiš bolje da savladaš?",
+        napomena: "Izaberi najviše tri odgovora.", max: 3,
         opcije: ["Excel",
                  "Power Query / Power Pivot",
                  "Power BI",
@@ -106,7 +106,7 @@ window.MC = {
 
       /* Preskace se ako je na pitanju o znanju izabran pocetnicki nivo:
          ko tek upoznaje AI nema sta da prijavi kao prepreku u primeni. */
-      { id: "prepreka", tekst: "Šta Vas trenutno najviše sprečava da bolje iskoristite AI u svom radu?",
+      { id: "prepreka", tekst: "Šta te trenutno najviše sprečava da bolje iskoristiš AI u svom radu?",
         uslov: { id: "ai_znanje", osim: ["Početnik sam i tek upoznajem mogućnosti AI-ja"] },
         opcije: ["Nemam dovoljno vremena da istražujem nove AI alate i njihove mogućnosti",
                  "Brine me bezbednost i poverljivost kompanijskih podataka koje bih unosio/la u AI alate",
