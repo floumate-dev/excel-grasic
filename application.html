@@ -511,7 +511,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   var nazad   = document.getElementById('q-back');
   var dalje   = document.getElementById('q-next');
 
-  var i = 0, odgovori = {}, poslato = false;
+  var i = 0, odgovori = {}, poslato = false, tajmer = null;
 
   function izbor(q){ return odgovori[q.id] || (odgovori[q.id] = []); }
 
@@ -576,10 +576,16 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     } else {
       odgovori[q.id] = [vrednost];
       crtaj();
+      /* Pitanje sa jednim odgovorom ide dalje samo, ali tek kad se vidi
+         sta je izabrano. Dugme DALJE i dalje stoji, za one koji ga
+         preteknu ili se predomisle u medjuvremenu. */
+      clearTimeout(tajmer);
+      tajmer = setTimeout(napred, 350);
     }
   }
 
   function napred(){
+    clearTimeout(tajmer); tajmer = null;
     var k = i + 1;
     while (k < A.pitanja.length && !vidljivo(A.pitanja[k])) k++;
     if (k < A.pitanja.length) { i = k; crtaj(); }
@@ -587,6 +593,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }
 
   function unazad(){
+    clearTimeout(tajmer); tajmer = null;
     var k = i - 1;
     while (k >= 0 && !vidljivo(A.pitanja[k])) k--;
     if (k >= 0) { i = k; crtaj(); }
