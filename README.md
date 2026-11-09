@@ -100,6 +100,26 @@ Hidden: `u=6AE5C8B7002DE`, `f=35`, `act=sub`, `v=2`, `or=83103e39-76f2-40ee-b0ac
 > Forma 31 na njihovom sajtu ima i `field[22]` (izbor između dva termina). Ako se pređe na
 > dva termina, koristi se ta forma: `u=6AE5C8B70C8DF`, `f=31`, `or=fe0f44b3-4723-4b9a-82d8-a9c32112ffea`.
 
+## AEvent (samo `optin-2`)
+
+Pored AC prijave, `optin-2` šalje prijavu i u AEvent (`fetch`, `mode: no-cors`) na
+`aevent.endpoint` iz `window.MC`. AEvent registruje osobu na Zoom webinar izabranog termina
+i pravi lični Zoom link, koji AEvent dalje šalje u ActiveCampaign i GHL.
+
+Svaki termin u `termini` nosi svoju AEvent kampanju i Zoom webinar:
+
+| Termin | `aeventWtl` (kampanja) | `aeventWebinarId` (Zoom) |
+|---|---|---|
+| 26.11. | `kHbfJwMUv2CqhGO` | `85170335868` |
+| 30.11. | `sTlwUYlMg63WGWw` | `85402964220` |
+
+Pre slanja forma sa `aevent.dataUrl` uzme **token** za izabranu kampanju (isto radi AEventov
+skript). Bez tokena AEvent prijavu šalje na CAPTCHA korak i ona se nikad ne završi.
+
+Šalje se: `token`, `wtl`, `webinarid`, `name`, `email`, `phone` (samo cifre sa pozivnim),
+`timezone`, `location` i `lp` (adresa stranice). Domen stranice mora biti na whitelisti u AEventu, inače AEvent odbija
+prijavu. Redirect na `application.html` čeka oba slanja, najviše 5 sekundi.
+
 ## Assets
 
 Slike (logo, Aleksandar, press logoi, gift box) se učitavaju sa `excelgrasic.com/wp-content/…`.

@@ -40,13 +40,17 @@ window.MC = {
   /* Termini koje posetilac bira u formi. Prvi nosi odbrojavanje i ulaznicu.
      Dodavanje treceg termina: samo jos jedan red ovde, forma ga sama pokupi. */
   termini: [
-    { iso: "2026-11-26T19:00:00+01:00", dan: "četvrtak, 26.11.", kratko: "26.11.", sat: "19 h" },
-    { iso: "2026-11-30T19:00:00+01:00", dan: "ponedeljak, 30.11.", kratko: "30.11.", sat: "19 h" }
+    { iso: "2026-11-26T19:00:00+01:00", dan: "četvrtak, 26.11.", kratko: "26.11.", sat: "19 h",
+      aeventWtl: "kHbfJwMUv2CqhGO", aeventWebinarId: "85170335868" },
+    { iso: "2026-11-30T19:00:00+01:00", dan: "ponedeljak, 30.11.", kratko: "30.11.", sat: "19 h",
+      aeventWtl: "sTlwUYlMg63WGWw", aeventWebinarId: "85402964220" }
   ],
   trajanje:   "90 minuta",
 
   /* Gde ide posetilac nakon prijave */
-  nextUrl:    "../application.html",
+  /* Pun link jer se ova stranica paste-uje u GHL. Kad application predje u GHL,
+     ovde ide njena GHL putanja. */
+  nextUrl:    "https://floumate-dev.github.io/excel-grasic/application.html",
 
   /* ActiveCampaign (forma 35 sa excelgrasic.com - jedan fiksan termin) */
   ac: {
@@ -58,6 +62,28 @@ window.MC = {
     /* TODO: ID polja u ActiveCampaignu koje prima izabrani termin,
        npr. "18" za field[18]. Dok je prazno, termin se ne salje u AC. */
     poljeTermin: ""
+  },
+
+  /* AEvent registracija (Zoom webinar sa licnim linkom). Svaki termin ima svoju
+     kampanju (aeventWtl) i Zoom webinar (aeventWebinarId) gore u `termini`.
+     Domen stranice mora biti na whitelisti u AEventu, inace AEvent odbija prijavu. */
+  aevent: {
+    endpoint: "https://44084705.aevent.online/registration",
+    /* odavde se pre slanja uzima token; bez tokena AEvent trazi CAPTCHA i prijava se ne zavrsi */
+    dataUrl:  "https://44084705.aevent.online/getdata"
+  },
+
+  /* Referral: ko dodje preko licnog linka (?r=KOD), prijava se racuna osobi koja ga je poslala.
+     Prijava se upisuje posle uspesne provere forme; dashboard je na istom domenu kao api. */
+  referral: {
+    api:    "https://excel-grasic-referral.vercel.app/api/signup",
+    param:  "r",
+    kljuc:  "excelg_ref"
+  },
+
+  /* Make: posle prijave sva polja iz popupa idu na ovaj webhook (scenario upisuje u GHL) */
+  make: {
+    webhook: "https://hook.eu1.make.com/dc4of33nmiswye9w1q6v828aw5w4k4iv"
   }
 };
 </script>
@@ -89,6 +115,12 @@ img{max-width:100%;display:block}
 a{color:inherit}
 .wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 20px}
 .sec{padding:clamp(60px,8vw,108px) 0;scroll-margin-top:84px}
+
+/* GHL ubacuje ovaj kod u svoj kontejner ogranicene sirine, pa okolo ostaje belo.
+   Sekcije se zato razvlace na punu sirinu prozora, bez obzira na roditelja. */
+.hero,.sec,.sec ~ footer{width:100vw;max-width:100vw;
+  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+html{overflow-x:hidden}
 /* naslovi se prelamaju u redove priblizno jednake duzine, nikad jedna rec u redu */
 h1,h2,h3{font-weight:500;letter-spacing:-.025em;line-height:1.1;text-wrap:balance}
 h1{font-size:clamp(2.1rem,5.2vw,3.35rem)}
@@ -1098,6 +1130,60 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   }, { passive: true });
 
   /* ---------- UTM capture (prosledjuje se dalje kroz funnel) ---------- */
+  /* ---------- vokativ imena (srpski pravopis) ----------
+     Petar -> Petre, Vuk -> Vuče, Predrag -> Predraže,
+     Miloš -> Miloše, Milica -> Milice, Dušan -> Dušane; Ana, Marko, Nikola, Andrej ostaju.
+     Kad pravilo nije sigurno (zenska imena na suglasnik, strana imena, cirilica),
+     ime ostaje kakvo je upisano - bolje "Ines" nego "Inese". */
+  function vokativ(ulaz){
+    var ime = String(ulaz || '').trim().split(/\s+/)[0].split('-')[0];
+    if (ime.length < 2) return ime;
+    ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1).toLocaleLowerCase('sr-RS');
+    var k = ime.toLocaleLowerCase('sr-RS');
+
+    /* nepostojano a i drugi izuzeci */
+    var IZUZECI = { 'petar': 'Petre', 'aleksandar': 'Aleksandre', 'dimitar': 'Dimitre',
+                    'mitar': 'Mitre', 'pavao': 'Pavle', 'đurađ': 'Đurđe', 'djuradj': 'Djurdje' };
+    if (IZUZECI[k]) return IZUZECI[k];
+
+    /* cirilica i strana imena (slova i spojevi kojih nema u srpskoj latinici) */
+    if (!/^[a-zčćđšž]+$/.test(k) || /[qwxy]|ch|th|ph|sh|ck|ee|oo|ou|ea/.test(k)) return ime;
+
+    /* zenska i strana imena na suglasnik ostaju ista */
+    if ((' ines nives karmen doris ingrid iris ester rut edit mirjam nikol nikolet kolet žaklin zaklin '
+       + 'kristin katrin ketrin karin merilin lilijan elizabet margaret margit ivet ivon suzan madlen '
+       + 'karolin izabel anabel dolores beatris rahel agnes kejt dženifer dzenifer džulijet dzulijet oleg ')
+       .indexOf(' ' + k + ' ') > -1) return ime;
+
+    var z = k.slice(-1), z2 = k.slice(-2);
+    if ('aeiou'.indexOf(z) > -1) {
+      if (k.length > 4 && k.slice(-3) === 'ica') return ime.slice(0, -1) + 'e';  /* Milica -> Milice, Ivica -> Ivice */
+      return ime;                                                               /* Ana, Nikola, Marko, Đorđe */
+    }
+    /* Andrej, Matej, Nikolaj (i retka na -č, -ć, -đ, -lj, -nj, -dž) ostaju ista */
+    if (z2 === 'lj' || z2 === 'nj' || z2 === 'dž') return ime;
+    if (z === 'j' || z === 'č' || z === 'ć' || z === 'đ') return ime;
+    if (z === 'k') return ime.slice(0, -1) + 'če';                               /* Vuk -> Vuče */
+    if (z === 'g') return ime.slice(0, -1) + 'že';                               /* Predrag -> Predraže */
+    if (z === 'h') return ime.slice(0, -1) + 'še';
+    if (z === 'c') return ime.slice(0, -1) + 'če';
+    return ime + 'e';                                                            /* Dušan -> Dušane, Miloš -> Miloše */
+  }
+
+  /* ---------- referral kod iz linka (?r=KOD) ----------
+     Pamti se za ovaj tab, pa vazi i ako posetilac prvo klikne po stranici. */
+  function refKod(){
+    var R = C.referral || {}, kod = '';
+    try { kod = new URLSearchParams(location.search).get(R.param || 'r') || ''; } catch(e){}
+    kod = kod.trim().toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+    try {
+      if (kod.length >= 4) sessionStorage.setItem(R.kljuc, kod);
+      else kod = sessionStorage.getItem(R.kljuc) || '';
+    } catch(e){ if (kod.length < 4) kod = ''; }
+    return kod;
+  }
+  refKod();
+
   function utmString(){
     var p = new URLSearchParams(location.search), keep = [];
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid'].forEach(function(k){
@@ -1185,7 +1271,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     var l = document.createElement('label');
     l.className = 'termin' + (i === 0 ? ' tu' : '');
     l.innerHTML =
-      '<input type="radio" name="termin" value="' + (t.dan + ' u ' + t.sat) + '"' +
+      '<input type="radio" name="termin" data-i="' + i + '" value="' + (t.dan + ' u ' + t.sat) + '"' +
       (i === 0 ? ' checked' : '') + '>' +
       '<span class="krug" aria-hidden="true"></span>' +
       '<span class="tx"><span class="t-dan"></span><span class="t-sat"></span></span>';
@@ -1204,6 +1290,11 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   function izabraniTermin(){
     var r = izbor.querySelector('input:checked');
     return r ? r.value : '';
+  }
+  /* ceo objekat izabranog termina iz window.MC (za AEvent wtl i webinarid) */
+  function izabraniTerminObj(){
+    var r = izbor.querySelector('input:checked');
+    return r ? C.termini[+r.getAttribute('data-i')] : null;
   }
 
   var SLOVO = 'A-Za-zÀ-ÖØ-öø-ÿČĆŽŠĐĆčćžšđ';
@@ -1344,16 +1435,97 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     btn.disabled = true;
     btn.querySelector('span').textContent = 'ŠALJEMO PRIJAVU...';
 
-    fetch(C.ac.endpoint, { method: 'POST', body: fd, mode: 'no-cors' })
-      .catch(function(){ /* no-cors uvek vrati opaque odgovor */ })
+    var slanja = [
+      fetch(C.ac.endpoint, { method: 'POST', body: fd, mode: 'no-cors' })
+        .catch(function(){ /* no-cors uvek vrati opaque odgovor */ })
+    ];
+
+    /* AEvent: registracija na izabrani termin, AEvent pravi licni Zoom link */
+    var t = izabraniTerminObj();
+    if (C.aevent && C.aevent.endpoint && t && t.aeventWtl && t.aeventWebinarId) {
+      var aeIme = fIme.value,
+          aeTel = srediTelefon(fTel.value).replace(/\D/g, ''),  /* AEvent: samo cifre sa pozivnim, bez "+" */
+          aeTz  = '';
+      try { aeTz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+
+      /* 1) token za izabranu kampanju (isto radi AEventov skript), 2) prijava sa tokenom */
+      slanja.push(
+        fetch(C.aevent.dataUrl + '?wtl=' + encodeURIComponent(t.aeventWtl) + '&page=registration&type=json')
+          .then(function(r){ return r.json(); })
+          .then(function(d){ return (d && d.token) || ''; }, function(){ return ''; })
+          .then(function(token){
+            var ae = new URLSearchParams();
+            if (token) ae.append('token', token);
+            ae.append('wtl', t.aeventWtl);
+            ae.append('webinarid', t.aeventWebinarId);
+            ae.append('name', aeIme);
+            ae.append('email', email);
+            ae.append('phone', aeTel);
+            if (aeTz) ae.append('timezone', aeTz);
+            ae.append('location', location.href);
+            ae.append('lp', location.href.split('?')[0]);
+            return fetch(C.aevent.endpoint, { method: 'POST', body: ae, mode: 'no-cors',
+                                              referrerPolicy: 'no-referrer-when-downgrade' });
+          })
+          .catch(function(){})
+      );
+    }
+
+    /* Referral: upis prijave (i preporuke, ako je dosla preko necijeg linka) */
+    var ref = refKod();
+    var referral = (C.referral && C.referral.api)
+      ? fetch(C.referral.api, {
+          method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, name: fIme.value, ref: ref, phone: srediTelefon(fTel.value) })
+        }).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; })
+      : Promise.resolve({});
+
+    /* Make: sva polja iz popupa + licni referral link idu u CRM (GHL custom polja).
+       Salje se posle referral odgovora, da bi link bio u istoj poruci. */
+    slanja.push(referral.then(function(rf){
+      if (!C.make || !C.make.webhook) return;
+      var mk = new URLSearchParams(), q = new URLSearchParams(location.search);
+      mk.append('event', 'optin');
+      mk.append('first_name', ime);
+      mk.append('last_name', prezime);
+      mk.append('full_name', fIme.value);
+      mk.append('vokativ', vokativ(ime));
+      mk.append('email', email);
+      mk.append('phone', srediTelefon(fTel.value));
+      mk.append('pozicija', fPos.value);
+      mk.append('termin', termin);
+      mk.append('termin_datum', (t && t.kratko) || '');
+      mk.append('termin_iso', (t && t.iso) || '');
+      mk.append('referral_link', (rf && rf.shareUrl) || '');
+      mk.append('dashboard_link', (rf && rf.dashboardUrl) || '');
+      mk.append('referred_by', ref);
+      /* izvor prijave iz linka: ?source=instagram&specificsource=bio
+         (referral linkovi nose source=referral). Bez source -> utm_source. */
+      mk.append('optin_source', q.get('source') || q.get('utm_source') || '');
+      mk.append('optin_specific_source', q.get('specificsource') || '');
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'].forEach(function(k){
+        mk.append(k, q.get(k) || '');
+      });
+      mk.append('page_url', location.href.split('?')[0]);
+      mk.append('submitted_at', new Date().toISOString());
+      return fetch(C.make.webhook, { method: 'POST', body: mk, mode: 'no-cors', keepalive: true })
+        .catch(function(){});
+    }));
+
+    /* cekamo sva slanja, ali najvise 5 s, da posetilac ne ostane zaglavljen */
+    Promise.race([
+      Promise.all(slanja),
+      new Promise(function(res){ setTimeout(res, 5000); })
+    ])
       .finally(function(){
-        /* Meta / TikTok Lead event ako je piksel ucitan */
+        /* Meta / TikTok Lead event ako je piksel ucitan (osnovni kod piksela je u GHL Head tracking code) */
         if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch(e){} }
         if (typeof ttq === 'object' && ttq.track) { try { ttq.track('SubmitForm'); } catch(e){} }
 
         var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email)
                + '&termin=' + encodeURIComponent(termin);
         var u = utmString(); if (u) qs += '&' + u;
+        if (ref) qs += '&ref=' + encodeURIComponent(ref);
         location.href = C.nextUrl + '?' + qs;
       });
   });
