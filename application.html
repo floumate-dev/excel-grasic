@@ -28,7 +28,78 @@ window.MC = {
   progres:    62,
 
   /* Meta piksel ("Novi Pixel Grasic"). Osnovni kod je u kodu stranice, ne dodaje se u GHL. */
-  pixelId:    "448307616997442"
+  pixelId:    "448307616997442",
+
+  /* ============================================================
+     ANKETA posle videa - jedno pitanje po ekranu.
+     Odgovori i zbir poena idu na Make, scenario ih upisuje dalje.
+
+     Bodove nose samo poslednja tri pitanja, najvise 70. Ostala
+     sluze za izbor edukacije i prilagodjavanje poruke, ne za poene.
+     Preostalih 30 poena iz modela su ponasanje posle masterklasa,
+     to se meri van ove stranice.
+
+     Dodavanje pitanja: jos jedan red u "pitanja". Traka napretka,
+     brojac i slanje sami se prilagode.
+     p = poeni za tu opciju; opcija bez p nosi nulu.
+     max = koliko odgovora sme da se izabere (bez toga je jedan).
+     ============================================================ */
+  anketa: {
+    webhook: "https://hook.eu1.make.com/9h8hqfmcgeb12w3bdl1bfd3b5t4eeulv",
+    pitanja: [
+      { id: "za_koga", tekst: "Za koga razmatraš edukaciju?",
+        opcije: ["Za sebe", "Za svoj tim", "I za sebe i za tim", "Još ne znam"] },
+
+      { id: "pozicija", tekst: "Čime se trenutno baviš?",
+        opcije: ["Studiram ili sam na prvom poslu", "Administracija", "Finansije i kontroling",
+                 "Prodaja i nabavka", "HR", "Analitika i IT", "Menadžment",
+                 "Preduzetništvo", "Drugo"] },
+
+      { id: "industrija", tekst: "U kojoj industriji radiš?",
+        opcije: ["Finansije i osiguranje", "Proizvodnja", "Trgovina i distribucija", "IT",
+                 "Profesionalne usluge", "Javni sektor i obrazovanje", "Drugo",
+                 "Trenutno ne radim"] },
+
+      { id: "oblasti", tekst: "Koje oblasti te najviše zanimaju?",
+        napomena: "Izaberi najviše dve.", max: 2,
+        opcije: ["Excel", "Power Query", "Power Pivot i DAX", "Power BI", "Python i Excel",
+                 "AI u poslovanju", "Microsoft 365", "Word i PowerPoint", "Još ne znam"] },
+
+      { id: "nivo", tekst: "Koliko ti je znanje u tim oblastima sada?",
+        opcije: ["Tek počinjem", "Znam osnove",
+                 "Redovno koristim alate, ali mnogo toga radim ručno",
+                 "Samostalno radim i želim napredniji nivo", "Ne znam"] },
+
+      { id: "razlog", tekst: "Šta je glavni razlog zbog kog razmatraš edukaciju?",
+        opcije: [
+          { t: "Želim da radim brže i sa manje ručnih koraka", p: 25 },
+          { t: "Nova pozicija traži znanja koja nemam", p: 25 },
+          { t: "Želim naprednije znanje i složenije projekte", p: 25 },
+          { t: "Treba mi jasan redosled učenja", p: 25 },
+          { t: "Razmišljam o promeni karijere", p: 25 },
+          { t: "Pripremam se za prvi posao", p: 25 },
+          { t: "Želim znanje za dodatne projekte ili zaradu", p: 25 },
+          /* "istražujem" nije konkretan cilj, pa ne nosi poene */
+          { t: "Za sada istražujem mogućnosti", p: 0 }
+        ] },
+
+      { id: "kada", tekst: "Kada planiraš da počneš sa učenjem?",
+        opcije: [
+          { t: "U narednih mesec dana", p: 25 },
+          { t: "U naredna tri meseca", p: 15 },
+          { t: "Kasnije", p: 5 },
+          { t: "Za sada se samo informišem", p: 0 }
+        ] },
+
+      { id: "preporuka",
+        tekst: "Da li želiš da ti posle masterklasa predložimo edukaciju po tvojim odgovorima?",
+        opcije: [
+          { t: "Da, kroz kratak razgovor", p: 20 },
+          { t: "Da, imejlom", p: 10 },
+          { t: "Ne za sada", p: 0 }
+        ] }
+    ]
+  }
 };
 </script>
 <script>
@@ -183,14 +254,41 @@ p,li{text-wrap:pretty}
 .survey-box{background:var(--white);border-radius:20px;padding:clamp(20px,2.6vw,28px);
   box-shadow:0 30px 70px rgba(0,16,12,.12);min-height:420px;display:flex;flex-direction:column}
 .survey-box > :only-child{flex:1}
-/* privremeni sadrzaj dok embed ne stigne */
-.ph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-  border:2px dashed var(--line);border-radius:14px;padding:34px 24px;gap:14px}
-.ph-ico{width:46px;height:46px;border-radius:50%;background:var(--mint);display:grid;place-items:center}
-.ph-ico svg{width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.ph h3{color:var(--green)}
-.ph p{font-size:.9rem;color:var(--ink-2);max-width:42ch}
-.ph .btn{margin-top:6px}
+/* anketa: jedno pitanje po ekranu */
+.q{flex:1;display:flex;flex-direction:column}
+.q-top{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.q-bar{flex:1;height:6px;border-radius:999px;background:var(--line);overflow:hidden}
+.q-bar i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--green),var(--leaf));transition:width .35s ease}
+.q-num{font-size:.76rem;font-weight:700;color:var(--ink-2);white-space:nowrap;letter-spacing:.02em}
+.q-text{color:var(--green);font-size:clamp(1.12rem,2.3vw,1.45rem);line-height:1.25;text-wrap:balance}
+.q-note{font-size:.86rem;color:var(--ink-2);margin-top:8px}
+.q-note.pazi{color:#9a5b12;font-weight:600}
+.q-opts{display:flex;flex-direction:column;gap:9px;margin:18px 0 auto}
+.q-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--white);border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;
+  font:500 .96rem/1.35 var(--font);color:var(--ink);cursor:pointer;
+  transition:border-color .15s,background .15s,transform .08s}
+.q-opt:hover{border-color:var(--leaf);background:var(--mint)}
+.q-opt:active{transform:scale(.995)}
+.q-opt .krug{flex:0 0 20px;height:20px;border-radius:50%;border:2px solid var(--line);position:relative}
+.q-opt.vise .krug{border-radius:6px}
+.q-opt.tu{border-color:var(--green);background:var(--mint)}
+.q-opt.tu .krug{border-color:var(--green)}
+.q-opt.tu .krug::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--green)}
+.q-opt.vise.tu .krug::after{border-radius:2px}
+.q-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
+.q-back{background:none;border:0;color:var(--ink-2);font:600 .88rem var(--font);cursor:pointer;padding:8px 2px}
+.q-back:hover{color:var(--green)}
+.q-back[hidden]{display:block;visibility:hidden}
+.q-nav .btn[hidden]{display:none}
+.q-nav .btn[disabled]{opacity:.45;pointer-events:none}
+.q-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:12px;padding:20px}
+.q-ico{width:52px;height:52px;border-radius:50%;background:var(--mint);display:grid;place-items:center}
+.q-ico svg{width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.q-done h3{color:var(--green)}
+.q-done p{font-size:.92rem;color:var(--ink-2);max-width:40ch}
 
 /* ============================================================
    FOOTER
@@ -213,7 +311,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .vsl-shell::before{transform:translate(9px,9px)}
   .survey{--survey-gap:clamp(8px,2.5vw,16px);padding-inline:clamp(10px,3vw,20px)}
   .survey-box{min-height:360px;padding:var(--survey-gap)}
-  .ph{padding-inline:var(--survey-gap)}
+  .q-opt{padding:12px 13px;font-size:.92rem}
 }
 </style>
 </head>
@@ -270,19 +368,23 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     </div>
 
     <!-- =========================================================
-         SLOT ZA ANKETU
-         Zameni ceo sadrzaj ovog diva embed kodom (Typeform, Tally,
-         Google Forms, Make forma...). Sve sto nije iframe visine
-         100% radi bez dodatnog CSS-a; iframe dobija visinu sam.
+         ANKETA
+         Prazna je u kodu; pitanja dolaze iz window.MC.anketa i crtaju
+         se jedno po jedno. Tekst pitanja se menja tamo, ne ovde.
          ========================================================= -->
     <div class="survey-box" id="survey-box">
-      <div class="ph">
-        <span class="ph-ico">
-          <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </span>
-        <h3>Ovde ide anketa</h3>
-        <p>Slot je spreman - kad stigne embed kod, ubacuje se na ovo mesto. Do tada možeš da nastaviš na poslednji korak.</p>
-        <a class="btn" id="skip" href="thankyou.html"><span>NASTAVI NA POSLEDNJI KORAK</span></a>
+      <div class="q" id="anketa">
+        <div class="q-top">
+          <span class="q-bar"><i id="q-fill"></i></span>
+          <span class="q-num" id="q-num"></span>
+        </div>
+        <h3 class="q-text" id="q-text"></h3>
+        <p class="q-note" id="q-note" hidden></p>
+        <div class="q-opts" id="q-opts"></div>
+        <div class="q-nav">
+          <button class="q-back" type="button" id="q-back" hidden>Nazad</button>
+          <button class="btn" type="button" id="q-next" hidden><span>DALJE</span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -363,11 +465,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   document.getElementById('vsl').src =
     'https://player.vimeo.com/video/' + C.vimeoId + '?autoplay=1&title=0&portrait=0&byline=0';
 
-  /* ---------- parametri se prosledjuju dalje kroz funnel ---------- */
-  var qs = location.search;
-  var skip = document.getElementById('skip');
-  if (skip) skip.href = C.nextUrl + qs;
-
   /* ---------- dugme vodi na anketu ---------- */
   document.getElementById('open-survey').addEventListener('click', function(){
     document.getElementById('survey').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -388,6 +485,146 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     } catch (e) {}
   }
   if (typeof ttq === 'object' && ttq.track) { try { ttq.track('CompleteRegistration'); } catch (e) {} }
+})();
+
+/* ============================================================
+   ANKETA
+   Pitanja dolaze iz window.MC.anketa, crtaju se jedno po jedno.
+   Na kraju odgovori i zbir poena idu na Make, pa se posetilac
+   prosledjuje na poslednji korak sa istim parametrima iz linka.
+   ============================================================ */
+(function(){
+  var C = window.MC, A = C && C.anketa;
+  if (!A || !A.pitanja || !A.pitanja.length) return;
+
+  var p       = new URLSearchParams(location.search);
+  var kutija  = document.getElementById('anketa');
+  var fill    = document.getElementById('q-fill');
+  var broj    = document.getElementById('q-num');
+  var tekst   = document.getElementById('q-text');
+  var nota    = document.getElementById('q-note');
+  var opcije  = document.getElementById('q-opts');
+  var nazad   = document.getElementById('q-back');
+  var dalje   = document.getElementById('q-next');
+
+  var i = 0, odgovori = {}, poslato = false;
+
+  /* opcija sme da bude obican tekst ili { t: tekst, p: poeni } */
+  function sredi(o){ return typeof o === 'string' ? { t: o, p: 0 } : o; }
+  function izbor(q){ return odgovori[q.id] || (odgovori[q.id] = []); }
+
+  function crtaj(){
+    var q = A.pitanja[i], uzeto = izbor(q), vise = q.max > 1;
+
+    fill.style.width = (i / A.pitanja.length * 100) + '%';
+    broj.textContent = 'Pitanje ' + (i + 1) + ' od ' + A.pitanja.length;
+    tekst.textContent = q.tekst;
+    nota.hidden = !q.napomena;
+    nota.className = 'q-note';
+    if (q.napomena) nota.textContent = q.napomena;
+
+    opcije.innerHTML = '';
+    q.opcije.forEach(function(sirovo){
+      var o = sredi(sirovo);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'q-opt' + (vise ? ' vise' : '') + (uzeto.indexOf(o.t) > -1 ? ' tu' : '');
+      b.setAttribute('aria-pressed', uzeto.indexOf(o.t) > -1 ? 'true' : 'false');
+      var krug = document.createElement('span');
+      krug.className = 'krug';
+      krug.setAttribute('aria-hidden', 'true');
+      var tx = document.createElement('span');
+      tx.textContent = o.t;
+      b.appendChild(krug); b.appendChild(tx);
+      b.addEventListener('click', function(){ biraj(q, o.t); });
+      opcije.appendChild(b);
+    });
+
+    nazad.hidden = i === 0;
+    dalje.hidden = !vise;
+    if (vise) dalje.disabled = uzeto.length === 0;
+  }
+
+  function biraj(q, vrednost){
+    var uzeto = izbor(q);
+    if (q.max > 1) {
+      var k = uzeto.indexOf(vrednost);
+      if (k > -1) {
+        uzeto.splice(k, 1);
+      } else if (uzeto.length < q.max) {
+        uzeto.push(vrednost);
+      } else {
+        /* vec je izabrano koliko sme; reci zasto se nista ne desava */
+        nota.hidden = false;
+        nota.className = 'q-note pazi';
+        nota.textContent = 'Već su izabrane dve. Otkači jednu pa biraj drugu.';
+        return;
+      }
+      crtaj();
+    } else {
+      odgovori[q.id] = [vrednost];
+      crtaj();
+      setTimeout(napred, 170);
+    }
+  }
+
+  function napred(){
+    if (i < A.pitanja.length - 1) { i++; crtaj(); }
+    else gotovo();
+  }
+
+  function zbir(){
+    var s = 0;
+    A.pitanja.forEach(function(q){
+      (odgovori[q.id] || []).forEach(function(v){
+        q.opcije.forEach(function(sirovo){
+          var o = sredi(sirovo);
+          if (o.t === v) s += (o.p || 0);
+        });
+      });
+    });
+    return s;
+  }
+
+  function posalji(){
+    if (poslato || !A.webhook) return;
+    poslato = true;
+    var d = new URLSearchParams();
+    d.append('event', 'anketa');
+    d.append('email', (p.get('email') || '').trim().toLowerCase());
+    d.append('first_name', (p.get('firstname') || p.get('ime') || '').trim());
+    A.pitanja.forEach(function(q){
+      d.append(q.id, (odgovori[q.id] || []).join(' | '));
+    });
+    d.append('bodovi', zbir());
+    d.append('bodovi_max', 70);
+    /* ko je rekao "ne za sada" ne ide u direktno kontaktiranje */
+    d.append('kontakt_ok', (odgovori.preporuka || [])[0] === 'Ne za sada' ? 'ne' : 'da');
+    d.append('page_url', location.href.split('?')[0]);
+    d.append('submitted_at', new Date().toISOString());
+    try {
+      fetch(A.webhook, { method: 'POST', body: d, mode: 'no-cors', keepalive: true })
+        .catch(function(){});
+    } catch (e) {}
+  }
+
+  function gotovo(){
+    posalji();
+    fill.style.width = '100%';
+    var dalje2 = C.nextUrl + location.search;
+    kutija.innerHTML =
+      '<div class="q-done">' +
+        '<span class="q-ico"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>' +
+        '<h3>Hvala, zabeleženo</h3>' +
+        '<p>Odgovori su stigli. Vodimo te na poslednji korak.</p>' +
+        '<a class="btn" href="' + dalje2 + '"><span>POSLEDNJI KORAK</span></a>' +
+      '</div>';
+    setTimeout(function(){ location.href = dalje2; }, 2200);
+  }
+
+  nazad.addEventListener('click', function(){ if (i > 0) { i--; crtaj(); } });
+  dalje.addEventListener('click', napred);
+  crtaj();
 })();
 </script>
 </body>
