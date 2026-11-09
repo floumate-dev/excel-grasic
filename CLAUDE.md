@@ -107,6 +107,7 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Poruke o greškama u formi | `optin/index.html` | `function proveri` |
 | Spisak pozivnih brojeva | `optin/index.html` | `var ZEMLJE` |
 | Tekst na bridge stranici | `application.html` | `class="sub"`, `class="step"` |
+| Pitanja u anketi | `application.html` | `anketa` u `window.MC` |
 | Tekst na potvrdi | `thankyou.html` | `class="step"` |
 | Reč koja se upiše u odgovor | `thankyou.html` | `odgovorNaslov`, `odgovorTekst` u `window.MC` |
 | Termine (datum i sat) | `optin/index.html`, `optin-2/index.html` | `termini` u `window.MC` |

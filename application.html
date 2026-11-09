@@ -32,16 +32,12 @@ window.MC = {
 
   /* ============================================================
      ANKETA posle videa - jedno pitanje po ekranu.
-     Odgovori i zbir poena idu na Make, scenario ih upisuje dalje.
-
-     Bodove nose samo poslednja tri pitanja, najvise 70. Ostala
-     sluze za izbor edukacije i prilagodjavanje poruke, ne za poene.
-     Preostalih 30 poena iz modela su ponasanje posle masterklasa,
-     to se meri van ove stranice.
+     Odgovori idu na Make onakvi kakvi jesu; bodovanje i sve sto se
+     iz njih zakljucuje radi se u scenariju, ne ovde.
 
      Dodavanje pitanja: jos jedan red u "pitanja". Traka napretka,
-     brojac i slanje sami se prilagode.
-     p = poeni za tu opciju; opcija bez p nosi nulu.
+     brojac i slanje sami se prilagode. Svako pitanje salje se pod
+     svojim "id", pa id ne menjaj ako je scenario vec vezan za njega.
      max = koliko odgovora sme da se izabere (bez toga je jedan).
      ============================================================ */
   anketa: {
@@ -71,33 +67,21 @@ window.MC = {
                  "Samostalno radim i želim napredniji nivo", "Ne znam"] },
 
       { id: "razlog", tekst: "Šta je glavni razlog zbog kog razmatraš edukaciju?",
-        opcije: [
-          { t: "Želim da radim brže i sa manje ručnih koraka", p: 25 },
-          { t: "Nova pozicija traži znanja koja nemam", p: 25 },
-          { t: "Želim naprednije znanje i složenije projekte", p: 25 },
-          { t: "Treba mi jasan redosled učenja", p: 25 },
-          { t: "Razmišljam o promeni karijere", p: 25 },
-          { t: "Pripremam se za prvi posao", p: 25 },
-          { t: "Želim znanje za dodatne projekte ili zaradu", p: 25 },
-          /* "istražujem" nije konkretan cilj, pa ne nosi poene */
-          { t: "Za sada istražujem mogućnosti", p: 0 }
-        ] },
+        opcije: ["Želim da radim brže i sa manje ručnih koraka",
+                 "Nova pozicija traži znanja koja nemam",
+                 "Želim naprednije znanje i složenije projekte",
+                 "Treba mi jasan redosled učenja", "Razmišljam o promeni karijere",
+                 "Pripremam se za prvi posao",
+                 "Želim znanje za dodatne projekte ili zaradu",
+                 "Za sada istražujem mogućnosti"] },
 
       { id: "kada", tekst: "Kada planiraš da počneš sa učenjem?",
-        opcije: [
-          { t: "U narednih mesec dana", p: 25 },
-          { t: "U naredna tri meseca", p: 15 },
-          { t: "Kasnije", p: 5 },
-          { t: "Za sada se samo informišem", p: 0 }
-        ] },
+        opcije: ["U narednih mesec dana", "U naredna tri meseca", "Kasnije",
+                 "Za sada se samo informišem"] },
 
       { id: "preporuka",
         tekst: "Da li želiš da ti posle masterklasa predložimo edukaciju po tvojim odgovorima?",
-        opcije: [
-          { t: "Da, kroz kratak razgovor", p: 20 },
-          { t: "Da, imejlom", p: 10 },
-          { t: "Ne za sada", p: 0 }
-        ] }
+        opcije: ["Da, kroz kratak razgovor", "Da, imejlom", "Ne za sada"] }
     ]
   }
 };
@@ -490,7 +474,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 /* ============================================================
    ANKETA
    Pitanja dolaze iz window.MC.anketa, crtaju se jedno po jedno.
-   Na kraju odgovori i zbir poena idu na Make, pa se posetilac
+   Na kraju odgovori idu na Make onakvi kakvi jesu, pa se posetilac
    prosledjuje na poslednji korak sa istim parametrima iz linka.
    ============================================================ */
 (function(){
@@ -509,8 +493,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 
   var i = 0, odgovori = {}, poslato = false;
 
-  /* opcija sme da bude obican tekst ili { t: tekst, p: poeni } */
-  function sredi(o){ return typeof o === 'string' ? { t: o, p: 0 } : o; }
   function izbor(q){ return odgovori[q.id] || (odgovori[q.id] = []); }
 
   function crtaj(){
@@ -524,19 +506,18 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     if (q.napomena) nota.textContent = q.napomena;
 
     opcije.innerHTML = '';
-    q.opcije.forEach(function(sirovo){
-      var o = sredi(sirovo);
+    q.opcije.forEach(function(o){
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'q-opt' + (vise ? ' vise' : '') + (uzeto.indexOf(o.t) > -1 ? ' tu' : '');
-      b.setAttribute('aria-pressed', uzeto.indexOf(o.t) > -1 ? 'true' : 'false');
+      b.className = 'q-opt' + (vise ? ' vise' : '') + (uzeto.indexOf(o) > -1 ? ' tu' : '');
+      b.setAttribute('aria-pressed', uzeto.indexOf(o) > -1 ? 'true' : 'false');
       var krug = document.createElement('span');
       krug.className = 'krug';
       krug.setAttribute('aria-hidden', 'true');
       var tx = document.createElement('span');
-      tx.textContent = o.t;
+      tx.textContent = o;
       b.appendChild(krug); b.appendChild(tx);
-      b.addEventListener('click', function(){ biraj(q, o.t); });
+      b.addEventListener('click', function(){ biraj(q, o); });
       opcije.appendChild(b);
     });
 
@@ -573,19 +554,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     else gotovo();
   }
 
-  function zbir(){
-    var s = 0;
-    A.pitanja.forEach(function(q){
-      (odgovori[q.id] || []).forEach(function(v){
-        q.opcije.forEach(function(sirovo){
-          var o = sredi(sirovo);
-          if (o.t === v) s += (o.p || 0);
-        });
-      });
-    });
-    return s;
-  }
-
   function posalji(){
     if (poslato || !A.webhook) return;
     poslato = true;
@@ -596,10 +564,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     A.pitanja.forEach(function(q){
       d.append(q.id, (odgovori[q.id] || []).join(' | '));
     });
-    d.append('bodovi', zbir());
-    d.append('bodovi_max', 70);
-    /* ko je rekao "ne za sada" ne ide u direktno kontaktiranje */
-    d.append('kontakt_ok', (odgovori.preporuka || [])[0] === 'Ne za sada' ? 'ne' : 'da');
     d.append('page_url', location.href.split('?')[0]);
     d.append('submitted_at', new Date().toISOString());
     try {
