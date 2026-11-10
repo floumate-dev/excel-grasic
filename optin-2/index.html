@@ -439,9 +439,10 @@ p{color:var(--ink)}
 /* talon sa datumom */
 .tk-stub{background:var(--cream);border-radius:20px 0 0 20px;padding:26px 16px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.tk-d{font-size:clamp(2.7rem,5vw,3.5rem);font-weight:600;line-height:.92;color:var(--green);
+/* oba datuma iste velicine; "ili" izmedju njih je sitnije */
+.tk-d,.tk-d2{font-size:clamp(2.7rem,5vw,3.5rem);font-weight:600;line-height:.92;color:var(--green);
   letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.tk-d2{font-size:1rem;font-weight:600;color:var(--leaf);line-height:1;margin-top:5px}
+.tk-ili{font-size:.9rem;font-weight:600;color:var(--leaf);line-height:1;margin:7px 0 6px}
 .tk-m{font-size:.76rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-top:7px}
 .tk-t{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);width:100%;
   font-size:1.02rem;font-weight:600;color:var(--green);font-variant-numeric:tabular-nums}
@@ -594,7 +595,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .fld-row{grid-template-columns:1fr}
   .ticket{grid-template-columns:1fr}
   .tk-stub{flex-direction:row;align-items:baseline;gap:12px;padding:16px 20px;border-radius:20px 20px 0 0}
-  .tk-d{font-size:2.2rem}
+  .tk-d,.tk-d2{font-size:2.2rem}
+  .tk-ili{margin:0}
   .tk-m{margin-top:0}
   .tk-t{margin:0 0 0 auto;padding:0;border:0;width:auto}
   .tk-body{border-left:0;border-top:2px dashed var(--line)}
@@ -934,6 +936,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     <div class="ticket">
       <div class="tk-stub">
         <span class="tk-d" id="tk-d">00</span>
+        <span class="tk-ili" id="tk-ili">ili</span>
         <span class="tk-d2" id="tk-d2"></span>
         <span class="tk-m" id="tk-m">-</span>
         <span class="tk-t" id="tk-t">00:00</span>
@@ -1045,8 +1048,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   var MESECI = ['jan','feb','mar','apr','maj','jun','jul','avg','sep','okt','nov','dec'];
   var iso = prvi.iso;   /* Citamo doslovno, bez konverzije. */
   document.getElementById('tk-d').textContent = String(+iso.slice(8, 10));
+  /* drugi datum je iste velicine kao prvi, "ili" stoji posebno u markupu */
   document.getElementById('tk-d2').textContent =
-    'ili ' + C.termini.slice(1).map(function(t){ return String(+t.iso.slice(8, 10)); }).join(' / ');
+    C.termini.slice(1).map(function(t){ return String(+t.iso.slice(8, 10)); }).join(' / ');
+  document.getElementById('tk-ili').hidden = C.termini.length < 2;
   document.getElementById('tk-m').textContent = MESECI[+iso.slice(5, 7) - 1];
   document.getElementById('tk-t').textContent = iso.slice(11, 16);
   document.getElementById('yr').textContent = new Date().getFullYear();
