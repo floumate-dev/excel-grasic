@@ -110,7 +110,13 @@ window.MC = {
                  "Nisam siguran/na kako da AI primenim na konkretne poslovne probleme",
                  "Koristim AI, ali želim da pređem sa jednostavnih upita na napredniju primenu",
                  "U kompaniji postoje ograničenja za korišćenje AI alata",
-                 "Trenutno nemam posebnih prepreka"] }
+                 "Trenutno nemam posebnih prepreka"] },
+
+      /* Pita se samo kad mejl nije stigao kroz link sa optina - recimo
+         kad neko otvori stranicu direktno ili iz poruke bez parametara.
+         Bez mejla odgovori nemaju za sta da se zakace u CRM-u. */
+      { id: "mejl", tip: "email", akoNemaMejl: true,
+        tekst: "Unesi email na kom ćemo ti poslati poklon" }
     ]
   }
 };
@@ -258,6 +264,7 @@ p,li{text-wrap:pretty}
 .q-note{font-size:.86rem;color:var(--ink-2);margin-top:8px}
 .q-note.pazi{color:#9a5b12;font-weight:600}
 .q-opts{display:flex;flex-direction:column;gap:9px;margin:18px 0 auto}
+.q-opts[hidden]{display:none}
 .q-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
   background:var(--white);border:1.5px solid var(--line);border-radius:14px;padding:13px 15px;
   font:500 .96rem/1.35 var(--font);color:var(--ink);cursor:pointer;
@@ -270,6 +277,12 @@ p,li{text-wrap:pretty}
 .q-opt.tu .krug{border-color:var(--green)}
 .q-opt.tu .krug::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--green)}
 .q-opt.vise.tu .krug::after{border-radius:2px}
+.q-mail{margin:18px 0 auto}
+.q-mail input{width:100%;background:var(--white);border:1.5px solid var(--line);border-radius:14px;
+  padding:14px 16px;font:500 1rem/1.3 var(--font);color:var(--ink)}
+.q-mail input::placeholder{color:#9aa5a0}
+.q-mail input:focus{outline:none;border-color:var(--green);background:var(--mint)}
+.q-mail .greska{margin-top:9px;font-size:.86rem;color:#9a5b12;font-weight:600}
 .q-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
 .q-back{background:none;border:0;color:var(--ink-2);font:600 .88rem var(--font);cursor:pointer;padding:8px 2px}
 .q-back:hover{color:var(--green)}
@@ -389,6 +402,11 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
         <h3 class="q-text" id="q-text"></h3>
         <p class="q-note" id="q-note" hidden></p>
         <div class="q-opts" id="q-opts"></div>
+        <div class="q-mail" id="q-mail" hidden>
+          <input id="q-mail-polje" type="email" inputmode="email" autocomplete="email"
+                 placeholder="ime@primer.com" spellcheck="false">
+          <p class="greska" id="q-mail-greska" hidden></p>
+        </div>
         <div class="q-nav">
           <button class="q-back" type="button" id="q-back" hidden>Nazad</button>
           <button class="btn" type="button" id="q-next" disabled><span>DALJE</span></button>
@@ -502,6 +520,20 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   var opcije  = document.getElementById('q-opts');
   var nazad   = document.getElementById('q-back');
   var dalje   = document.getElementById('q-next');
+  var kutMail = document.getElementById('q-mail');
+  var polje   = document.getElementById('q-mail-polje');
+  var greska  = document.getElementById('q-mail-greska');
+
+  function ispravanMejl(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v || '').trim()); }
+
+  /* Mejl stigao kroz link sa optina. Ako ga nema, ili je u linku zavrsio
+     pokvaren (odsecen, bez domena), pita se na kraju ankete - bolje
+     pitati nego upisati neupotrebljivu adresu. */
+  var sirovMejl = (p.get('email') || '').trim().toLowerCase();
+  var mejlLink = ispravanMejl(sirovMejl) ? sirovMejl : '';
+  function mejl(){
+    return mejlLink || String((odgovori.mejl || [])[0] || '').trim().toLowerCase();
+  }
 
   var i = 0, odgovori = {}, poslato = false, tajmer = null;
 
@@ -511,6 +543,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
      jedan od odgovora iz "osim". Racuna se svaki put iznova, pa povratak
      nazad i promena odgovora vrati ili ukloni pitanje kako treba. */
   function vidljivo(q){
+    if (q.akoNemaMejl) return !mejlLink;
     var u = q.uslov;
     if (!u) return true;
     var dat = (odgovori[u.id] || [])[0];
@@ -529,8 +562,21 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     nota.className = 'q-note';
     if (q.napomena) nota.textContent = q.napomena;
 
+    var upis = q.tip === 'email';
+    opcije.hidden = upis;
+    kutMail.hidden = !upis;
+    if (upis) {
+      opcije.innerHTML = '';
+      polje.value = uzeto[0] || '';
+      greska.hidden = true;
+      dalje.disabled = !ispravanMejl(polje.value);
+      nazad.hidden = mesto === 0;
+      setTimeout(function(){ polje.focus(); }, 60);
+      return;
+    }
+
     opcije.innerHTML = '';
-    q.opcije.forEach(function(o){
+    (q.opcije || []).forEach(function(o){
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'q-opt' + (vise ? ' vise' : '') + (uzeto.indexOf(o) > -1 ? ' tu' : '');
@@ -598,7 +644,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     d.append('event', 'anketa');
     /* mejl, telefon i termin stizu kroz link sa optina; po njima se
        odgovori lepe na postojeci kontakt umesto da prave novi */
-    d.append('email', (p.get('email') || '').trim().toLowerCase());
+    d.append('email', mejl());
     d.append('phone', (p.get('phone') || '').trim());
     d.append('first_name', (p.get('firstname') || p.get('ime') || '').trim());
     d.append('termin', (p.get('termin') || '').trim());
@@ -606,6 +652,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
        Preskoceno pitanje ide prazno, pa stari odgovor ne moze da procuri
        ako se neko vratio i promenio raniji izbor. */
     A.pitanja.forEach(function(q){
+      /* mejl vec putuje kao "email", nema potrebe i pod svojim id-em */
+      if (q.tip === 'email') return;
       d.append(q.id, vidljivo(q) ? (odgovori[q.id] || []).join(' | ') : '');
     });
     d.append('page_url', location.href.split('?')[0]);
@@ -620,7 +668,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
      Jednom po osobi, da ponovljeno popunjavanje ne naduva brojku. */
   function piksel(){
     try {
-      var kljuc = 'mc_sa_' + (p.get('email') || '').trim().toLowerCase();
+      var kljuc = 'mc_sa_' + mejl();
       var vec = false;
       try { vec = localStorage.getItem(kljuc) === '1'; } catch (e) {}
       if (vec) return;
@@ -634,7 +682,13 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     posalji();
     piksel();
     fill.style.width = '100%';
-    var dalje2 = C.nextUrl + location.search;
+    /* ako je mejl unet ovde, nosimo ga i na poslednji korak, da share
+       link i potvrda tamo znaju na koga se odnose */
+    var qs = location.search;
+    if (!mejlLink && mejl()) {
+      qs += (qs ? '&' : '?') + 'email=' + encodeURIComponent(mejl());
+    }
+    var dalje2 = C.nextUrl + qs;
     kutija.innerHTML =
       '<div class="q-done">' +
         '<span class="q-ico"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>' +
@@ -644,6 +698,18 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
       '</div>';
     setTimeout(function(){ location.href = dalje2; }, 2200);
   }
+
+  polje.addEventListener('input', function(){
+    odgovori.mejl = [polje.value.trim()];
+    greska.hidden = true;
+    dalje.disabled = !ispravanMejl(polje.value);
+  });
+  polje.addEventListener('keydown', function(e){
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    if (ispravanMejl(polje.value)) napred();
+    else { greska.hidden = false; greska.textContent = 'Proveri adresu, nešto joj fali.'; }
+  });
 
   nazad.addEventListener('click', unazad);
   dalje.addEventListener('click', napred);
