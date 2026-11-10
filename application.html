@@ -658,6 +658,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     d.append('phone', (p.get('phone') || '').trim());
     d.append('first_name', (p.get('firstname') || p.get('ime') || '').trim());
     d.append('termin', (p.get('termin') || '').trim());
+    d.append('drzava', (p.get('drzava') || '').trim());
     /* Svako pitanje salje se uvek, da mapiranje u scenariju bude stabilno.
        Preskoceno pitanje ide prazno, pa stari odgovor ne moze da procuri
        ako se neko vratio i promenio raniji izbor. */

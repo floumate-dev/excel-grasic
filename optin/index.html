@@ -57,7 +57,11 @@ window.MC = {
 
     /* TODO: ID polja u ActiveCampaignu koje prima izabrani termin,
        npr. "18" za field[18]. Dok je prazno, termin se ne salje u AC. */
-    poljeTermin: ""
+    poljeTermin: "",
+
+    /* TODO: ID polja u ActiveCampaignu koje prima drzavu posetioca,
+       npr. "19" za field[19]. Dok je prazno, drzava se ne salje u AC. */
+    poljeDrzava: ""
   }
 };
 </script>
@@ -1056,6 +1060,38 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     US:['+1','SAD'],             CA:['+1','Kanada'],                AU:['+61','Australija'],
     AE:['+971','UAE'],           TR:['+90','Turska']
   };
+
+  /* Drzava posetioca po IP adresi. Pita se odmah po ucitavanju stranice,
+     da bi odgovor stigao pre nego sto neko popuni formu. Servis vraca samo
+     oznaku drzave (RS), ime na srpskom uzimamo iz ZEMLJE. Ako servis padne
+     ili zakasni, prijava ide bez drzave - nikad ne blokira slanje. */
+  var drzavaKod = '', drzavaIme = '';
+  (function(){
+    function upisi(kod, ime){
+      kod = String(kod || '').toUpperCase();
+      if (!/^[A-Z]{2}$/.test(kod)) return;
+      drzavaKod = kod;
+      drzavaIme = (ZEMLJE[kod] && ZEMLJE[kod][1]) || ime || kod;
+    }
+    function uzmi(url, izvuci){
+      return fetch(url, { cache: 'no-store' })
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(j){ if (j) izvuci(j); });
+    }
+    function cuti(){}
+    try {
+      uzmi('https://api.country.is/', function(j){ upisi(j.country, ''); })
+        .catch(cuti)
+        .then(function(){
+          if (drzavaKod) return;
+          /* rezerva: drugi servis, daje i ime drzave na engleskom */
+          return uzmi('https://get.geojs.io/v1/ip/country.json', function(j){
+            upisi(j.country, j.name);
+          }).catch(cuti);
+        })
+        .catch(cuti);
+    } catch (e) {}
+  })();
   var ZONE = {
     'Europe/Belgrade':'RS','Europe/Sarajevo':'BA','Europe/Zagreb':'HR','Europe/Podgorica':'ME',
     'Europe/Skopje':'MK','Europe/Ljubljana':'SI','Europe/Tirane':'AL','Europe/Sofia':'BG',
@@ -1265,6 +1301,7 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     fd.append('phone', srediTelefon(fTel.value));
     fd.append('field[5]', fPos.value);
     if (C.ac.poljeTermin) fd.append('field[' + C.ac.poljeTermin + ']', termin);
+    if (C.ac.poljeDrzava && drzavaIme) fd.append('field[' + C.ac.poljeDrzava + ']', drzavaIme);
 
     /* AC obavezna hidden polja */
     fd.append('u', C.ac.u);
@@ -1290,7 +1327,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
            stranici mogla da zalepi odgovore na isti kontakt */
         var qs = 'firstname=' + encodeURIComponent(ime) + '&email=' + encodeURIComponent(email)
                + '&phone=' + encodeURIComponent(srediTelefon(fTel.value))
-               + '&termin=' + encodeURIComponent(termin);
+               + '&termin=' + encodeURIComponent(termin)
+               + '&drzava=' + encodeURIComponent(drzavaIme);
         var u = utmString(); if (u) qs += '&' + u;
         location.href = C.nextUrl + '?' + qs;
       });

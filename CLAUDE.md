@@ -115,6 +115,7 @@ Ako nešto pukne, vraćanje je `git revert <hash>` pa push.
 | Naziv i opis termina u kalendaru | `kalendar/index.html` | `naziv`, `opis` u `window.MC` |
 | Šta se skida sa linka za pristup | `kalendar/index.html` | `ocisti` u `window.MC` |
 | Dugmad za kalendar u mejlu | `mejl/kalendar-dugmad-termin-1.html` | ceo fajl |
+| Imena država na srpskom | `optin/index.html`, `optin-2/index.html` | `var ZEMLJE` |
 
 ---
 
@@ -125,6 +126,9 @@ Ovo čeka podatke od klijenta, ne diraj dok ne stignu:
 - **ID polja u ActiveCampaignu za izabrani termin** - `ac.poljeTermin` u
   `window.MC` je prazan, pa termin ne stiže u AC. Dok se ne upiše (npr. `"18"`
   za `field[18]`), prijava radi ali se ne zna ko je izabrao koji termin.
+- **ID polja u ActiveCampaignu za državu** - `ac.poljeDrzava` je prazan, pa
+  država ne stiže u AC. U Make webhook sa optin-2 i u webhook ankete ide i
+  bez toga (`drzava`, `drzava_kod`).
 - video na application i thankyou stranici vrti isti snimak kao landing
 - slot za anketu na application stranici je prazan (`id="survey-box"`)
 - glavni pasus na application stranici je lorem ipsum
