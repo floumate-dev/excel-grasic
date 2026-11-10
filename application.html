@@ -287,6 +287,12 @@ p,li{text-wrap:pretty}
    FOOTER
    ============================================================ */
 footer{background:var(--deep);padding:32px 20px;text-align:center}
+
+/* GHL ubacuje ovaj kod u svoj kontejner ogranicene sirine, pa okolo ostaje belo.
+   Sekcije se zato razvlace na punu sirinu prozora, bez obzira na roditelja. */
+.stage,.survey,footer{width:100vw;max-width:100vw;
+  margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+html{overflow-x:hidden}
 footer img{height:24px;width:auto;margin:0 auto 12px}
 footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
 .foot-by{font-size:.74rem;color:rgba(236,237,229,.38);margin-top:8px}
