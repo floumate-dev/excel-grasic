@@ -664,7 +664,14 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     A.pitanja.forEach(function(q){
       /* mejl vec putuje kao "email", nema potrebe i pod svojim id-em */
       if (q.tip === 'email') return;
-      d.append(q.id, vidljivo(q) ? (odgovori[q.id] || []).join(' | ') : '');
+      var dati = vidljivo(q) ? (odgovori[q.id] || []) : [];
+      /* Pitanja sa vise odgovora idu kao niz (teme[]=Excel&teme[]=Power BI).
+         Checkbox polje u GHL-u prima niz, pa se ovako mapira bez formule;
+         spojen tekst bi stigao kao jedna stavka koju GHL odbija. Kad nema
+         izabranog odgovora kljuc izostaje, da prazna stavka ne padne na
+         proveri dozvoljenih vrednosti. */
+      if (q.max > 1) dati.forEach(function(v){ d.append(q.id + '[]', v); });
+      else d.append(q.id, dati.join(' | '));
     });
     d.append('page_url', location.href.split('?')[0]);
     d.append('submitted_at', new Date().toISOString());
