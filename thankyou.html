@@ -222,6 +222,12 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .mbtn .ik{width:19px;height:19px;flex:0 0 19px}
   .mbtn span{display:none}
 }
+/* iPhone uvecava stranicu kad se dodirne polje cija su slova manja od 16px,
+   i ne vraca je nazad. Na ekranima na dodir polja su zato tacno 16px, u
+   pikselima a ne u rem: GHL ima svoju osnovnu velicinu fonta. */
+@media (hover:none) and (pointer:coarse){
+  .copy input{font-size:16px}
+}
 </style>
 <script>
 /* 100vw ukljucuje i scrollbar; --sb je njegova sirina, da sekcije budu tacno od ivice do ivice */

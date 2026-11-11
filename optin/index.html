@@ -545,6 +545,12 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   .sticky-cta{display:flex}
   body{padding-bottom:64px}
 }
+/* iPhone uvecava stranicu kad se dodirne polje cija su slova manja od 16px,
+   i ne vraca je nazad. Na ekranima na dodir polja su zato tacno 16px, u
+   pikselima a ne u rem: GHL ima svoju osnovnu velicinu fonta. */
+@media (hover:none) and (pointer:coarse){
+  .fld input,.tel select{font-size:16px}
+}
 </style>
 </head>
 <body>
