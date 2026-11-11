@@ -170,7 +170,7 @@ p,li{text-wrap:pretty}
 /* program koji po adresi najverovatnije koristi */
 .mbtn.pred{border-color:var(--lime);background:rgba(225,242,94,.17);color:var(--lime)}
 .sent{display:block;margin-top:11px;font-size:.8rem;color:rgba(236,237,229,.6);text-align:center}
-.sent b{color:var(--cream);font-weight:600;word-break:break-all}
+.sent b{color:var(--cream);font-weight:600;overflow-wrap:anywhere}
 .sent[hidden]{display:none}
 .sent a{color:var(--lime);font-weight:600;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 /* dva podjednako duga reda, umesto jednog dugog i jednog sa dve reci */
@@ -360,25 +360,40 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
   var mail = (p.get('email') || '').trim().toLowerCase();
   var sent = document.getElementById('sent-to');
   if (mail) {
-    sent.innerHTML = 'Poslali smo na <b>' + mail.replace(/[<>&]/g, '') + '</b>';
+    sent.innerHTML = 'Poslali smo na <b>' + mail.replace(/[<>&]/g, '') + '</b><br>sa adrese <b>' + C.posiljalac + '</b>';
   } else {
     sent.textContent = 'Stiže sa adrese ' + C.posiljalac;
   }
-  /* Tri dugmeta otvaraju odgovor vec napisan: Gmail i Outlook u pregledacu,
-     Apple Mail (tj. podrazumevani program na uredjaju) preko mailto. */
+  /* Tri dugmeta vode do mejla koji smo vec poslali, da se odgovori bas na
+     njega: odgovor na nasu poruku je ono sto mejl programu govori da se
+     dopisujemo, pa podsetnici idu u Inbox. Gmail i Outlook otvaraju pretragu
+     po posiljaocu (u Gmailu i u Spamu i Promocijama); Apple Mail nema
+     pretragu preko linka, pa se otvara sam program - mejl je stigao pre
+     par minuta i stoji na vrhu. */
   var zaKoga = encodeURIComponent(C.posiljalac);
   var naslov = encodeURIComponent(C.odgovorNaslov || 'Primljeno');
   var tekst = encodeURIComponent(C.odgovorTekst || 'Primljeno');
+  var dom = mail.split('@')[1] || '';
 
+  /* Gmail: authuser bira nalog na koji je stigla potvrda, ako ih ima vise */
   document.getElementById('open-mail').href =
-    'https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=' + zaKoga + '&su=' + naslov + '&body=' + tekst;
-  document.getElementById('open-outlook').href =
-    'https://outlook.live.com/mail/0/deeplink/compose?to=' + zaKoga + '&subject=' + naslov + '&body=' + tekst;
-  document.getElementById('open-apple').href =
-    'mailto:' + C.posiljalac + '?subject=' + naslov + '&body=' + tekst;
+    'https://mail.google.com/mail/' + (mail ? '?authuser=' + encodeURIComponent(mail) : '') +
+    '#search/' + encodeURIComponent('in:anywhere from:' + C.posiljalac);
+
+  /* Outlook: licni nalozi (hotmail, outlook, live, msn) su na outlook.live.com,
+     poslovni (Microsoft 365) na outlook.office.com */
+  var licni = /^(outlook|hotmail|live|msn)\./.test(dom);
+  document.getElementById('open-outlook').href = (licni
+    ? 'https://outlook.live.com/mail/0/deeplink/search?query='
+    : 'https://outlook.office.com/mail/deeplink/search?query=') + encodeURIComponent('from:' + C.posiljalac);
+
+  /* Apple Mail postoji samo na Apple uredjajima; drugde ostaje odgovor preko mailto */
+  var apple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  document.getElementById('open-apple').href = apple
+    ? 'message://'
+    : 'mailto:' + C.posiljalac + '?subject=' + naslov + '&body=' + tekst;
 
   /* program koji po domenu adrese najverovatnije koristi dobija naglasak */
-  var dom = mail.split('@')[1] || '';
   var pred = null;
   if (/^(gmail|googlemail)\./.test(dom)) pred = 'open-mail';
   else if (/^(outlook|hotmail|live|msn)\./.test(dom)) pred = 'open-outlook';
