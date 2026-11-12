@@ -178,10 +178,22 @@ p{color:var(--ink)}
 .proof-lead strong{font-size:clamp(1.9rem,2.8vw,2.4rem);font-weight:600;color:var(--green);letter-spacing:-.04em;line-height:1}
 .proof-prefix,.proof-detail{font-size:.8rem;line-height:1.35;color:var(--ink-2)}
 .proof-count{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}
-.client-logos{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.client-logos img{height:auto;object-fit:contain;filter:grayscale(1);opacity:.75;transition:filter .2s ease,opacity .2s ease}
-.client-logos li:hover img{filter:none;opacity:1}
-.logo-ms{width:112px}.logo-intesa{width:130px}.logo-dm{width:46px}.logo-hbc{width:98px}.logo-ikea{width:72px}
+/* beskonacna traka logoa: dve iste liste jedna za drugom, traka klizi za
+   sirinu jedne liste pa krece ispocetka bez skoka */
+.logo-marquee{min-width:0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.logo-track{display:flex;width:max-content;animation:logoTraka 48s linear infinite}
+.logo-marquee:hover .logo-track{animation-play-state:paused}
+@keyframes logoTraka{to{transform:translateX(-50%)}}
+.client-logos{list-style:none;display:flex;align-items:center;gap:56px;padding-right:56px}
+.client-logos li{flex:none;display:flex;align-items:center}
+.client-logos img{display:block;width:auto;max-width:none;object-fit:contain}
+@media (prefers-reduced-motion:reduce){
+  .logo-track{animation:none;width:auto;flex-wrap:wrap}
+  .logo-track ul[aria-hidden]{display:none}
+  .client-logos{flex-wrap:wrap;justify-content:center;gap:22px 36px;padding-right:0}
+}
 
 /* ============================================================
    PREDNOSTI (cream traka)
@@ -411,8 +423,8 @@ footer{background:var(--deep);padding:30px 0}
   .menu-toggle[aria-expanded="true"] span:last-child{transform:translateY(-3.25px) rotate(-45deg)}
   .sec-head{display:block}
   .sec-head>p{margin-top:12px;max-width:none}
-  .client-logos{gap:12px}
-  .logo-ms{width:78px}.logo-intesa{width:92px}.logo-dm{width:32px}.logo-hbc{width:68px}.logo-ikea{width:50px}
+  .client-logos{gap:36px;padding-right:36px}
+  .client-logos img{zoom:.82}
   .form-fields{grid-template-columns:1fr}
   .foot-in{flex-direction:column;align-items:flex-start}
   .foot-links{flex-direction:column;align-items:flex-start;gap:8px}
@@ -508,13 +520,42 @@ footer{background:var(--deep);padding:30px 0}
 <section class="proof full" aria-label="Kompanije sa kojima smo sarađivali">
   <div class="wrap proof-in">
     <p class="proof-lead"><span class="proof-count"><span class="proof-prefix">Samo<br> neke od</span> <strong>500+</strong></span> <span class="proof-detail">kompanija sa kojima<br> smo sarađivali</span></p>
-    <ul class="client-logos" aria-label="Neke od tih kompanija">
-      <li><img class="logo-ms" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft.webp" alt="Microsoft" width="138" height="33"></li>
-      <li><img class="logo-intesa" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/banca-intesa.webp" alt="Banca Intesa" width="142" height="21"></li>
-      <li><img class="logo-dm" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/dm.webp" alt="dm" width="55" height="39"></li>
-      <li><img class="logo-hbc" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/coca-cola-hbc.webp" alt="Coca-Cola HBC" width="110" height="36"></li>
-      <li><img class="logo-ikea" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/ikea.webp" alt="IKEA" width="80" height="33"></li>
-    </ul>
+    <div class="logo-marquee">
+      <div class="logo-track">
+        <ul class="client-logos" aria-label="Neke od tih kompanija">
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/microsoft.png" alt="Microsoft" width="120" height="26" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/banca-intesa.png" alt="Banca Intesa" width="153" height="20" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/dm.png" alt="dm" width="69" height="45" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/coca-cola-hbc.png" alt="Coca-Cola HBC" width="100" height="31" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/ikea.png" alt="IKEA" width="88" height="35" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/a1.png" alt="A1" width="44" height="46" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nis.png" alt="NIS" width="102" height="30" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/blackrock.png" alt="BlackRock" width="138" height="22" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/philip-morris.png" alt="Philip Morris International" width="57" height="46" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/procredit.png" alt="ProCredit Bank" width="125" height="25" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/continental.png" alt="Continental" width="131" height="24" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nelt.png" alt="Nelt" width="110" height="28" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/alumil.png" alt="Alumil" width="101" height="31" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/mokrogorska.png" alt="Mokrogorska" width="79" height="39" loading="lazy" decoding="async"></li>
+        </ul>
+        <ul class="client-logos" aria-hidden="true">
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/microsoft.png" alt="" width="120" height="26" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/banca-intesa.png" alt="" width="153" height="20" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/dm.png" alt="" width="69" height="45" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/coca-cola-hbc.png" alt="" width="100" height="31" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/ikea.png" alt="" width="88" height="35" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/a1.png" alt="" width="44" height="46" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nis.png" alt="" width="102" height="30" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/blackrock.png" alt="" width="138" height="22" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/philip-morris.png" alt="" width="57" height="46" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/procredit.png" alt="" width="125" height="25" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/continental.png" alt="" width="131" height="24" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nelt.png" alt="" width="110" height="28" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/alumil.png" alt="" width="101" height="31" loading="lazy" decoding="async"></li>
+          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/mokrogorska.png" alt="" width="79" height="39" loading="lazy" decoding="async"></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
