@@ -16,6 +16,10 @@ kalendar/index.html  "dodaj u kalendar" iz mejla: sklopi termin i posalje
                      .ics fajl u pregledacu, bez servera
 mejl/                blokovi koji se lepe u ActiveCampaign mejlove
                      (nisu stranice, ne otvaraju se same)
+kompanije/           Yearly Ticket za kompanije (B2B). Tekst je Jankov,
+                     dizajn isti kao optin-2. Lepi se u GHL ceo fajl; slike
+                     iz kompanije/img/ se pozivaju punim github.io linkom,
+                     SEO slika je kompanije/seo-yearly-ticket-1200x630.jpg.
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.
