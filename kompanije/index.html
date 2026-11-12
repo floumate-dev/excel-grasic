@@ -1,850 +1,784 @@
 <!doctype html>
-<html lang="sr">
+<html lang="sr-Latn">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Yearly Ticket za kompanije. Tekst je Jankov (copywriter), dizajn je isti
-     kao na Masterclass stranicama (optin-2). Ovaj kod se lepi u telo GHL
-     stranice: naslov, opis, robots, SEO slika i ikonica se podesavaju u GHL-u
-     (SEO podesavanja stranice), ne ovde, da isti tagovi ne postoje dva puta.
-     Slike se vuku sa github.io (kompanije/img/), zato pun link. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:84px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-
-/* ============================================================
-   BRAND TOKENI - isti kao na optin-2 (excelgrasic.com)
-   ============================================================ */
-:root{
-  --white:#ffffff;
-  --ink:#363636;
-  --ink-2:#6b7570;
-  --green:#004d3a;
-  --deep:#001812;
-  --lime:#e1f25e;
-  --leaf:#75a34d;
-  --cream:#ecede5;
-  --mint:#e1eae8;
-  --line:#dfe5e2;
-  --r:16px;
-  --font:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Yearly Ticket za kompanije - Jankova stranica (dizajn i tekst), prepakovana za GHL.
+       Naslov, opis, robots, SEO slika i ikonica se podesavaju u GHL-u, ne ovde.
+       Slike su na github.io (kompanije/img/), font je Onest sa Google Fonts.
+       Prethodna verzija u nasem stilu je u git istoriji (commit d59f614). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --ink: #103e33; --pine: #004d3a; --hero: #073e31; --green: #7dd855;
+  --lime: #def16a; --paper: #f6f6ef; --white: #fff; --body: #455951;
+  --muted: #52665c; --line: #d5ddd2; --font: Onest, "Segoe UI", Arial, sans-serif;
+  --grain: url("https://floumate-dev.github.io/excel-grasic/kompanije/img/grain.png"); --wave: url("https://floumate-dev.github.io/excel-grasic/kompanije/img/wave.webp");
+  color-scheme: light;
 }
-body{background:var(--white);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
-img{max-width:100%;display:block}
-a{color:inherit}
-button,input,select,textarea{font:inherit}
-.wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 20px}
-.sec{padding:clamp(60px,8vw,108px) 0}
+*,*::before,*::after { box-sizing: border-box; }
+html { scroll-padding-top: 86px; }
+body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--font); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button,input,select,textarea { font: inherit; }
+button { cursor: pointer; }
+button,a,summary { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid #3a841e; outline-offset: 4px; }
+.hero :focus-visible,.contact :focus-visible,.footer :focus-visible { outline-color: #def16a; }
+h1,h2,h3,p,figure,ul,ol,dl,dd { margin: 0; }
+h1,h2,h3 { text-wrap: balance; }
+.wrap { width: min(1192px, calc(100% - 112px)); margin-inline: auto; }
+.section-space { padding-block: clamp(66px, 6.3vw, 96px); }
+h2 { font-size: clamp(34px, 3.6vw, 53px); line-height: 1.07; font-weight: 640; letter-spacing: -.052em; }
+h3 { line-height: 1.22; letter-spacing: -.038em; }
+.eyebrow { display: flex; align-items: center; gap: 10px; font-size: 11.5px; font-weight: 720; line-height: 1.45; letter-spacing: .14em; text-transform: uppercase; }
+.overline { color: #39694f; margin-bottom: 14px; }
+.overline::before { content: ""; width: 23px; height: 2px; background: #75a763; flex: none; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 14px; padding: 13px 21px; min-height: 47px; border: 1px solid transparent; border-radius: 11px; font-size: 15px; font-weight: 650; letter-spacing: -.018em; line-height: 1.3; text-align: center; transition: background-color .18s, color .18s, border-color .18s, transform .18s; }
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-dark { background: var(--pine); color: white; }
+.btn-dark:hover { background: #096147; }
+.btn-bright { color: #173b21; background: var(--lime); }
+.btn-bright:hover { background: #ecfa98; }
+.btn-outline { color: var(--ink); background: transparent; border-color: #9eafa1; }
+.btn-outline:hover { background: #edf2e7; border-color: var(--pine); }
+.diagonal-arrow { display: inline-block; flex: none; position: relative; width: 14px; height: 14px; }
+.diagonal-arrow::before { content: ""; position: absolute; width: 12px; height: 1.6px; background: currentColor; left: 0; top: 6px; transform: rotate(-45deg); }
+.diagonal-arrow::after { content: ""; position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; border-top: 1.6px solid currentColor; border-right: 1.6px solid currentColor; }
+.skip-link { position: fixed; z-index: 10; left: 12px; top: 8px; padding: 10px 16px; color: white; background: var(--pine); border-radius: 7px; transform: translateY(-160%); }
+.skip-link:focus { transform: translateY(0); }
+.site-header { position: sticky; top: 0; z-index: 5; background: #f5f5ec; box-shadow: 0 1px 0 rgba(32,67,46,.10); }
+.header-inner { display: flex; align-items: center; gap: 42px; min-height: 75px; }
+.brand-home { display: inline-flex; align-items: center; margin-right: auto; padding-block: 6px; }
+.brand-dark { width: 156px; height: auto; }
+.main-nav,.header-actions { display: flex; align-items: center; }
+.main-nav { gap: 30px; font-weight: 530; font-size: 14px; }
+.main-nav a { padding: 9px 0; text-underline-offset: 6px; }
+.main-nav a:hover { text-decoration: underline; }
+.header-cta { padding: 11px 17px; min-height: 42px; font-size: 14px; gap: 11px; border-radius: 9px; }
+.menu-toggle { display: none; }
+.hero { isolation: isolate; position: relative; overflow: hidden; color: #f8faef; background: radial-gradient(ellipse at 84% 39%, #185740 0, transparent 51%), linear-gradient(112deg,#093e30 0%,#073b2f 52%,#094632 100%); }
+.hero::before { position: absolute; content: ""; inset: 0; z-index: -1; pointer-events: none; background: var(--grain); opacity: .26; }
+.hero-grid,.contact-grid { position: absolute; inset: 0; pointer-events: none; z-index: -1; background-image: linear-gradient(90deg,rgba(187,221,164,.11) 1px,transparent 1px),linear-gradient(0deg,rgba(187,221,164,.11) 1px,transparent 1px); background-size: 49px 49px; background-position: 52% 55%; }
+.hero-grid { mask-image: linear-gradient(90deg,transparent 19%,rgba(0,0,0,.06) 39%,#000 84%); }
+.hero-inner { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.97fr); align-items: center; column-gap: clamp(14px,2.5vw,42px); padding-block: clamp(57px,5.6vw,85px) clamp(62px,5.8vw,91px); }
+.hero-copy { position: relative; z-index: 1; }
+.hero h1 { font-weight: 665; font-size: clamp(50px,5.35vw,78px); letter-spacing: -.065em; line-height: 1.025; margin: 0 0 22px; }
+.hero-line { display: block; }
+.hero h1 em { font-style: normal; color: #9fe47a; }
+.hero-intro { max-width: 510px; color: #d5e4d8; font-size: clamp(16px,1.26vw,18px); font-weight: 410; line-height: 1.58; letter-spacing: -.012em; }
+.hero-actions { display: flex; align-items: center; gap: 26px; margin-top: 29px; }
+.hero-actions .btn { min-height: 49px; padding-inline: 23px; }
+.text-link { display: inline-block; padding-block: 5px 3px; border-bottom: 1px solid currentColor; font-size: 14.5px; font-weight: 590; line-height: 1.3; }
 
-/* GHL ubacuje kod u svoj kontejner ogranicene sirine - trake idu od ivice do ivice */
-.full{width:calc(100vw - var(--sb,0px));max-width:none;
+/* Two overlapping, printed tickets. Keeping the lettering as HTML preserves
+   its sharpness at every viewport size. */
+.ticket-stage { width: 100%; max-width: 600px; aspect-ratio: 1.64; position: relative; container-type: inline-size; isolation: isolate; justify-self: center; }
+.ticket-cast { position: absolute; inset: 37% 7% 1% 0; background: radial-gradient(ellipse, rgba(0,20,12,.48),transparent 68%); transform: rotate(-9deg); filter: blur(9px); }
+.ticket-layer { position: absolute; width: 83%; height: 68%; }
+.ticket-layer.rear { left: 14.2%; top: 17.3%; transform: rotate(11deg); filter: drop-shadow(0 12px 10px rgba(0,20,11,.28)); }
+.ticket-layer.front { left: 4.1%; top: 14%; transform: rotate(-8deg); filter: drop-shadow(0 17px 15px rgba(0,25,13,.34)) drop-shadow(0 2px 1px rgba(0,17,8,.35)); }
+.ticket-paper { width: 100%; height: 100%; position: relative; overflow: hidden; isolation: isolate; border-radius: 2.35cqw;
+  mask-image: radial-gradient(circle at 78.5% 0%,transparent 0 1.22cqw,#000 1.4cqw),radial-gradient(circle at 78.5% 100%,transparent 0 1.22cqw,#000 1.4cqw),radial-gradient(circle at 0 50%,transparent 0 1.45cqw,#000 1.60cqw),radial-gradient(circle at 100% 50%,transparent 0 1.45cqw,#000 1.60cqw);
+  mask-composite: intersect;
+}
+.ticket-paper::after { content: ""; position: absolute; inset: 0; background: var(--grain); pointer-events: none; opacity: .46; z-index: 2; }
+.front-paper { color: #153e28; background: linear-gradient(117deg,#e3f1bd 0%,#d5eaa8 39%,#bed896 76%,#ccdfa5 100%); box-shadow: inset 0 1px 0 #f2ffd0,inset 0 -1px 0 #9bb780; }
+.back-paper { background: linear-gradient(116deg,#54855f,#4f885f 35%,#2a694e 85%); box-shadow: inset 0 0 0 1.5px #8aab79; }
+.back-rules { position: absolute; inset: 5% 3%; border: 1px solid rgba(211,237,173,.55); outline: 1px solid rgba(211,237,173,.23); outline-offset: -4px; border-radius: 1.6cqw; }
+.rear-waves { position: absolute; inset: -20% -13%; background: var(--wave) center / 108% 120% no-repeat; filter: invert(1); opacity: .8; transform: rotate(-7deg); }
+.ticket-perforation { position: absolute; top: 4%; bottom: 4%; left: 78.5%; width: 1px; background: repeating-linear-gradient(to bottom,rgba(35,79,40,.68) 0 4px,transparent 4px 9px); }
+.back-paper .ticket-perforation { background: repeating-linear-gradient(to bottom,rgba(208,231,171,.65) 0 4px,transparent 4px 9px); }
+.back-stub { position: absolute; top: 17%; right: 4.6%; width: 11%; height: 65%; background: repeating-linear-gradient(0deg,rgba(207,235,181,.75) 0 1px,transparent 1px 4px,rgba(207,235,181,.7) 4px 6px,transparent 6px 9px); }
+.front-waves { position: absolute; inset: 13% -6% -29% 4%; background: var(--wave) center / 120% 112% no-repeat; opacity: .54; transform: rotate(-11deg); }
+.ticket-brand { position: absolute; width: 28.5%; left: 46%; top: 49%; transform: translateY(-50%); display: grid; justify-items: center; gap: 1.35cqw; mix-blend-mode: multiply; }
+.ticket-brand-symbol { width: 92%; height: auto; opacity: .94; }
+.ticket-wordmark { width: 100%; height: auto; }
+.ticket-content { position: absolute; inset: 0 21.5% 0 0; }
+.ticket-name { position: absolute; top: 49%; left: 5.15cqw; transform: translateY(-50%); font-size: 9cqw; font-weight: 690; letter-spacing: -.081em; line-height: .94; }
+.ticket-caption { position: absolute; left: 5.15cqw; bottom: 3.85cqw; font: 650 1.45cqw/1.1 var(--font); text-transform: uppercase; letter-spacing: .15em; }
+.ticket-stub { position: absolute; inset: 0 0 0 78.5%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 5.3cqw 0 4.1cqw; background: linear-gradient(90deg,rgba(92,130,66,.07),rgba(229,242,191,.12)); }
+.stub-value { writing-mode: vertical-rl; font-size: 5.7cqw; line-height: 1; letter-spacing: -.061em; font-weight: 655; }
+.barcode { display: block; height: 6cqw; width: 9.8cqw; background: repeating-linear-gradient(90deg,#22472e 0 .32cqw,transparent .32cqw .66cqw,#22472e .66cqw .86cqw,transparent .86cqw 1.24cqw,#22472e 1.24cqw 1.83cqw,transparent 1.83cqw 2.15cqw,#22472e 2.15cqw 2.35cqw,transparent 2.35cqw 2.86cqw); }
+
+.proof-strip { background: white; border-bottom: 1px solid var(--line); }
+.proof-inner { min-height: 115px; padding-block: 22px; display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: clamp(23px,3.4vw,54px); }
+.proof-lead { display: flex; align-items: center; gap: 13px; border-right: 1px solid #d5ddd2; padding: 2px clamp(21px,3.3vw,49px) 2px 0; }
+.proof-count { display: inline-flex; align-items: center; gap: 9px; flex: none; white-space: nowrap; }
+.proof-lead strong { font-size: clamp(28px,2.65vw,40px); font-weight: 670; letter-spacing: -.065em; line-height: 1; }
+.proof-prefix,.proof-detail { font-size: 12.7px; line-height: 1.4; color: #465c50; font-weight: 500; }
+/* beskonacna traka logoa: dve iste liste jedna za drugom; traka klizi za
+   sirinu jedne liste pa krece ispocetka bez skoka */
+.logo-marquee { min-width: 0; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image: linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent); }
+.logo-track { display: flex; width: max-content; animation: logoTraka 48s linear infinite; }
+.logo-marquee:hover .logo-track { animation-play-state: paused; }
+@keyframes logoTraka { to { transform: translateX(-50%); } }
+.client-logos { list-style: none; padding: 0 52px 0 0; display: flex; align-items: center; gap: 52px; }
+.client-logos li { flex: none; display: flex; align-items: center; }
+.client-logos img { display: block; width: auto; max-width: none; object-fit: contain; }
+@media (prefers-reduced-motion: reduce) {
+  .logo-track { animation: none; width: auto; }
+  .logo-track ul[aria-hidden] { display: none; }
+  .client-logos { flex-wrap: wrap; justify-content: center; gap: 20px 34px; padding-right: 0; }
+}
+
+.benefits { background: #fafbf5; }
+.benefits-inner { display: grid; grid-template-columns: minmax(0,1.18fr) minmax(0,.88fr); align-items: center; gap: clamp(35px,6vw,96px); }
+.benefit-copy h2 { max-width: 660px; }
+.benefit-list { list-style: none; padding: 0; margin: 27px 0 0; }
+.benefit-list li { position: relative; padding-left: 25px; }
+.benefit-list li+li { margin-top: 19px; }
+.benefit-list li::before { content: ""; position: absolute; left: 1px; top: .34em; width: 10px; height: 10px; border: 2px solid #528d54; border-top: 0; border-left: 0; transform: rotate(45deg) scaleX(.64); }
+.benefit-list h3 { font-size: clamp(18px,1.55vw,22px); font-weight: 640; letter-spacing: -.035em; }
+.benefit-list p { color: var(--body); margin-top: 3px; max-width: 530px; font-size: 15.5px; line-height: 1.55; }
+.tool-panel {
+  container-type: inline-size; min-width: 0; padding: clamp(16px,1.8vw,26px);
+  border: 1px solid #c5d5b9; border-radius: 18px; background: linear-gradient(125deg,#e7efdb,#d4e6c6);
+}
+.tool-panel h3 { margin-bottom: 17px; font-size: clamp(22px,1.9vw,28px); font-weight: 650; letter-spacing: -.045em; }
+.tool-grid {
+  display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); grid-auto-rows: 1fr; gap: 1px;
+  list-style: none; padding: 0; border: 1px solid #c8d6be; border-radius: 12px; overflow: hidden; background: #dce4d5;
+}
+.tool-grid li {
+  min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 15px 2px 13px;
+  background: #fdfef9; text-align: center; font-size: clamp(12px,.94vw,14px); font-weight: 580; line-height: 1.25; letter-spacing: -.025em;
+}
+.tool-grid img { width: 46px; height: 46px; object-fit: contain; padding: 5px; }
+.tool-grid img.office-mark { padding: 0; }
+.tool-grid li > span { max-width: 100%; overflow-wrap: anywhere; }
+@container (max-width: 355px) {
+  .tool-grid li { gap: 6px; padding: 12px 1px 10px; font-size: clamp(11px,4cqi,13px); }
+  .tool-grid img { width: 40px; height: 40px; padding: 4px; }
+}
+
+.pricing { background: #f0f3e9; border-block: 1px solid #d8dfd1; }
+.section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 36px; }
+.pricing-heading h2 { max-width: 680px; }
+.section-heading > p { max-width: 324px; color: var(--body); line-height: 1.55; font-size: 16px; padding-bottom: 1px; }
+.plans { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 19px; margin-top: 32px; }
+.plan { --metal: #a38264; --metal-light: #f4ded1; --metal-dark: #986f55; --metal-mid: #cead92; position: relative; display: flex; flex-direction: column; padding: clamp(20px,2.15vw,32px); border-radius: 15px; border: 1px solid #cbd6c8; border-top: 4px solid var(--metal); background: #fff; }
+.plan.silver { --metal: #839891; --metal-light: #e7eeea; --metal-mid: #b6c5c1; --metal-dark: #718b81; }
+.plan.gold { --metal: #ad8c31; --metal-light: #f5e7ae; --metal-mid: #d9c671; --metal-dark: #a49447; }
+.plan-heading { display: flex; align-items: center; gap: 13px; }
+.plan-heading h3 { font-size: clamp(22px,1.9vw,28px); font-weight: 630; }
+.mini-ticket { position: relative; width: 43px; height: 30px; transform: rotate(-10deg); filter: drop-shadow(0 1px 1px #0002); display: block; flex: none; }
+.mini-ticket::before { content: ""; position: absolute; inset: 0; border: 1px solid var(--metal); border-radius: 5px; background: repeating-linear-gradient(153deg,transparent 0 3px,color-mix(in srgb,var(--metal-dark) 37%,transparent) 3.5px 4px,transparent 4.4px 6px),linear-gradient(140deg,var(--metal-mid),var(--metal-light) 52%,var(--metal-mid)); mask: radial-gradient(circle at 0 50%,transparent 2.7px,#000 3.3px),radial-gradient(circle at 100% 50%,transparent 2.7px,#000 3.3px); mask-composite: intersect; }
+.mini-ticket::after { content: ""; position: absolute; inset: 4px 10px 4px auto; border-left: 1px dashed var(--metal-dark); }
+.budget-label { font-size: 13px; color: var(--muted); margin-top: 29px; font-weight: 510; }
+.budget-total { margin-top: 2px; display: flex; gap: 8px; align-items: baseline; font-size: clamp(37px,3.4vw,51px); font-weight: 640; letter-spacing: -.064em; line-height: 1.07; font-variant-numeric: lining-nums; }
+.budget-total span small { font-size: .75em; font-weight: 460; color: var(--body); }
+.budget-total span { font-size: 16px; line-height: 1; letter-spacing: .02em; font-weight: 580; }
+.plan dl { margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--line); }
+.plan dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 14px; line-height: 1.55; }
+.plan dl div+div { margin-top: 7px; }
+.plan dt { color: var(--muted); }
+.plan dd { font-weight: 620; text-align: right; white-space: nowrap; }
+.plan dd small { font-size: .81em; font-weight: 520; }
+.plan .extra { color: #33722d; }
+.plan .plan-value { margin-top: 14px; padding: 10px 12px; background: #eef4e9; border-radius: 6px; column-gap: 7px; }
+.plan-value dt { color: #2d523c; font-weight: 550; }
+.plan-value dd { font-size: 1.12em; }
+.plan-cta { justify-content: flex-start; margin-top: 25px; width: 100%; min-height: 44px; padding: 10px 14px; border-color: var(--pine); font-size: 14px; border-radius: 9px; }
+.plan-cta:hover { background: #146649; border-color: #146649; }
+.plan-help { margin-top: 21px; color: var(--body); font-size: 14px; }
+.plan-help a { color: var(--pine); font-weight: 610; margin-left: 3px; text-decoration: underline; text-underline-offset: 4px; }
+.workflow { background: #fff; border-bottom: 1px solid #d5dfd1; }
+.workflow-inner { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.98fr); gap: clamp(48px,8vw,125px); align-items: center; }
+.workflow-intro>p { color: var(--body); margin-top: 17px; font-size: 16.5px; line-height: 1.65; max-width: 540px; }
+.steps { padding: 0; list-style: none; counter-reset: workflow; }
+.steps li { position: relative; display: grid; grid-template-columns: 43px minmax(0,1fr); gap: 19px; counter-increment: workflow; }
+.steps li+li { padding-top: 26px; }
+.steps li::before { content: counter(workflow); content: counter(workflow) / ""; position: relative; z-index: 1; width: 43px; height: 43px; border-radius: 50%; display: grid; place-items: center; color: #f2f9e8; background: #245b41; font-weight: 590; font-size: 17px; line-height: 1; }
+.steps li:not(:last-child)::after { content: ""; position: absolute; left: 21px; top: 42px; bottom: -27px; width: 1px; background: #adc0ad; }
+.steps li+li:not(:last-child)::after { top: 68px; }
+.step-copy { padding-top: 3px; }
+.step-copy h3 { font-size: 22px; font-weight: 640; }
+.step-copy p { margin-top: 6px; font-size: 15.3px; line-height: 1.6; color: var(--body); }
+.answers { background: #fafaf5; }
+.answer-grid { display: grid; grid-template-columns: minmax(0,.72fr) minmax(0,1.28fr); align-items: center; gap: clamp(49px,8.5vw,133px); }
+.founder-card { width: 100%; max-width: 365px; overflow: hidden; background: #eef3e9; border: 1px solid #cddacb; border-radius: 16px; }
+.founder-art { height: clamp(175px,15.5vw,223px); position: relative; overflow: hidden; background: var(--pine); }
+.founder-art img { position: absolute; left: 50%; top: 10%; width: 62%; height: auto; max-width: 238px; transform: translateX(-50%); }
+.founder-info { padding: 20px 23px 23px; }
+.founder-role { font-size: 12px; line-height: 1.4; color: #4b694f; font-weight: 580; }
+.founder-name { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+.founder-name h3 { min-width: 0; font-size: 26px; font-weight: 650; }
+.mvp-badge { flex: none; width: clamp(57px,5.5vw,80px); height: auto; }
+.founder-info p:last-child { color: var(--body); margin-top: 9px; font-size: 14px; line-height: 1.6; }
+.faq-column h2 { margin-bottom: 24px; }
+.questions { border-top: 1px solid #c7d4c8; }
+.questions details { border-bottom: 1px solid #c7d4c8; }
+.questions summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 17px; padding-block: 17px; list-style: none; font-size: clamp(16px,1.4vw,20px); font-weight: 590; line-height: 1.4; letter-spacing: -.026em; }
+.questions summary::-webkit-details-marker { display: none; }
+.questions summary::after { content: ""; flex: none; width: 25px; height: 25px; border: 1px solid #b7c7b6; border-radius: 50%; background: linear-gradient(#365b42,#365b42) center/9px 1.4px no-repeat,linear-gradient(#365b42,#365b42) center/1.4px 9px no-repeat; }
+.questions details[open] summary::after { background: linear-gradient(#365b42,#365b42) center/9px 1.4px no-repeat,#e9efe4; }
+.questions summary:hover { color: #2c7542; }
+.answer { padding: 0 40px 18px 0; color: var(--body); font-size: 15px; line-height: 1.64; }
+.answer p+p { margin-top: 8px; }
+.contact { position: relative; isolation: isolate; overflow: hidden; background: #0a4132; color: #f3f7e9; }
+.contact:focus { outline: 0; }
+.contact::before { position: absolute; content: ""; inset: 0; z-index: -1; background: var(--grain); opacity: .22; }
+.contact-grid { mask-image: linear-gradient(115deg,transparent 8%,#000 85%); }
+.contact-inner { display: grid; grid-template-columns: minmax(0,.82fr) minmax(0,1.18fr); align-items: start; gap: clamp(26px,6vw,100px); padding-block: clamp(57px,6vw,88px); }
+.contact-copy { padding-top: clamp(6px,2.1vw,32px); }
+.contact-copy h2 { max-width: 475px; font-size: clamp(38px,4.1vw,61px); }
+.contact-copy>p { max-width: 405px; margin-top: 18px; color: #d4e2d5; font-size: 16px; line-height: 1.65; }
+.direct-contact { display: grid; justify-items: start; gap: 4px; margin-top: clamp(25px,3vw,43px); }
+.direct-contact>span { color: #c2d6c7; font-size: 13px; }
+.direct-contact a { display: inline-flex; align-items: center; gap: 8px; color: #e2f5bd; font-weight: 600; font-size: 16px; text-underline-offset: 4px; }
+.direct-contact a:hover { text-decoration: underline; }
+.form-card { background: #fafbf5; border: 1px solid #e4e9db; border-radius: 17px; padding: clamp(22px,2.75vw,40px); color: var(--ink); min-width: 0; box-shadow: 0 15px 34px #012a232e; }
+.form-card :focus-visible { outline-color: #37823a; }
+.form-card h3 { font-size: clamp(24px,2vw,30px); font-weight: 640; margin-bottom: 18px; }
+.form-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px 18px; }
+.form-field { min-width: 0; }
+.form-field.full { grid-column: 1/-1; }
+.form-field label { font-weight: 620; font-size: 14px; line-height: 1.35; display: block; margin-bottom: 6px; }
+.form-field label span { font-weight: 420; font-size: .92em; color: #55675a; }
+.form-field input,.form-field select,.form-field textarea,.manual-copy { color: var(--ink); border: 1px solid #a9b9a8; border-radius: 8px; background-color: #fff; width: 100%; padding: 10px 11px; min-height: 43px; font-size: 16px; display: block; line-height: 1.4; }
+.form-field select { padding-right: 26px; }
+.form-field textarea,.manual-copy { resize: vertical; min-height: 76px; }
+.form-field textarea::placeholder { color: #66756b; opacity: 1; font-size: 14px; }
+.form-field :is(input,textarea):focus-visible { border-color: #447548; }
+.form-field input:user-invalid { border-color: #a44a3a; }
+.form-submit { width: 100%; margin-top: 20px; }
+.form-note { margin-top: 8px; color: #506256; font-size: 12.5px; line-height: 1.5; }
+.form-note:empty { display: none; }
+.request-review>p:first-of-type { color: var(--body); font-size: 15px; }
+.request-review h3 { margin-bottom: 7px; }
+.review-fields { margin-block: 18px 22px; border-top: 1px solid #c5d4c3; }
+.review-fields>div { display: grid; grid-template-columns: minmax(90px,.55fr) minmax(0,1fr); gap: 12px; border-bottom: 1px solid #d4ded1; padding-block: 8px; font-size: 14px; }
+.review-fields dt { color: var(--muted); }
+.review-fields dd { font-weight: 550; overflow-wrap: anywhere; white-space: pre-wrap; }
+.review-actions { display: flex; gap: 9px; flex-wrap: wrap; }
+.review-actions .btn { min-height: 42px; font-size: 14px; }
+.edit-request { border: 0; padding: 5px 0; margin-top: 13px; color: var(--pine); background: transparent; text-decoration: underline; text-underline-offset: 4px; font-size: 14px; font-weight: 590; }
+.manual-copy { margin-top: 9px; }
+[hidden] { display: none !important; }
+/* GHL: kod stoji u kontejneru ogranicene sirine - trake idu od ivice do ivice */
+.site-header,#sadrzaj>section,.footer{width:calc(100vw - var(--sb,0px));max-width:none;
   margin-left:calc(50% - 50vw + var(--sb,0px) / 2);margin-right:calc(50% - 50vw + var(--sb,0px) / 2)}
 html{overflow-x:hidden}
-html body{line-height:1.6 !important;font-weight:400 !important}
+/* GHL na body stavlja line-height i font-weight "unset !important" */
+html body{line-height:1.55 !important;font-weight:400 !important}
 
-h1,h2,h3{font-weight:500;letter-spacing:-.025em;line-height:1.1;text-wrap:balance;color:var(--green)}
-h1{font-size:clamp(2.3rem,5.4vw,3.6rem)}
-h2{font-size:clamp(1.6rem,3.6vw,2.15rem);line-height:1.18}
-h3{font-size:clamp(1.1rem,1.9vw,1.3rem);line-height:1.25}
-p,li,dd,summary{text-wrap:pretty}
-p{color:var(--ink)}
-.nb{white-space:nowrap}
-:focus-visible{outline:3px solid rgba(0,77,58,.35);outline-offset:3px}
 
-.on-dark{color:var(--cream)}
-.on-dark h1,.on-dark h2,.on-dark h3{color:var(--cream)}
-.on-dark p{color:rgba(236,237,229,.8)}
-.on-dark :focus-visible{outline-color:rgba(225,242,94,.9)}
-.hl{background-image:linear-gradient(transparent 58%, rgba(225,242,94,.45) 58%);padding:0 .08em}
-.on-dark .hl{background-image:none;color:var(--lime)}
+.footer { background: #073527; color: #dae7d7; }
+.footer-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 26px; padding-block: 16px; }
+.footer-inner>a img { width: 122px; height: auto; }
+.footer-links { display: flex; align-items: center; gap: 26px; font-size: 13px; font-weight: 450; }
+.footer-links a { display: inline-flex; align-items: center; gap: 4px; padding-block: 3px; }
+.footer-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.footer .diagonal-arrow { transform: scale(.75); }
 
-.rv{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
-.rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
-@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(117,163,77,0)}100%{box-shadow:0 0 0 0 rgba(117,163,77,0)}}
-
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--green);margin-bottom:16px}
-.eyebrow::before{content:"";width:18px;height:2px;background:var(--lime)}
-.on-dark .eyebrow{color:var(--lime)}
-
-/* ============================================================
-   DUGMAD - isto kao optin-2
-   ============================================================ */
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:14px;
-  background:linear-gradient(145deg,#f2ff8c 0%,var(--lime) 44%,#cde14c 100%);
-  color:var(--green);font-family:var(--font);font-weight:700;letter-spacing:-.01em;
-  font-size:clamp(.95rem,1.5vw,1.08rem);padding:17px 22px 17px 30px;border-radius:999px;
-  text-decoration:none;border:0;cursor:pointer;overflow:hidden;
-  box-shadow:0 4px 0 0 #a7bd3d, 0 16px 30px rgba(0,24,18,.26);
-  transition:transform .16s cubic-bezier(.22,1,.36,1),box-shadow .16s ease}
-.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(255,255,255,.6) 50%,transparent 68%);
-  transform:translateX(-120%);transition:transform .6s ease}
-.btn:hover{transform:translateY(2px);box-shadow:0 2px 0 0 #a7bd3d,0 10px 20px rgba(0,24,18,.3)}
-.btn:active{transform:translateY(4px);box-shadow:0 0 0 0 #a7bd3d,0 6px 14px rgba(0,24,18,.28)}
-.btn:hover::after{transform:translateX(120%)}
-.btn .arw{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;
-  border-radius:50%;background:rgba(0,77,58,.14);font-size:1rem;line-height:1;
-  transition:transform .22s cubic-bezier(.22,1,.36,1),background .22s ease}
-.btn:hover .arw{transform:translateX(4px);background:rgba(0,77,58,.22)}
-.btn-wide{width:100%}
-/* sekundarno: zelena kontura, puni se na hover */
-.btn-line{display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  font-family:var(--font);font-weight:700;font-size:.95rem;color:var(--green);text-decoration:none;
-  background:transparent;border:1.5px solid var(--green);border-radius:999px;padding:13px 20px;cursor:pointer;
-  transition:background .18s ease,color .18s ease,transform .18s ease}
-.btn-line:hover{background:var(--green);color:var(--lime);transform:translateY(-1px)}
-.btn-line .arw{transition:transform .22s cubic-bezier(.22,1,.36,1)}
-.btn-line:hover .arw{transform:translateX(4px)}
-.btn-sm{display:inline-flex;align-items:center;background:var(--green);color:var(--lime);font-family:var(--font);font-weight:700;
-  font-size:.85rem;padding:11px 19px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;white-space:nowrap;
-  transition:transform .15s ease,background .15s ease}
-.btn-sm:hover{transform:translateY(-1px);background:#0a5f49}
-
-/* ============================================================
-   ZAGLAVLJE
-   ============================================================ */
-.site-head{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line)}
-.head-in{display:flex;align-items:center;gap:36px;min-height:72px}
-.brand{margin-right:auto;display:inline-flex;padding-block:6px}
-.brand img{width:140px;height:auto}
-.main-nav{display:flex;gap:28px;font-size:.92rem;font-weight:500}
-.main-nav a{text-decoration:none;color:var(--ink);padding:8px 0;transition:color .15s ease}
-.main-nav a:hover{color:var(--green)}
-.head-actions{display:flex;align-items:center;gap:10px}
-.menu-toggle{display:none}
-
-/* ============================================================
-   HERO
-   ============================================================ */
-.hero{position:relative;overflow:hidden;background:var(--green)}
-.hero::before{content:"";position:absolute;inset:0;
-  background-image:linear-gradient(rgba(236,237,229,.055) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(236,237,229,.055) 1px,transparent 1px);
-  background-size:68px 44px;mask-image:radial-gradient(ellipse 90% 75% at 60% 30%,#000 20%,transparent 78%)}
-.hero::after{content:"";position:absolute;width:620px;height:620px;right:-160px;top:-220px;border-radius:50%;
-  background:radial-gradient(circle,rgba(225,242,94,.16),transparent 62%);pointer-events:none}
-.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,60px);align-items:center;
-  padding-block:clamp(54px,7vw,96px)}
-.hero h1{margin:0 0 20px}
-.hero-line{display:block}
-.hero-intro{font-size:clamp(1rem,1.4vw,1.1rem);max-width:500px}
-.hero-actions{margin-top:30px}
-
-/* ULAZNICA u herou - Jankova karta (dve odstampane ulaznice jedna preko druge).
-   Slova su HTML, pa ostaju ostra na svakoj sirini; papir je tekstura iz img/. */
-.ticket-stage{--grain:url("https://floumate-dev.github.io/excel-grasic/kompanije/img/grain.png");--wave:url("https://floumate-dev.github.io/excel-grasic/kompanije/img/wave.webp");
-  width:100%;max-width:600px;aspect-ratio:1.64;position:relative;container-type:inline-size;isolation:isolate;justify-self:center}
-.ticket-cast{position:absolute;inset:37% 7% 1% 0;background:radial-gradient(ellipse,rgba(0,20,12,.48),transparent 68%);transform:rotate(-9deg);filter:blur(9px)}
-.ticket-layer{position:absolute;width:83%;height:68%}
-.ticket-layer.rear{left:14.2%;top:17.3%;transform:rotate(11deg);filter:drop-shadow(0 12px 10px rgba(0,20,11,.28))}
-.ticket-layer.front{left:4.1%;top:14%;transform:rotate(-8deg);filter:drop-shadow(0 17px 15px rgba(0,25,13,.34)) drop-shadow(0 2px 1px rgba(0,17,8,.35))}
-.ticket-paper{width:100%;height:100%;position:relative;overflow:hidden;isolation:isolate;border-radius:2.35cqw;
-  -webkit-mask-image:radial-gradient(circle at 78.5% 0%,transparent 0 1.22cqw,#000 1.4cqw),radial-gradient(circle at 78.5% 100%,transparent 0 1.22cqw,#000 1.4cqw),radial-gradient(circle at 0 50%,transparent 0 1.45cqw,#000 1.60cqw),radial-gradient(circle at 100% 50%,transparent 0 1.45cqw,#000 1.60cqw);
-  -webkit-mask-composite:source-in;
-  mask-image:radial-gradient(circle at 78.5% 0%,transparent 0 1.22cqw,#000 1.4cqw),radial-gradient(circle at 78.5% 100%,transparent 0 1.22cqw,#000 1.4cqw),radial-gradient(circle at 0 50%,transparent 0 1.45cqw,#000 1.60cqw),radial-gradient(circle at 100% 50%,transparent 0 1.45cqw,#000 1.60cqw);
-  mask-composite:intersect}
-.ticket-paper::after{content:"";position:absolute;inset:0;background:var(--grain);pointer-events:none;opacity:.46;z-index:2}
-.front-paper{color:#153e28;background:linear-gradient(117deg,#e3f1bd 0%,#d5eaa8 39%,#bed896 76%,#ccdfa5 100%);box-shadow:inset 0 1px 0 #f2ffd0,inset 0 -1px 0 #9bb780}
-.back-paper{background:linear-gradient(116deg,#54855f,#4f885f 35%,#2a694e 85%);box-shadow:inset 0 0 0 1.5px #8aab79}
-.back-rules{position:absolute;inset:5% 3%;border:1px solid rgba(211,237,173,.55);outline:1px solid rgba(211,237,173,.23);outline-offset:-4px;border-radius:1.6cqw}
-.rear-waves{position:absolute;inset:-20% -13%;background:var(--wave) center / 108% 120% no-repeat;filter:invert(1);opacity:.8;transform:rotate(-7deg)}
-.ticket-perforation{position:absolute;top:4%;bottom:4%;left:78.5%;width:1px;background:repeating-linear-gradient(to bottom,rgba(35,79,40,.68) 0 4px,transparent 4px 9px)}
-.back-paper .ticket-perforation{background:repeating-linear-gradient(to bottom,rgba(208,231,171,.65) 0 4px,transparent 4px 9px)}
-.back-stub{position:absolute;top:17%;right:4.6%;width:11%;height:65%;background:repeating-linear-gradient(0deg,rgba(207,235,181,.75) 0 1px,transparent 1px 4px,rgba(207,235,181,.7) 4px 6px,transparent 6px 9px)}
-.front-waves{position:absolute;inset:13% -6% -29% 4%;background:var(--wave) center / 120% 112% no-repeat;opacity:.54;transform:rotate(-11deg)}
-.ticket-brand{position:absolute;width:28.5%;left:46%;top:49%;transform:translateY(-50%);display:grid;justify-items:center;gap:1.35cqw;mix-blend-mode:multiply}
-.ticket-brand-symbol{width:92%;height:auto;opacity:.94}
-.ticket-wordmark{width:100%;height:auto}
-.ticket-content{position:absolute;inset:0 21.5% 0 0}
-.ticket-name{position:absolute;top:49%;left:5.15cqw;transform:translateY(-50%);font-size:9cqw;font-weight:690;letter-spacing:-.081em;line-height:.94}
-.ticket-caption{position:absolute;left:5.15cqw;bottom:3.85cqw;font:650 1.45cqw/1.1 var(--font);text-transform:uppercase;letter-spacing:.15em}
-.ticket-stub{position:absolute;inset:0 0 0 78.5%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5.3cqw 0 4.1cqw;background:linear-gradient(90deg,rgba(92,130,66,.07),rgba(229,242,191,.12))}
-.stub-value{writing-mode:vertical-rl;font-size:5.7cqw;line-height:1;letter-spacing:-.061em;font-weight:655}
-.barcode{display:block;height:6cqw;width:9.8cqw;background:repeating-linear-gradient(90deg,#22472e 0 .32cqw,transparent .32cqw .66cqw,#22472e .66cqw .86cqw,transparent .86cqw 1.24cqw,#22472e 1.24cqw 1.83cqw,transparent 1.83cqw 2.15cqw,#22472e 2.15cqw 2.35cqw,transparent 2.35cqw 2.86cqw)}
-
-/* ============================================================
-   KOMPANIJE (traka sa logoima)
-   ============================================================ */
-.proof{background:var(--white);border-bottom:1px solid var(--line)}
-.proof-in{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:clamp(24px,4vw,56px);padding-block:26px}
-.proof-lead{display:flex;align-items:center;gap:12px;padding-right:clamp(22px,3.4vw,48px);border-right:1px solid var(--line)}
-.proof-lead strong{font-size:clamp(1.9rem,2.8vw,2.4rem);font-weight:600;color:var(--green);letter-spacing:-.04em;line-height:1}
-.proof-prefix,.proof-detail{font-size:.8rem;line-height:1.35;color:var(--ink-2)}
-.proof-count{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}
-/* beskonacna traka logoa: dve iste liste jedna za drugom, traka klizi za
-   sirinu jedne liste pa krece ispocetka bez skoka */
-.logo-marquee{min-width:0;overflow:hidden;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
-.logo-track{display:flex;width:max-content;animation:logoTraka 48s linear infinite}
-.logo-marquee:hover .logo-track{animation-play-state:paused}
-@keyframes logoTraka{to{transform:translateX(-50%)}}
-.client-logos{list-style:none;display:flex;align-items:center;gap:56px;padding-right:56px}
-.client-logos li{flex:none;display:flex;align-items:center}
-.client-logos img{display:block;width:auto;max-width:none;object-fit:contain}
-@media (prefers-reduced-motion:reduce){
-  .logo-track{animation:none;width:auto;flex-wrap:wrap}
-  .logo-track ul[aria-hidden]{display:none}
-  .client-logos{flex-wrap:wrap;justify-content:center;gap:22px 36px;padding-right:0}
+@media (min-width:1550px) {
+  .hero-inner { padding-block: 90px; }
 }
-
-/* ============================================================
-   PREDNOSTI (cream traka)
-   ============================================================ */
-.benefits{background:var(--cream)}
-.benefits-in{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,72px);align-items:center}
-.ben{list-style:none;display:grid;gap:14px;margin-top:28px}
-.ben-item{display:flex;gap:15px;background:var(--white);border-radius:14px;padding:20px 22px;border-left:3px solid var(--lime);
-  transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s ease}
-.ben-item:hover{transform:translateX(4px);box-shadow:0 14px 34px rgba(0,77,58,.08)}
-.ben-check{flex:0 0 28px;height:28px;border-radius:9px;background:var(--lime);display:grid;place-items:center;margin-top:1px}
-.ben-check svg{width:15px;height:15px;stroke:var(--green);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.ben-item h3{font-size:1.05rem;font-weight:600;letter-spacing:-.015em;line-height:1.35}
-.ben-item p{font-size:.95rem;margin-top:5px}
-
-.tool-panel{container-type:inline-size;min-width:0;background:var(--white);border-radius:20px;padding:clamp(18px,2.4vw,28px);
-  box-shadow:0 24px 54px rgba(0,77,58,.1)}
-.tool-panel h3{margin-bottom:16px}
-.tool-grid{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.tool-grid li{min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 12px;
-  background:var(--mint);border-radius:12px;text-align:center;font-size:.8rem;font-weight:600;color:var(--green);line-height:1.25;
-  transition:transform .2s cubic-bezier(.22,1,.36,1),background .2s ease}
-.tool-grid li:hover{transform:translateY(-3px);background:#d5e2df}
-.tool-grid img{width:40px;height:40px;object-fit:contain;padding:3px}
-.tool-grid img.office-mark{padding:0}
-.tool-grid li>span{max-width:100%;overflow-wrap:normal;hyphens:none}
-@container (max-width:355px){
-  .tool-grid li{gap:6px;padding:11px 1px 10px;font-size:.66rem;letter-spacing:-.01em}
-  .tool-grid img{width:34px;height:34px}
+@media (max-width: 1150px) {
+  .wrap { width: min(100% - 72px,1192px); }
+  .header-inner { gap: 27px; }
+  .hero-inner { grid-template-columns: minmax(0,1.02fr) minmax(0,1fr); }
+  .section-heading>p { max-width: 270px; }
+  .proof-inner { gap: 26px; }
+  .proof-lead { padding-right: 25px; }
+  .plan { padding: 23px 20px; }
+  .workflow-inner { gap: 54px; }
 }
-
-/* ============================================================
-   PAKETI
-   ============================================================ */
-.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:36px;margin-bottom:clamp(28px,3.6vw,44px)}
-.sec-head h2{max-width:620px}
-.sec-head>p{max-width:340px;color:var(--ink-2);font-size:1rem}
-.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.plan{--metal:#a38264;--metal-light:#f4ded1;--metal-mid:#cead92;--metal-dark:#986f55;
-  position:relative;display:flex;flex-direction:column;background:var(--white);border:1px solid var(--line);border-radius:var(--r);
-  padding:clamp(22px,2.4vw,30px);overflow:hidden;
-  transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease,border-color .2s ease}
-.plan::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--metal-mid),var(--metal))}
-.plan:hover{transform:translateY(-4px);border-color:var(--leaf);box-shadow:0 18px 44px rgba(0,77,58,.12)}
-.plan.silver{--metal:#839891;--metal-light:#e7eeea;--metal-mid:#b6c5c1;--metal-dark:#718b81}
-.plan.gold{--metal:#ad8c31;--metal-light:#f5e7ae;--metal-mid:#d9c671;--metal-dark:#a49447}
-.plan-heading{display:flex;align-items:center;gap:13px}
-.plan-heading h3{font-size:clamp(1.25rem,1.9vw,1.45rem);font-weight:600}
-.mini-ticket{position:relative;width:40px;height:28px;transform:rotate(-10deg);filter:drop-shadow(0 1px 1px #0002);display:block;flex:none}
-.mini-ticket::before{content:"";position:absolute;inset:0;border:1px solid var(--metal);border-radius:5px;
-  background:repeating-linear-gradient(153deg,transparent 0 3px,color-mix(in srgb,var(--metal-dark) 37%,transparent) 3.5px 4px,transparent 4.4px 6px),linear-gradient(140deg,var(--metal-mid),var(--metal-light) 52%,var(--metal-mid));
-  -webkit-mask:radial-gradient(circle at 0 50%,transparent 2.7px,#000 3.3px),radial-gradient(circle at 100% 50%,transparent 2.7px,#000 3.3px);
-  -webkit-mask-composite:source-in;mask:radial-gradient(circle at 0 50%,transparent 2.7px,#000 3.3px),radial-gradient(circle at 100% 50%,transparent 2.7px,#000 3.3px);mask-composite:intersect}
-.mini-ticket::after{content:"";position:absolute;inset:4px 10px 4px auto;border-left:1px dashed var(--metal-dark)}
-.budget-label{margin-top:26px;font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
-.budget-total{margin-top:4px;display:flex;gap:8px;align-items:baseline;font-size:clamp(2.2rem,3.4vw,2.9rem);font-weight:600;
-  color:var(--green);letter-spacing:-.045em;line-height:1.05;font-variant-numeric:lining-nums}
-.budget-total span{font-size:1rem;letter-spacing:0;font-weight:600}
-.budget-total span small{font-size:.78em;font-weight:500;color:var(--ink-2)}
-.plan dl{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
-.plan dl div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.9rem}
-.plan dl div+div{margin-top:8px}
-.plan dt{color:var(--ink-2)}
-.plan dd{font-weight:600;text-align:right;white-space:nowrap;color:var(--ink)}
-.plan .extra{color:var(--leaf)}
-.plan .plan-value{margin-top:12px;padding:11px 13px;background:var(--mint);border-radius:10px}
-.plan-value dt{color:var(--green);font-weight:600}
-.plan-value dd{color:var(--green);font-size:1.08em}
-.plan-cta{margin-top:24px;width:100%;justify-content:space-between}
-.plan-help{margin-top:24px;color:var(--ink-2);font-size:.95rem}
-.plan-help a{white-space:nowrap;color:var(--green);font-weight:600;margin-left:3px;text-decoration:underline;text-decoration-color:var(--lime);
-  text-decoration-thickness:2px;text-underline-offset:4px}
-
-/* ============================================================
-   KAKO FUNKCIONISE (cream traka)
-   ============================================================ */
-.workflow{background:var(--cream)}
-.workflow-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,7vw,110px);align-items:center}
-.workflow-intro>p{margin-top:16px;font-size:1.02rem;max-width:520px}
-.steps{list-style:none;counter-reset:korak;display:grid;gap:0}
-.steps li{position:relative;display:grid;grid-template-columns:40px 1fr;gap:18px;counter-increment:korak;padding:18px 0}
-.steps li::before{content:counter(korak);position:relative;z-index:1;width:40px;height:40px;border-radius:12px;
-  background:linear-gradient(145deg,#f2ff8c,var(--lime) 58%,#cde14c);color:var(--green);font-weight:700;font-size:1.05rem;
-  display:grid;place-items:center;font-variant-numeric:tabular-nums;
-  box-shadow:0 0 0 4px rgba(225,242,94,.25),0 6px 14px rgba(0,77,58,.14)}
-/* linija koja spaja korake */
-.steps li:not(:last-child)::after{content:"";position:absolute;left:19px;top:62px;bottom:-22px;width:2px;background:rgba(0,77,58,.14)}
-.step-copy{background:var(--white);border-radius:14px;padding:18px 20px}
-.step-copy h3{font-size:1.1rem;font-weight:600}
-.step-copy p{margin-top:6px;font-size:.95rem}
-
-/* ============================================================
-   PITANJA + OSNIVAC
-   ============================================================ */
-.answers{background:var(--white)}
-.answer-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(36px,6vw,90px);align-items:center}
-.founder{position:relative;z-index:0;max-width:400px}
-.founder::after{content:"";position:absolute;inset:0;border:1.5px solid rgba(0,77,58,.22);border-radius:24px;
-  transform:translate(14px,14px);z-index:-1;pointer-events:none}
-.founder-card{background:var(--white);border-radius:24px;overflow:hidden;box-shadow:0 24px 54px rgba(0,77,58,.12)}
-.bio-stage{position:relative;overflow:hidden;aspect-ratio:1/.86;
-  background:radial-gradient(ellipse 62% 48% at 50% 24%,rgba(225,242,94,.16),transparent 70%),var(--green)}
-.bio-stage::before{content:"";position:absolute;inset:0;z-index:1;
-  background-image:linear-gradient(rgba(236,237,229,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(236,237,229,.06) 1px,transparent 1px);
-  background-size:52px 34px;mask-image:radial-gradient(ellipse 85% 70% at 50% 20%,#000 25%,transparent 80%)}
-.bio-bars{position:absolute;left:0;bottom:0;width:100%;height:82%;z-index:2}
-.bio-plane{position:absolute;right:7%;top:10%;width:17%;z-index:3;
-  filter:drop-shadow(0 10px 22px rgba(0,16,12,.35));animation:planeFloat 5.5s ease-in-out infinite}
-@keyframes planeFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-9px) rotate(-3deg)}}
-@media (prefers-reduced-motion:reduce){.bio-plane{animation:none}}
-.bio-man{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:94%;width:auto;max-width:none;z-index:4}
-.founder-info{padding:20px 24px 24px}
-.founder-role{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
-.founder-name{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
-.founder-name h3{font-size:1.4rem;font-weight:600}
-.mvp-badge{flex:none;height:30px;width:auto}
-.founder-info>p:last-child{margin-top:10px;font-size:.92rem}
-
-.faq-col h2{margin-bottom:22px}
-.questions{display:grid;gap:10px}
-.questions details{background:var(--white);border:1px solid var(--line);border-radius:14px;transition:border-color .2s ease,background .2s ease}
-.questions details[open]{border-color:var(--leaf);background:#fbfcf7}
-.questions summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:18px 20px;font-size:clamp(1rem,1.4vw,1.08rem);font-weight:600;color:var(--green);line-height:1.4}
-.questions summary::-webkit-details-marker{display:none}
-.questions summary::after{content:"";flex:none;width:28px;height:28px;border-radius:50%;
-  background:linear-gradient(var(--green),var(--green)) center/10px 2px no-repeat,linear-gradient(var(--green),var(--green)) center/2px 10px no-repeat,var(--mint);
-  transition:transform .2s ease}
-.questions details[open] summary::after{background:linear-gradient(var(--green),var(--green)) center/10px 2px no-repeat,var(--lime);transform:rotate(180deg)}
-.answer{padding:0 20px 18px;font-size:.95rem}
-.answer p{color:var(--ink)}
-
-/* ============================================================
-   PRIJAVA (zelena traka)
-   ============================================================ */
-.contact{position:relative;overflow:hidden;background:var(--green)}
-.contact::before{content:"";position:absolute;inset:0;
-  background-image:linear-gradient(rgba(236,237,229,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(236,237,229,.05) 1px,transparent 1px);
-  background-size:68px 44px;mask-image:radial-gradient(ellipse 85% 80% at 30% 50%,#000 10%,transparent 76%)}
-.contact:focus{outline:0}
-.contact-in{position:relative;z-index:2;display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,6vw,90px);align-items:start}
-.contact-copy{padding-top:clamp(4px,2vw,28px)}
-.contact-copy h2{font-size:clamp(2rem,4.2vw,2.9rem);line-height:1.08}
-.contact-copy>p{margin-top:18px;max-width:420px;font-size:1.02rem}
-.direct{display:grid;justify-items:start;gap:4px;margin-top:clamp(24px,3vw,40px);padding-top:20px;border-top:1px solid rgba(236,237,229,.16)}
-.direct>span{font-size:.82rem;color:rgba(236,237,229,.6)}
-.direct a{display:inline-flex;align-items:center;gap:8px;color:var(--lime);font-weight:600;font-size:1.05rem;text-decoration:none}
-.direct a:hover{text-decoration:underline;text-underline-offset:4px}
-
-.form-card{min-width:0;border-radius:22px;padding:clamp(24px,3vw,36px);color:var(--ink);
-  background:var(--white) linear-gradient(90deg,var(--lime),var(--leaf)) top left/100% 4px no-repeat;
-  box-shadow:0 44px 96px rgba(0,16,12,.4)}
-.form-card h3,.on-dark .form-card h3{margin-bottom:18px;color:var(--green)}
-.on-dark .form-card p{color:var(--ink-2)}
-.form-fields{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
-.fld{margin-bottom:14px;min-width:0}
-.fld.full-row{grid-column:1/-1}
-.fld>label{display:block;font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin-bottom:7px}
-.fld>label span{text-transform:none;letter-spacing:0;font-weight:500;color:#9aa49f}
-.fld input,.fld select,.fld textarea,.manual-copy{width:100%;background:var(--white);border:1px solid var(--line);border-radius:12px;
-  padding:14px 15px;color:var(--ink);font-family:var(--font);font-size:.97rem;line-height:1.4;
-  transition:border-color .15s ease,box-shadow .15s ease}
-.fld select{-webkit-appearance:none;appearance:none;cursor:pointer;color:var(--green);font-weight:600;background-color:var(--cream);padding-right:38px;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004d3a' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;background-size:14px}
-.fld textarea,.manual-copy{resize:vertical;min-height:92px}
-.fld input::placeholder,.fld textarea::placeholder{color:#a8b2ae}
-.fld :is(input,select,textarea):focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(0,77,58,.1)}
-.fld input:user-invalid{border-color:#c9533f;background:rgba(201,83,63,.04)}
-.form-submit{margin-top:6px}
-.form-note{margin-top:10px;color:var(--ink-2);font-size:.82rem;line-height:1.5}
-.form-note:empty{display:none}
-
-.request-review>p:first-of-type{color:var(--ink-2);font-size:.95rem}
-.request-review h3{margin-bottom:8px}
-.review-fields{margin:18px 0 22px;border-top:1px solid var(--line)}
-.review-fields>div{display:grid;grid-template-columns:minmax(90px,.55fr) minmax(0,1fr);gap:12px;border-bottom:1px solid var(--line);padding-block:9px;font-size:.9rem}
-.review-fields dt{color:var(--ink-2)}
-.review-fields dd{font-weight:600;color:var(--green);overflow-wrap:anywhere;white-space:pre-wrap}
-.review-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.edit-request{border:0;padding:5px 0;margin-top:14px;color:var(--green);background:transparent;cursor:pointer;
-  text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:2px;text-underline-offset:4px;font-size:.9rem;font-weight:600}
-.manual-copy{margin-top:10px}
-[hidden]{display:none !important}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-footer{background:var(--deep);padding:30px 0}
-.foot-in{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.foot-in>a img{height:24px;width:auto}
-.foot-links{display:flex;align-items:center;gap:24px;font-size:.82rem}
-.foot-links a{color:rgba(236,237,229,.7);text-decoration:none;transition:color .15s ease}
-.foot-links a:hover{color:var(--lime)}
-.foot-copy{margin-top:18px;padding-top:16px;border-top:1px solid rgba(236,237,229,.1);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.foot-copy p{font-size:.76rem;color:rgba(236,237,229,.45)}
-.foot-copy a{color:rgba(236,237,229,.6);font-weight:600;text-decoration:none}
-.foot-copy a:hover{color:var(--lime)}
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width:980px){
-  .hero-in{grid-template-columns:1fr;gap:20px;padding-block:48px 40px}
-  .ticket-stage{width:min(94%,460px);aspect-ratio:1.69}
-  .benefits-in,.workflow-in,.answer-grid,.contact-in{grid-template-columns:1fr}
-  .tool-panel{max-width:600px}
-  .plans{grid-template-columns:1fr;max-width:560px}
-  .founder{max-width:520px}
-  .faq-col{order:-1}
-  .proof-in{grid-template-columns:1fr;gap:16px}
-  .proof-lead{border-right:0;padding-right:0;justify-content:center}
+@media (max-width: 900px) {
+  .wrap { width: calc(100% - 48px); }
+  .main-nav { gap: 18px; }
+  .header-inner { gap: 21px; min-height: 67px; }
+  .brand-dark { width: 131px; }
+  .hero-inner { gap: 10px; padding-block: 54px 62px; }
+  .hero h1 { font-size: clamp(46px,5.9vw,54px); }
+  .hero-intro { font-size: 16px; }
+  .hero-actions { gap: 18px; }
+  .hero-actions .btn { padding-inline: 16px; }
+  .proof-inner { gap: 20px; min-height: 101px; }
+  .proof-lead { flex-direction: column; align-items: flex-start; gap: 3px; padding-right: 21px; }
+  .proof-prefix,.proof-detail { font-size: 11.5px; }
+  .proof-detail br { display: none; }
+  .proof-detail { max-width: 151px; }
+  .plans { gap: 12px; }
+  .plan { padding: 19px 15px; }
+  .plan-heading { gap: 9px; }.mini-ticket { width: 34px; height: 24px; }
+  .plan dl div { font-size: 12.8px; }.plan-heading h3 { font-size: 22px; }
+  .section-heading { gap: 24px; }.section-heading>p { max-width: 251px; font-size: 15px; }
+  .workflow-inner { gap: 33px; }.steps li { gap: 14px; grid-template-columns: 36px minmax(0,1fr); }
+  .steps li::before { width: 36px; height: 36px; }.steps li:not(:last-child)::after { left: 17px; top: 36px; }.steps li+li:not(:last-child)::after { top: 62px; }
+  .step-copy h3 { font-size: 20px; }
+  .answer-grid { gap: 40px; grid-template-columns: minmax(0,.77fr) minmax(0,1.23fr); }
+  .founder-art img { width: 66%; }.founder-info { padding: 17px; }
+  .footer-links { gap: 18px; }
+  .benefits-inner { gap: 22px; grid-template-columns: minmax(0,1fr) minmax(302px,.93fr); }
+  .tool-panel { padding: 16px 12px; }
+  .contact-inner { grid-template-columns: minmax(0,.7fr) minmax(0,1.3fr); gap: 23px; }
+  .plan .plan-value { flex-wrap: wrap; padding: 8px; }
 }
-@media (max-width:720px){
-  .main-nav{position:absolute;inset:100% 0 auto;display:none;flex-direction:column;gap:0;background:var(--white);
-    border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(0,77,58,.08);padding:6px 20px 12px}
-  .main-nav[data-open]{display:flex}
-  .main-nav a{padding:12px 2px;font-size:1rem}
-  .main-nav a+a{border-top:1px solid var(--line)}
-  .head-in{min-height:62px;gap:12px}
-  .brand img{width:118px}
-  .btn-sm{font-size:.78rem;padding:9px 14px}
-  .menu-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:38px;height:38px;
-    border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--green);cursor:pointer;padding:0}
-  .menu-toggle span{width:15px;height:1.5px;background:currentColor;transition:transform .16s ease}
-  .menu-toggle[aria-expanded="true"] span:first-child{transform:translateY(3.25px) rotate(45deg)}
-  .menu-toggle[aria-expanded="true"] span:last-child{transform:translateY(-3.25px) rotate(-45deg)}
-  .sec-head{display:block}
-  .sec-head>p{margin-top:12px;max-width:none}
-  .client-logos{gap:36px;padding-right:36px}
-  .client-logos img{zoom:.82}
-  .form-fields{grid-template-columns:1fr}
-  .foot-in{flex-direction:column;align-items:flex-start}
-  .foot-links{flex-direction:column;align-items:flex-start;gap:8px}
+@media (max-width: 720px) {
+  html { scroll-padding-top: 72px; }
+  .wrap { width: calc(100% - 40px); }
+  .section-space { padding-block: 55px; }
+  .header-inner { min-height: 62px; gap: 9px; }
+  .header-actions { gap: 10px; }.header-cta { min-height: 36px; font-size: 12.5px; padding: 8px 11px; gap: 7px; }
+  .brand-dark { width: clamp(100px,26vw,132px); }
+  .menu-toggle { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 37px; height: 38px; border: 1px solid #bfccbd; border-radius: 8px; background: transparent; color: var(--pine); padding: 0; }
+  .menu-toggle span { width: 15px; height: 1.5px; background: currentColor; transition: transform .16s; }
+  .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+  .main-nav { position: absolute; inset: 100% 0 auto; display: none; background: #f5f5ec; border-block: 1px solid #d3dfd0; box-shadow: 0 9px 16px #153e2415; flex-direction: column; gap: 0; align-items: stretch; padding: 6px 20px 10px; }
+  .main-nav[data-open] { display: flex; }
+  .main-nav a { padding: 11px 3px; font-size: 15px; }.main-nav a+a { border-top: 1px solid #dbe3d8; }
+  .hero-inner { grid-template-columns: 1fr; row-gap: 24px; padding-block: 44px 12px; }
+  .hero-copy { max-width: 535px; }
+  .hero h1 { font-size: clamp(39px,10.8vw,66px); margin-block: 0 17px; }
+  .hero-intro { max-width: 490px; line-height: 1.56; }
+  .hero-actions { margin-top: 22px; gap: 23px; }
+  .hero-actions .btn { min-height: 45px; padding-inline: 17px; }
+  .hero-grid { mask-image: linear-gradient(150deg,transparent 18%,rgba(0,0,0,.15) 45%,#000 95%); background-size: 38px 38px; }
+  .ticket-stage { width: min(94%,435px); aspect-ratio: 1.69; }
+  .proof-inner { display: block; padding-block: 19px 22px; min-height: 0; }
+  .proof-lead { display: flex; flex-direction: row; align-items: center; gap: 7px; padding: 0; border: 0; }
+  .proof-count { gap: 6px; }
+  .proof-lead strong { font-size: 25px; }.proof-prefix,.proof-detail { font-size: 12px; max-width: none; }
+  .logo-marquee { margin-top: 14px; }
+  .client-logos { gap: 36px; padding-right: 36px; }
+  .client-logos img { zoom: .82; }
+  .section-heading { display: block; }.section-heading>p { max-width: 500px; margin-top: 14px; }
+  .plans { grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr)); gap: 13px; margin-top: 23px; }
+  .plan { padding: 23px; }.plan-heading h3 { font-size: 25px; }.plan-heading { gap: 13px; }.mini-ticket { width: 41px; height: 28px; }
+  .budget-label { margin-top: 17px; }.budget-total { font-size: 44px; }
+  .plan dl { margin-top: 16px; padding-top: 12px; }.plan dl div { font-size: 14px; }.plan-cta { margin-top: 18px; }
+  .workflow-inner { grid-template-columns: 1fr; gap: 29px; }
+  .workflow-intro>p { margin-top: 14px; }
+  .steps li { gap: 16px; }.steps li+li { padding-top: 22px; }
+  .steps li:not(:last-child)::after { bottom: -23px; }.steps li+li:not(:last-child)::after { top: 58px; }
+  .answer-grid { grid-template-columns: 1fr; gap: 31px; }
+  .faq-column { grid-row: 1; }.faq-column h2 { margin-bottom: 19px; }
+  .founder-card { max-width: none; display: grid; grid-template-columns: minmax(95px,.5fr) minmax(0,1.5fr); }
+  .founder-art { height: 100%; min-height: 155px; }.founder-art img { top: auto; bottom: 0; height: 92%; width: auto; max-width: none; }
+  .founder-info { align-self: center; padding: 14px 17px; }.founder-info h3 { font-size: 22px; }.founder-info p:last-child { font-size: 13px; margin-top: 5px; }
+  .benefits-inner,.contact-inner { grid-template-columns: 1fr; gap: 27px; }
+  .tool-panel { justify-self: center; width: min(100%,560px); padding: clamp(13px,3.4vw,23px); }
+  .benefit-list { margin-top: 21px; }
+  .benefit-list li+li { margin-top: 16px; }
+  .contact-inner { padding-block: 46px; }
+  .contact-copy { padding-top: 0; }
+  .contact-copy h2,.contact-copy>p { max-width: 540px; }
+  .direct-contact { margin-top: 17px; }
+  .form-card { padding: 22px; }
 }
-@media (max-width:480px){
-  .hero-actions .btn{width:100%}
-  .tool-grid{gap:6px}
-  .steps li{grid-template-columns:34px 1fr;gap:12px}
-  .steps li::before{width:34px;height:34px;border-radius:10px}
-  .steps li:not(:last-child)::after{left:16px;top:56px}
-  .step-copy{padding:15px 16px}
-  .form-card{padding:24px 18px}
-  .proof-lead{flex-wrap:wrap}
+@media (min-width:580px) and (max-width:720px) {
+  .plans { grid-template-columns: 1fr; }
+  .plan { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
+  .plan-heading { grid-row: 1 / 3; align-self: center; }.budget-label,.budget-total { grid-column: 2; margin-top: 0; }
+  .plan dl { grid-column: 1; }.plan-cta { grid-column: 2; align-self: end; }
 }
-/* iPhone uvecava stranicu kad se dodirne polje manje od 16px */
-@media (hover:none) and (pointer:coarse){
-  .fld input,.fld select,.fld textarea,.manual-copy{font-size:16px}
+@media (max-width: 480px) {
+  .wrap { width: calc(100% - 36px); }
+  h2 { font-size: 34px; }.overline { margin-bottom: 11px; }
+  .hero-inner { row-gap: 19px; }
+  .hero-actions { gap: 18px; }.text-link { font-size: 13.8px; }
+  .proof-lead { justify-content: center; }
+  .plans { grid-template-columns: 1fr; }
+  .form-fields { grid-template-columns: 1fr; gap: 14px; }
+  .form-card { padding: 20px 17px; }
+  .tool-panel h3 { margin-bottom: 13px; }
+  .questions summary { font-size: 17px; }.answer { padding-right: 8px; }
+  .founder-card { grid-template-columns: 29% 71%; }
+  .footer-inner,.footer-links { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .footer-inner { padding-block: 22px; }.footer-links { gap: 6px; }
+}
+@media (max-width: 355px) {
+  .wrap { width: calc(100% - 28px); }
+  .founder-info { padding-inline: 12px; }
+  .founder-name { gap: 6px; }
+  .founder-name h3 { font-size: 20px; }
+  .tool-panel { width: calc(100% + 12px); padding-inline: 8px; }
+  .tool-grid li { padding-inline: 0; }
+  .header-actions { gap: 6px; }.header-cta { white-space: nowrap; padding-inline: 10px; }
+  .hero-actions { gap: 13px; }.hero-actions .btn { padding-inline: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; } *,*::before,*::after { transition: none !important; }
+}
+@media print {
+  @page { size: A4; margin: 13mm; }
+  html { scroll-padding: 0; }body { background: white; font-size: 10pt; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wrap { width: 100%; }.site-header { position: static; }.header-inner { min-height: 14mm; }
+  .header-actions,.main-nav,.hero-actions,.plan-cta,.contact .btn,.footer-links a:first-child { display: none !important; }
+  .hero-inner { grid-template-columns: 1.1fr 1fr; gap: 15px; padding: 9mm 6mm; }
+  .hero h1 { font-size: 34pt; }.hero-intro { font-size: 10pt; }
+  .proof-inner { min-height: auto; padding: 4mm 2mm; }.proof-lead strong { font-size: 18pt; }
+  .section-space { padding-block: 8mm; }h2 { font-size: 24pt; }.plans { display: grid; grid-template-columns: repeat(3,1fr); gap: 3mm; margin-top: 4mm; }
+  .plan { padding: 4mm; }.plan-heading h3 { font-size: 13pt; }.plan-heading { gap: 6px; }.mini-ticket { width: 22px; height: 16px; }
+  .budget-total { font-size: 22pt; }.plan dl div { font-size: 8pt; }.section-heading>p { font-size: 9pt; }
+  .workflow-inner,.answer-grid { gap: 6mm; }.workflow-intro>p,.step-copy p,.answer { font-size: 9pt; }.step-copy h3 { font-size: 12pt; }
+  .workflow,.plan,.founder-card,.questions details,.contact-inner { break-inside: avoid; }.faq-column { grid-row: auto; }
+  .questions summary::after { display: none; }.questions details::details-content { content-visibility: visible; }
+  .contact-inner { padding: 7mm; grid-template-columns: 1fr; }.contact p { font-size: 10pt; }
+  .contact .form-card,.plan-help { display: none; }
+  .benefits-inner { gap: 5mm; }
+  .tool-panel { padding: 3mm; break-inside: avoid; }.tool-panel h3 { font-size: 14pt; margin-bottom: 3mm; }
+  .tool-grid li { padding: 2mm 0; gap: 1mm; font-size: 7.5pt; }.tool-grid img { width: 9mm; height: 9mm; }
+  .benefit-list p { font-size: 9pt; }
+  .footer-inner { padding-inline: 6mm; min-height: 16mm; }
 }
 </style>
 </head>
 <body>
-<script>
-/* 100vw ukljucuje i scrollbar; --sb je njegova sirina, da trake budu tacno od ivice do ivice */
-(function(){
-  function sb(){ document.documentElement.style.setProperty('--sb', Math.max(0, window.innerWidth - document.documentElement.clientWidth) + 'px'); }
-  document.addEventListener('DOMContentLoaded', sb); window.addEventListener('load', sb); window.addEventListener('resize', sb);
-})();
-</script>
-
-<div id="vrh"></div>
-<header class="site-head full">
-  <div class="wrap head-in">
-    <a class="brand" href="#vrh" aria-label="Outliers, na početak stranice">
-      <img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outliers-logo-dark.webp" width="253" height="61" alt="Outliers">
-    </a>
-    <nav id="navigacija" class="main-nav" aria-label="Glavna navigacija">
-      <a href="#paketi">Paketi</a>
-      <a href="#kako-funkcionise">Kako funkcioniše</a>
-      <a href="#pitanja">FAQ</a>
-    </nav>
-    <div class="head-actions">
-      <a class="btn-sm" href="#prijava">Zatražite ponudu</a>
-      <button id="menu-toggle" class="menu-toggle" type="button" aria-controls="navigacija" aria-expanded="false" aria-label="Otvorite meni"><span></span><span></span></button>
-    </div>
-  </div>
-</header>
-
-<main id="sadrzaj">
-
-<!-- ============ HERO ============ -->
-<section class="hero on-dark full" aria-labelledby="hero-title">
-  <div class="wrap hero-in">
-    <div class="hero-copy">
-      <h1 id="hero-title"><span class="hero-line">Niste iskoristili</span> <span class="hero-line"><span class="hl">godišnji budžet</span></span> <span class="hero-line">za edukacije?</span></h1>
-      <p class="hero-intro">Uplatite sada, ostvarite 20% bonus na vrednost edukacije i iskoristite je u narednih 6 meseci, kad god vama odgovara!</p>
-      <div class="hero-actions">
-        <a class="btn" href="#paketi"><span>Pogledajte ponudu</span><span class="arw" aria-hidden="true">→</span></a>
+  <script>
+  /* 100vw ukljucuje i scrollbar; --sb je njegova sirina, da trake budu tacno od ivice do ivice */
+  (function(){
+    function sb(){ document.documentElement.style.setProperty('--sb', Math.max(0, window.innerWidth - document.documentElement.clientWidth) + 'px'); }
+    document.addEventListener('DOMContentLoaded', sb); window.addEventListener('load', sb); window.addEventListener('resize', sb);
+  })();
+  </script>
+  <a class="skip-link" href="#sadrzaj">Pređite na sadržaj</a>
+  <div id="vrh"></div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand-home" href="#vrh" aria-label="Outliers, na početak stranice">
+        <img class="brand-dark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outliers-logo-dark.webp" width="254" height="61" alt="Outliers">
+      </a>
+      <nav id="navigacija" class="main-nav" aria-label="Glavna navigacija">
+        <a href="#paketi">Paketi</a>
+        <a href="#kako-funkcionise">Kako funkcioniše</a>
+        <a href="#pitanja">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-dark header-cta" href="#prijava">Zatražite ponudu</a>
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-controls="navigacija" aria-expanded="false" aria-label="Otvorite meni"><span></span><span></span></button>
       </div>
     </div>
-    <div class="ticket-stage" role="img" aria-label="Outliers Yearly Ticket za kompanije">
-      <div class="ticket-cast"></div>
-      <div class="ticket-layer rear">
-        <div class="ticket-paper back-paper">
-          <div class="rear-waves"></div>
-          <div class="back-rules"></div>
-          <div class="ticket-perforation"></div>
-          <div class="back-stub"></div>
-        </div>
-      </div>
-      <div class="ticket-layer front">
-        <div class="ticket-paper front-paper">
-          <div class="front-waves"></div>
-          <div class="ticket-brand">
-            <img class="ticket-brand-symbol" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/ticket-brand-symbol.webp" width="379" height="300" alt="">
-            <img class="ticket-wordmark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/ticket-wordmark.webp" width="663" height="97" alt="OUTLIERS">
-          </div>
-          <div class="ticket-content">
-            <div class="ticket-name">Yearly<br>Ticket</div>
-            <div class="ticket-caption">Edukacije za kompanije</div>
-          </div>
-          <div class="ticket-perforation"></div>
-          <div class="ticket-stub">
-            <span class="stub-value">+20%</span>
-            <span class="barcode"></span>
+  </header>
+
+  <main id="sadrzaj">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <h1 id="hero-title"><span class="hero-line">Niste iskoristili</span> <span class="hero-line"><em>godišnji budžet</em></span> <span class="hero-line">za edukacije?</span></h1>
+          <p class="hero-intro">Uplatite sada, ostvarite 20% bonus na vrednost edukacije i iskoristite je u narednih 6 meseci, kad god vama odgovara!</p>
+          <div class="hero-actions">
+            <a class="btn btn-bright" href="#paketi">Pogledajte ponudu</a>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ KOMPANIJE ============ -->
-<section class="proof full" aria-label="Kompanije sa kojima smo sarađivali">
-  <div class="wrap proof-in">
-    <p class="proof-lead"><span class="proof-count"><span class="proof-prefix">Samo<br> neke od</span> <strong>500+</strong></span> <span class="proof-detail">kompanija sa kojima<br> smo sarađivali</span></p>
-    <div class="logo-marquee">
-      <div class="logo-track">
-        <ul class="client-logos" aria-label="Neke od tih kompanija">
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/microsoft.png" alt="Microsoft" width="120" height="26" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/banca-intesa.png" alt="Banca Intesa" width="153" height="20" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/dm.png" alt="dm" width="69" height="45" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/coca-cola-hbc.png" alt="Coca-Cola HBC" width="100" height="31" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/ikea.png" alt="IKEA" width="88" height="35" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/a1.png" alt="A1" width="44" height="46" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nis.png" alt="NIS" width="102" height="30" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/blackrock.png" alt="BlackRock" width="138" height="22" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/philip-morris.png" alt="Philip Morris International" width="57" height="46" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/procredit.png" alt="ProCredit Bank" width="125" height="25" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/continental.png" alt="Continental" width="131" height="24" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nelt.png" alt="Nelt" width="110" height="28" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/alumil.png" alt="Alumil" width="101" height="31" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/mokrogorska.png" alt="Mokrogorska" width="79" height="39" loading="lazy" decoding="async"></li>
-        </ul>
-        <ul class="client-logos" aria-hidden="true">
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/microsoft.png" alt="" width="120" height="26" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/banca-intesa.png" alt="" width="153" height="20" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/dm.png" alt="" width="69" height="45" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/coca-cola-hbc.png" alt="" width="100" height="31" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/ikea.png" alt="" width="88" height="35" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/a1.png" alt="" width="44" height="46" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nis.png" alt="" width="102" height="30" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/blackrock.png" alt="" width="138" height="22" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/philip-morris.png" alt="" width="57" height="46" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/procredit.png" alt="" width="125" height="25" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/continental.png" alt="" width="131" height="24" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nelt.png" alt="" width="110" height="28" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/alumil.png" alt="" width="101" height="31" loading="lazy" decoding="async"></li>
-          <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/mokrogorska.png" alt="" width="79" height="39" loading="lazy" decoding="async"></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PREDNOSTI ============ -->
-<section class="sec benefits full" id="prednosti" aria-labelledby="benefits-title">
-  <div class="wrap benefits-in">
-    <div class="rv">
-      <h2 id="benefits-title">Budžet odobrite sada, a obuke birajte kad zatrebaju</h2>
-      <ul class="ben">
-        <li class="ben-item"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <div><h3>Uplatite jednom, koristite za različite obuke više puta</h3>
-          <p>Kada se pojavi potreba za obukom, već imate sredstva iz kojih možete da je pokrijete.</p></div></li>
-        <li class="ben-item"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <div><h3>Broj učesnika i koga ćete uključiti odlučite neposredno pre obuke</h3>
-          <p>Pri kupovini ne morate da znate tačan broj učesnika. Možete da uključite i kolege koje tek dolaze u tim.</p></div></li>
-        <li class="ben-item"><span class="ben-check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span>
-          <div><h3>Različiti timovi mogu da dele paket</h3>
-          <p>Finansije mogu prve da krenu na radionicu iz Excela, a prodaja na Power BI kada dođe vreme za sledeći kvartalni izveštaj.</p></div></li>
-      </ul>
-    </div>
-    <div class="tool-panel rv">
-      <h3 id="tools-title">Pokrivamo edukacije iz:</h3>
-      <ul class="tool-grid" role="list" aria-labelledby="tools-title">
-        <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/excel.svg" alt="" width="46" height="46"><span>Excel</span></li>
-        <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/word.svg" alt="" width="46" height="46"><span>Word</span></li>
-        <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/powerpoint.svg" alt="" width="46" height="46"><span>PowerPoint</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/power-bi.svg" alt="" width="46" height="46"><span>Power BI</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/chatgpt.svg" alt="" width="46" height="46"><span>ChatGPT</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/claude.svg" alt="" width="46" height="46"><span>Claude</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/gemini.svg" alt="" width="46" height="46"><span>Gemini</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/copilot.svg" alt="" width="46" height="46"><span>Copilot</span></li>
-        <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outlook.svg" alt="" width="46" height="46"><span>Outlook</span></li>
-        <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/teams.svg" alt="" width="46" height="46"><span>Teams</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/canva-ai.svg" alt="" width="46" height="46"><span>Canva AI</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/perplexity.svg" alt="" width="46" height="46"><span>Perplexity</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/power-query.svg" alt="" width="46" height="46"><span>Power Query</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/notebooklm.svg" alt="" width="46" height="46"><span>NotebookLM</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/gamma.svg" alt="" width="46" height="46"><span>Gamma</span></li>
-        <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/copilot-studio.svg" alt="" width="46" height="46"><span>Copilot Studio</span></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PAKETI ============ -->
-<section class="sec pricing full" id="paketi" aria-labelledby="pricing-title">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div>
-        <span class="eyebrow">Paketi</span>
-        <h2 id="pricing-title">Koliko želite da izdvojite za obuke?</h2>
-      </div>
-      <p>Svaki paket uvećavamo za 20%. Izaberite iznos koji odgovara vašem planu edukacija.</p>
-    </div>
-    <div class="plans">
-      <article class="plan bronze rv" aria-labelledby="paket-bronze">
-        <div class="plan-heading"><span class="mini-ticket" aria-hidden="true"></span><h3 id="paket-bronze">Bronze Ticket</h3></div>
-        <p class="budget-label">Vaša uplata</p>
-        <p class="budget-total">3.000 <span>EUR <small>+ PDV</small></span></p>
-        <dl><div><dt>Dodatnih 20%</dt><dd class="extra">+600 EUR</dd></div>
-          <div class="plan-value"><dt>Budžet za edukacije</dt><dd>3.600 EUR</dd></div></dl>
-        <a class="btn-line plan-cta" href="#prijava" data-plan="Bronze" aria-label="Izaberite Bronze Ticket"><span>Izaberite Bronze Ticket</span><span class="arw" aria-hidden="true">→</span></a>
-      </article>
-      <article class="plan silver rv" aria-labelledby="paket-silver">
-        <div class="plan-heading"><span class="mini-ticket" aria-hidden="true"></span><h3 id="paket-silver">Silver Ticket</h3></div>
-        <p class="budget-label">Vaša uplata</p>
-        <p class="budget-total">5.000 <span>EUR <small>+ PDV</small></span></p>
-        <dl><div><dt>Dodatnih 20%</dt><dd class="extra">+1.000 EUR</dd></div>
-          <div class="plan-value"><dt>Budžet za edukacije</dt><dd>6.000 EUR</dd></div></dl>
-        <a class="btn-line plan-cta" href="#prijava" data-plan="Silver" aria-label="Izaberite Silver Ticket"><span>Izaberite Silver Ticket</span><span class="arw" aria-hidden="true">→</span></a>
-      </article>
-      <article class="plan gold rv" aria-labelledby="paket-gold">
-        <div class="plan-heading"><span class="mini-ticket" aria-hidden="true"></span><h3 id="paket-gold">Gold Ticket</h3></div>
-        <p class="budget-label">Vaša uplata</p>
-        <p class="budget-total">10.000 <span>EUR <small>+ PDV</small></span></p>
-        <dl><div><dt>Dodatnih 20%</dt><dd class="extra">+2.000 EUR</dd></div>
-          <div class="plan-value"><dt>Budžet za edukacije</dt><dd>12.000 EUR</dd></div></dl>
-        <a class="btn-line plan-cta" href="#prijava" data-plan="Gold" aria-label="Izaberite Gold Ticket"><span>Izaberite Gold Ticket</span><span class="arw" aria-hidden="true">→</span></a>
-      </article>
-    </div>
-    <p class="plan-help">Treba vam pomoć pri izboru? <a href="#prijava" data-plan="">Posavetujte se sa nama</a></p>
-  </div>
-</section>
-
-<!-- ============ KAKO FUNKCIONISE ============ -->
-<section class="sec workflow full" id="kako-funkcionise" aria-labelledby="how-title">
-  <div class="wrap workflow-in">
-    <div class="workflow-intro rv">
-      <span class="eyebrow">Kako funkcioniše</span>
-      <h2 id="how-title">Čitav proces je jednostavan i sastoji se od tri laka koraka.</h2>
-      <p>Ako niste sigurni koji paket da odaberete, kontaktirajte nas, naš tim će vam pomoći. Posle toga, poslaćemo vam fakturu za odabrani paket i dogovoriti teme, broj polaznika i termine.</p>
-    </div>
-    <ol class="steps rv">
-      <li><div class="step-copy"><h3>Pošaljete upit za paket</h3>
-        <p>U prijavi označite Bronze, Silver ili Gold. Ako još procenjujete budžet, možete zatražiti preporuku.</p></div></li>
-      <li><div class="step-copy"><h3>Uplatite i aktivirate Ticket</h3>
-        <p>Šaljemo vam fakturu za odabrani paket. Od aktivacije imate šest meseci da iskoristite budžet uvećan za 20%.</p></div></li>
-      <li><div class="step-copy"><h3>Dogovorimo obuke i termine</h3>
-        <p>U tih šest meseci održavamo <span class="nb">in-house</span> i hibridne obuke. Za online kurseve dovoljno je da ih u tom roku dodelite polaznicima.</p></div></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ============ PITANJA ============ -->
-<section class="sec answers full" id="pitanja" aria-labelledby="faq-title">
-  <div class="wrap answer-grid">
-    <aside class="founder rv" aria-labelledby="founder-title">
-      <div class="founder-card">
-        <div class="bio-stage" aria-hidden="true">
-          <svg class="bio-bars" viewBox="0 0 200 150" preserveAspectRatio="none">
-            <rect x="7"   y="92" width="26" height="58"  rx="4" fill="rgba(236,237,229,.14)"/>
-            <rect x="39"  y="74" width="26" height="76"  rx="4" fill="rgba(236,237,229,.17)"/>
-            <rect x="71"  y="52" width="26" height="98"  rx="4" fill="rgba(236,237,229,.2)"/>
-            <rect x="103" y="62" width="26" height="88"  rx="4" fill="rgba(236,237,229,.17)"/>
-            <rect x="135" y="32" width="26" height="118" rx="4" fill="rgba(236,237,229,.22)"/>
-            <rect x="167" y="14" width="26" height="136" rx="4" fill="rgba(225,242,94,.26)"/>
-            <polyline points="20,92 52,74 84,52 116,62 148,32 180,14" fill="none"
-                      stroke="rgba(225,242,94,.55)" stroke-width="2" vector-effect="non-scaling-stroke"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <svg class="bio-plane" viewBox="0 0 100 100">
-            <path d="M97 6 3 45l37 13z"   fill="#e1f25e"/>
-            <path d="M97 6 40 58l7 36z"   fill="#c6da4d"/>
-            <path d="M40 58l7 36 17-19z"  fill="#a3b83c"/>
-          </svg>
-          <img class="bio-man" src="https://excelgrasic.com/wp-content/uploads/2023/11/aleksandar-grasic-o-predavacu.png" alt="" loading="lazy">
-        </div>
-        <div class="founder-info">
-          <p class="founder-role">Osnivač kompanije Outliers</p>
-          <div class="founder-name">
-            <h3 id="founder-title">Aleksandar Grašić</h3>
-            <img class="mvp-badge" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft-mvp.png" alt="Microsoft MVP" width="258" height="106">
+        <div class="ticket-stage" role="img" aria-label="Outliers Yearly Ticket za kompanije">
+          <div class="ticket-cast"></div>
+          <div class="ticket-layer rear">
+            <div class="ticket-paper back-paper">
+              <div class="rear-waves"></div>
+              <div class="back-rules"></div>
+              <div class="ticket-perforation"></div>
+              <div class="back-stub"></div>
+            </div>
           </div>
-          <p>Microsoft MVP šest godina zaredom. Sa svojim timom vodi edukacije iz Excela, <span class="nb">Power BI-ja</span> i primene AI alata u poslovanju.</p>
+          <div class="ticket-layer front">
+            <div class="ticket-paper front-paper">
+              <div class="front-waves"></div>
+              <div class="ticket-brand">
+                <img class="ticket-brand-symbol" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/ticket-brand-symbol.webp" width="379" height="300" alt="">
+                <img class="ticket-wordmark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/ticket-wordmark.webp" width="663" height="97" alt="OUTLIERS">
+              </div>
+              <div class="ticket-content">
+                <div class="ticket-name">Yearly<br>Ticket</div>
+                <div class="ticket-caption">Edukacije za kompanije</div>
+              </div>
+              <div class="ticket-perforation"></div>
+              <div class="ticket-stub">
+                <span class="stub-value">+20%</span>
+                <span class="barcode"></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </aside>
-    <div class="faq-col rv">
-      <span class="eyebrow">FAQ</span>
-      <h2 id="faq-title">Česta pitanja</h2>
-      <div class="questions">
-        <details open>
-          <summary>Koliko dugo polaznici imaju pristup online kursu?</summary>
-          <div class="answer"><p>Od dana kada im dodelite kurs, polaznici imaju pun period pristupa predviđen za taj kurs. Potrebno je samo da dodelu obavite u prvih šest meseci od aktivacije paketa.</p></div>
-        </details>
-        <details>
-          <summary>Koliko zaposlenih moramo da prijavimo pri kupovini?</summary>
-          <div class="answer"><p>Tačan broj određujete naknadno. Budžet možete da rasporedite na više timova i sektora i da uključite kolege prema tome koja im je obuka potrebna.</p></div>
-        </details>
-        <details>
-          <summary>Na koji iznos se dodaje 20%?</summary>
-          <div class="answer"><p>Dodatni budžet računamo na osnovicu bez <span class="nb">PDV-a.</span> Ako uplatite 3.000 EUR + PDV za Bronze Ticket, za edukacije vam je na raspolaganju 3.600 EUR.</p></div>
-        </details>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ============ PRIJAVA ============ -->
-<section class="sec contact on-dark full" id="prijava" tabindex="-1" aria-labelledby="contact-title">
-  <div class="wrap contact-in">
-    <div class="contact-copy rv">
-      <span class="eyebrow">Yearly Ticket</span>
-      <h2 id="contact-title">Prijavite se za Yearly Ticket.</h2>
-      <p>Izaberite paket koji razmatrate ili nam napišite kakve obuke planirate ako vam treba preporuka.</p>
-      <div class="direct">
-        <span>Možete nam pisati i direktno</span>
-        <a href="mailto:office@excelgrasic.com">office@excelgrasic.com <span aria-hidden="true">↗</span></a>
-      </div>
-    </div>
-    <div class="form-card">
-      <form id="ticket-form" action="mailto:office@excelgrasic.com" method="post" enctype="text/plain" aria-labelledby="form-title">
-        <h3 id="form-title">Podaci za ponudu</h3>
-        <div class="form-fields">
-          <div class="fld"><label for="contact-name">Ime i prezime</label>
-            <input id="contact-name" name="Ime i prezime" autocomplete="name" maxlength="100" required pattern=".*\S.*" title="Unesite ime i prezime."></div>
-          <div class="fld"><label for="contact-company">Naziv kompanije</label>
-            <input id="contact-company" name="Kompanija" autocomplete="organization" maxlength="150" required pattern=".*\S.*" title="Unesite naziv kompanije."></div>
-          <div class="fld"><label for="contact-email">Poslovni imejl</label>
-            <input id="contact-email" name="Imejl" type="email" autocomplete="email" maxlength="200" required></div>
-          <div class="fld"><label for="contact-phone">Telefon <span>(opciono)</span></label>
-            <input id="contact-phone" name="Telefon" type="tel" autocomplete="tel" maxlength="40"></div>
-          <div class="fld full-row"><label for="contact-package">Koji paket vas zanima?</label>
-            <select id="contact-package" name="Paket">
-              <option value="" selected>Potrebna nam je preporuka</option>
-              <option value="Bronze">Bronze Ticket · 3.000 EUR + PDV</option>
-              <option value="Silver">Silver Ticket · 5.000 EUR + PDV</option>
-              <option value="Gold">Gold Ticket · 10.000 EUR + PDV</option>
-            </select></div>
-          <div class="fld full-row"><label for="contact-message">Šta biste želeli da vaš tim savlada? <span>(opciono)</span></label>
-            <textarea id="contact-message" name="Potrebe tima" rows="3" maxlength="1500" placeholder="Na primer, želimo da ubrzamo izradu mesečnih izveštaja u Excelu."></textarea></div>
+    <section class="proof-strip" aria-label="Kompanije sa kojima smo sarađivali">
+      <div class="wrap proof-inner">
+        <p class="proof-lead"><span class="proof-count"><span class="proof-prefix">Samo<br> neke od</span> <strong>500+</strong></span> <span class="proof-detail">kompanija sa kojima<br> smo sarađivali</span></p>
+        <div class="logo-marquee">
+          <div class="logo-track">
+            <ul class="client-logos" aria-label="Neke od tih kompanija">
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/microsoft.png" alt="Microsoft" width="120" height="26" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/banca-intesa.png" alt="Banca Intesa" width="153" height="20" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/dm.png" alt="dm" width="69" height="45" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/coca-cola-hbc.png" alt="Coca-Cola HBC" width="100" height="31" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/ikea.png" alt="IKEA" width="88" height="35" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/a1.png" alt="A1" width="44" height="46" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nis.png" alt="NIS" width="102" height="30" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/blackrock.png" alt="BlackRock" width="138" height="22" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/philip-morris.png" alt="Philip Morris International" width="57" height="46" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/procredit.png" alt="ProCredit Bank" width="125" height="25" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/continental.png" alt="Continental" width="131" height="24" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nelt.png" alt="Nelt" width="110" height="28" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/alumil.png" alt="Alumil" width="101" height="31" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/mokrogorska.png" alt="Mokrogorska" width="79" height="39" loading="lazy" decoding="async"></li>
+            </ul>
+            <ul class="client-logos" aria-hidden="true">
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/microsoft.png" alt="" width="120" height="26" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/banca-intesa.png" alt="" width="153" height="20" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/dm.png" alt="" width="69" height="45" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/coca-cola-hbc.png" alt="" width="100" height="31" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/ikea.png" alt="" width="88" height="35" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/a1.png" alt="" width="44" height="46" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nis.png" alt="" width="102" height="30" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/blackrock.png" alt="" width="138" height="22" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/philip-morris.png" alt="" width="57" height="46" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/procredit.png" alt="" width="125" height="25" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/continental.png" alt="" width="131" height="24" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/nelt.png" alt="" width="110" height="28" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/alumil.png" alt="" width="101" height="31" loading="lazy" decoding="async"></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/klijenti/mokrogorska.png" alt="" width="79" height="39" loading="lazy" decoding="async"></li>
+            </ul>
+          </div>
         </div>
-        <button class="btn btn-wide form-submit" type="submit"><span>Pripremite prijavu</span><span class="arw" aria-hidden="true">→</span></button>
-        <noscript><p class="form-note">Za slanje se otvara vaša imejl aplikacija.</p></noscript>
-      </form>
-      <div id="request-review" class="request-review" hidden>
-        <h3 id="review-title" tabindex="-1">Pregled vaše prijave</h3>
-        <p>Proverite podatke i otvorite pripremljen imejl. Prijavu šaljete iz svoje imejl aplikacije.</p>
-        <dl id="review-fields" class="review-fields"></dl>
-        <div class="review-actions">
-          <a href="mailto:office@excelgrasic.com" id="send-email" class="btn"><span>Otvorite imejl</span><span class="arw" aria-hidden="true">↗</span></a>
-          <button type="button" class="btn-line" id="copy-request">Kopirajte prijavu</button>
-        </div>
-        <p class="form-note">Primalac je office@excelgrasic.com.</p>
-        <p class="form-note" role="status" id="copy-status"></p>
-        <textarea id="manual-copy" class="manual-copy" rows="6" aria-label="Prijava za ručno kopiranje" readonly hidden></textarea>
-        <button type="button" id="edit-request" class="edit-request">Izmenite podatke</button>
       </div>
-    </div>
-  </div>
-</section>
-</main>
+    </section>
 
-<footer class="full">
-  <div class="wrap">
-    <div class="foot-in">
-      <a href="#vrh" aria-label="Outliers, na početak stranice"><img src="https://excelgrasic.com/wp-content/uploads/2023/11/outliers-logo-white.png" alt="Outliers (Excel Grašić)"></a>
-      <div class="foot-links">
-        <a href="https://excelgrasic.com/za-kompanije/" target="_blank" rel="noopener noreferrer">Excel Grašić za kompanije ↗</a>
+    <section class="benefits section-space" id="prednosti" aria-labelledby="benefits-title">
+      <div class="wrap benefits-inner">
+        <div class="benefit-copy">
+          <h2 id="benefits-title">Budžet odobrite sada, a obuke birajte kad zatrebaju</h2>
+          <ul class="benefit-list">
+            <li><h3>Uplatite jednom, koristite za različite obuke više puta</h3>
+              <p>Kada se pojavi potreba za obukom, već imate sredstva iz kojih možete da je pokrijete.</p></li>
+            <li><h3>Broj učesnika i koga ćete uključiti odlučite neposredno pre obuke</h3>
+              <p>Pri kupovini ne morate da znate tačan broj učesnika. Možete da uključite i kolege koje tek dolaze u tim.</p></li>
+            <li><h3>Različiti timovi mogu da dele paket</h3>
+              <p>Finansije mogu prve da krenu na radionicu iz Excela, a prodaja na Power BI kada dođe vreme za sledeći kvartalni izveštaj.</p></li>
+          </ul>
+        </div>
+        <div class="tool-panel">
+          <h3 id="tools-title">Pokrivamo edukacije iz:</h3>
+          <ul class="tool-grid" role="list" aria-labelledby="tools-title">
+            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/excel.svg" alt="" width="46" height="46"><span>Excel</span></li>
+            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/word.svg" alt="" width="46" height="46"><span>Word</span></li>
+            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/powerpoint.svg" alt="" width="46" height="46"><span>PowerPoint</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/power-bi.svg" alt="" width="46" height="46"><span>Power BI</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/chatgpt.svg" alt="" width="46" height="46"><span>ChatGPT</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/claude.svg" alt="" width="46" height="46"><span>Claude</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/gemini.svg" alt="" width="46" height="46"><span>Gemini</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/copilot.svg" alt="" width="46" height="46"><span>Copilot</span></li>
+            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outlook.svg" alt="" width="46" height="46"><span>Outlook</span></li>
+            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/teams.svg" alt="" width="46" height="46"><span>Teams</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/canva-ai.svg" alt="" width="46" height="46"><span>Canva AI</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/perplexity.svg" alt="" width="46" height="46"><span>Perplexity</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/power-query.svg" alt="" width="46" height="46"><span>Power Query</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/notebooklm.svg" alt="" width="46" height="46"><span>NotebookLM</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/gamma.svg" alt="" width="46" height="46"><span>Gamma</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/copilot-studio.svg" alt="" width="46" height="46"><span>Copilot Studio</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing section-space" id="paketi" aria-labelledby="pricing-title">
+      <div class="wrap">
+        <div class="section-heading pricing-heading">
+          <div>
+            <h2 id="pricing-title">Koliko želite da izdvojite za obuke?</h2>
+          </div>
+          <p>Svaki paket uvećavamo za 20%. Izaberite iznos koji odgovara vašem planu edukacija.</p>
+        </div>
+        <div class="plans">
+          <article class="plan bronze" aria-labelledby="paket-bronze">
+            <div class="plan-heading"><span class="mini-ticket" aria-hidden="true"></span><h3 id="paket-bronze">Bronze Ticket</h3></div>
+            <p class="budget-label">Vaša uplata</p>
+            <p class="budget-total">3.000 <span>EUR <small>+ PDV</small></span></p>
+            <dl><div><dt>Dodatnih 20%</dt><dd class="extra">+600 EUR</dd></div>
+              <div class="plan-value"><dt>Budžet za edukacije</dt><dd>3.600 EUR</dd></div></dl>
+            <a class="btn btn-dark plan-cta" href="#prijava" data-plan="Bronze" aria-label="Izaberite Bronze Ticket">Izaberite Bronze Ticket</a>
+          </article>
+          <article class="plan silver" aria-labelledby="paket-silver">
+            <div class="plan-heading"><span class="mini-ticket" aria-hidden="true"></span><h3 id="paket-silver">Silver Ticket</h3></div>
+            <p class="budget-label">Vaša uplata</p>
+            <p class="budget-total">5.000 <span>EUR <small>+ PDV</small></span></p>
+            <dl><div><dt>Dodatnih 20%</dt><dd class="extra">+1.000 EUR</dd></div>
+              <div class="plan-value"><dt>Budžet za edukacije</dt><dd>6.000 EUR</dd></div></dl>
+            <a class="btn btn-dark plan-cta" href="#prijava" data-plan="Silver" aria-label="Izaberite Silver Ticket">Izaberite Silver Ticket</a>
+          </article>
+          <article class="plan gold" aria-labelledby="paket-gold">
+            <div class="plan-heading"><span class="mini-ticket" aria-hidden="true"></span><h3 id="paket-gold">Gold Ticket</h3></div>
+            <p class="budget-label">Vaša uplata</p>
+            <p class="budget-total">10.000 <span>EUR <small>+ PDV</small></span></p>
+            <dl><div><dt>Dodatnih 20%</dt><dd class="extra">+2.000 EUR</dd></div>
+              <div class="plan-value"><dt>Budžet za edukacije</dt><dd>12.000 EUR</dd></div></dl>
+            <a class="btn btn-dark plan-cta" href="#prijava" data-plan="Gold" aria-label="Izaberite Gold Ticket">Izaberite Gold Ticket</a>
+          </article>
+        </div>
+        <p class="plan-help">Treba vam pomoć pri izboru? <a href="#prijava" data-plan="">Posavetujte se sa nama</a></p>
+      </div>
+    </section>
+
+    <section class="workflow section-space" id="kako-funkcionise" aria-labelledby="how-title">
+      <div class="wrap workflow-inner">
+        <div class="workflow-intro">
+          <h2 id="how-title">Čitav proces je jednostavan i sastoji se od tri laka koraka.</h2>
+          <p>Ako niste sigurni koji paket da odaberete, kontaktirajte nas, naš tim će vam pomoći. Posle toga, poslaćemo vam fakturu za odabrani paket i dogovoriti teme, broj polaznika i termine.</p>
+        </div>
+        <ol class="steps">
+          <li><div class="step-copy"><h3>Pošaljete upit za paket</h3>
+            <p>U prijavi označite Bronze, Silver ili Gold. Ako još procenjujete budžet, možete zatražiti preporuku.</p></div></li>
+          <li><div class="step-copy"><h3>Uplatite i aktivirate Ticket</h3>
+            <p>Šaljemo vam fakturu za odabrani paket. Od aktivacije imate šest meseci da iskoristite budžet uvećan za 20%.</p></div></li>
+          <li><div class="step-copy"><h3>Dogovorimo obuke i termine</h3>
+            <p>U tih šest meseci održavamo in-house i hibridne obuke. Za online kurseve dovoljno je da ih u tom roku dodelite polaznicima.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="answers section-space" id="pitanja" aria-labelledby="faq-title">
+      <div class="wrap answer-grid">
+        <aside class="founder-card" aria-labelledby="founder-title">
+          <div class="founder-art" aria-hidden="true">
+            <img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/aleksandar.webp" alt="" width="490" height="570" loading="lazy">
+          </div>
+          <div class="founder-info">
+            <p class="founder-role">Osnivač kompanije Outliers</p>
+            <div class="founder-name">
+              <h3 id="founder-title">Aleksandar Grašić</h3>
+              <img class="mvp-badge" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft-mvp.png" alt="Microsoft MVP" width="258" height="106">
+            </div>
+            <p>Microsoft MVP šest godina zaredom. Sa svojim timom vodi edukacije iz Excela, Power BI-ja i primene AI alata u poslovanju.</p>
+          </div>
+        </aside>
+        <div class="faq-column">
+          <h2 id="faq-title">Česta pitanja</h2>
+          <div class="questions">
+            <details open>
+              <summary>Koliko dugo polaznici imaju pristup online kursu?</summary>
+              <div class="answer"><p>Od dana kada im dodelite kurs, polaznici imaju pun period pristupa predviđen za taj kurs. Potrebno je samo da dodelu obavite u prvih šest meseci od aktivacije paketa.</p></div>
+            </details>
+            <details>
+              <summary>Koliko zaposlenih moramo da prijavimo pri kupovini?</summary>
+              <div class="answer"><p>Tačan broj određujete naknadno. Budžet možete da rasporedite na više timova i sektora i da uključite kolege prema tome koja im je obuka potrebna.</p></div>
+            </details>
+            <details>
+              <summary>Na koji iznos se dodaje 20%?</summary>
+              <div class="answer"><p>Dodatni budžet računamo na osnovicu bez PDV-a. Ako uplatite 3.000 EUR + PDV za Bronze Ticket, za edukacije vam je na raspolaganju 3.600 EUR.</p></div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="prijava" tabindex="-1" aria-labelledby="contact-title">
+      <div class="contact-grid" aria-hidden="true"></div>
+      <div class="wrap contact-inner">
+        <div class="contact-copy">
+          <h2 id="contact-title">Prijavite se za Yearly Ticket.</h2>
+          <p>Izaberite paket koji razmatrate ili nam napišite kakve obuke planirate ako vam treba preporuka.</p>
+          <div class="direct-contact">
+            <span>Možete nam pisati i direktno</span>
+            <a href="mailto:office@excelgrasic.com">office@excelgrasic.com <span class="diagonal-arrow" aria-hidden="true"></span></a>
+          </div>
+        </div>
+        <div class="form-card">
+          <form id="ticket-form" action="mailto:office@excelgrasic.com" method="post" enctype="text/plain" aria-labelledby="form-title">
+            <h3 id="form-title">Podaci za ponudu</h3>
+            <div class="form-fields">
+              <div class="form-field"><label for="contact-name">Ime i prezime</label>
+                <input id="contact-name" name="Ime i prezime" autocomplete="name" maxlength="100" required pattern=".*\S.*" title="Unesite ime i prezime."></div>
+              <div class="form-field"><label for="contact-company">Naziv kompanije</label>
+                <input id="contact-company" name="Kompanija" autocomplete="organization" maxlength="150" required pattern=".*\S.*" title="Unesite naziv kompanije."></div>
+              <div class="form-field"><label for="contact-email">Poslovni imejl</label>
+                <input id="contact-email" name="Imejl" type="email" autocomplete="email" maxlength="200" required></div>
+              <div class="form-field"><label for="contact-phone">Telefon <span>(opciono)</span></label>
+                <input id="contact-phone" name="Telefon" type="tel" autocomplete="tel" maxlength="40"></div>
+              <div class="form-field full"><label for="contact-package">Koji paket vas zanima?</label>
+                <select id="contact-package" name="Paket">
+                  <option value="" selected>Potrebna nam je preporuka</option>
+                  <option value="Bronze">Bronze Ticket · 3.000 EUR + PDV</option>
+                  <option value="Silver">Silver Ticket · 5.000 EUR + PDV</option>
+                  <option value="Gold">Gold Ticket · 10.000 EUR + PDV</option>
+                </select></div>
+              <div class="form-field full"><label for="contact-message">Šta biste želeli da vaš tim savlada? <span>(opciono)</span></label>
+                <textarea id="contact-message" name="Potrebe tima" rows="3" maxlength="1500" placeholder="Na primer, želimo da ubrzamo izradu mesečnih izveštaja u Excelu."></textarea></div>
+            </div>
+            <button class="btn btn-dark form-submit" type="submit">Pripremite prijavu</button>
+            <noscript><p class="form-note">Za slanje se otvara vaša imejl aplikacija.</p></noscript>
+          </form>
+          <div id="request-review" class="request-review" hidden>
+            <h3 id="review-title" tabindex="-1">Pregled vaše prijave</h3>
+            <p>Proverite podatke i otvorite pripremljen imejl. Prijavu šaljete iz svoje imejl aplikacije.</p>
+            <dl id="review-fields" class="review-fields"></dl>
+            <div class="review-actions">
+              <a href="mailto:office@excelgrasic.com" id="send-email" class="btn btn-dark">Otvorite imejl <span class="diagonal-arrow" aria-hidden="true"></span></a>
+              <button type="button" class="btn btn-outline" id="copy-request">Kopirajte prijavu</button>
+            </div>
+            <p class="form-note">Primalac je office@excelgrasic.com.</p>
+            <p class="form-note" role="status" id="copy-status"></p>
+            <textarea id="manual-copy" class="manual-copy" rows="6" aria-label="Prijava za ručno kopiranje" readonly hidden></textarea>
+            <button type="button" id="edit-request" class="edit-request">Izmenite podatke</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <a href="#vrh" aria-label="Outliers, na početak stranice"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outliers-for-business.webp" alt="Outliers For Business" width="145" height="41"></a>
+      <div class="footer-links">
+        <a href="https://excelgrasic.com/za-kompanije/" target="_blank" rel="noopener noreferrer">Excel Grašić za kompanije <span class="diagonal-arrow" aria-hidden="true"></span></a>
         <a href="#vrh">Na početak stranice ↑</a>
       </div>
     </div>
-    <div class="foot-copy">
-      <p>© <span id="yr"></span> Outliers - Excel Grašić. Sva prava zadržana.</p>
-      <p>powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<script>
-(function(){
-  document.getElementById("yr").textContent = new Date().getFullYear();
-
-  /* ---------- reveal on scroll ---------- */
-  var rv = document.querySelectorAll(".rv");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e, i){
-        if (e.isIntersecting) {
-          var el = e.target;
-          setTimeout(function(){ el.classList.add("in"); }, Math.min(i * 60, 240));
-          io.unobserve(el);
-        }
-      });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: .12 });
-    rv.forEach(function(el){ io.observe(el); });
-  } else {
-    rv.forEach(function(el){ el.classList.add("in"); });
-  }
-
-  /* ---------- meni na telefonu ---------- */
-  var nav = document.getElementById("navigacija");
-  var menu = document.getElementById("menu-toggle");
+  <script>(() => {
+  const nav = document.getElementById("navigacija");
+  const menu = document.getElementById("menu-toggle");
   function closeMenu() {
     nav.removeAttribute("data-open");
     menu.setAttribute("aria-expanded", "false");
     menu.setAttribute("aria-label", "Otvorite meni");
   }
-  menu.addEventListener("click", function(){
-    if (nav.hasAttribute("data-open")) { closeMenu(); }
-    else {
+
+  menu.addEventListener("click", () => {
+    if (nav.hasAttribute("data-open")) {
+      closeMenu();
+    } else {
       nav.setAttribute("data-open", "");
       menu.setAttribute("aria-expanded", "true");
       menu.setAttribute("aria-label", "Zatvorite meni");
     }
   });
   nav.addEventListener("click", closeMenu);
-  document.addEventListener("click", function(e){
-    if (!nav.contains(e.target) && !menu.contains(e.target)) closeMenu();
+  document.addEventListener("click", (event) => {
+    if (!nav.contains(event.target) && !menu.contains(event.target)) closeMenu();
   });
-  document.addEventListener("keydown", function(e){
-    if (e.key === "Escape" && nav.hasAttribute("data-open")) { closeMenu(); menu.focus(); }
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && nav.hasAttribute("data-open")) {
+      closeMenu();
+      menu.focus();
+    }
   });
   window.matchMedia("(min-width: 721px)").addEventListener("change", closeMenu);
 
-  /* ---------- prijava: pregled pa imejl (kao na Jankovoj stranici) ---------- */
-  var form = document.getElementById("ticket-form");
-  var plan = document.getElementById("contact-package");
-  var nameField = document.getElementById("contact-name");
-  var companyField = document.getElementById("contact-company");
-  var emailField = document.getElementById("contact-email");
-  var phoneField = document.getElementById("contact-phone");
-  var messageField = document.getElementById("contact-message");
-  var review = document.getElementById("request-review");
-  var reviewFields = document.getElementById("review-fields");
-  var sendEmail = document.getElementById("send-email");
-  var manualCopy = document.getElementById("manual-copy");
-  var copyStatus = document.getElementById("copy-status");
-  var recipient = "office@excelgrasic.com";
+  const form = document.getElementById("ticket-form");
+  const plan = document.getElementById("contact-package");
+  const nameField = document.getElementById("contact-name");
+  const companyField = document.getElementById("contact-company");
+  const emailField = document.getElementById("contact-email");
+  const phoneField = document.getElementById("contact-phone");
+  const messageField = document.getElementById("contact-message");
+  const review = document.getElementById("request-review");
+  const reviewFields = document.getElementById("review-fields");
+  const sendEmail = document.getElementById("send-email");
+  const manualCopy = document.getElementById("manual-copy");
+  const copyStatus = document.getElementById("copy-status");
 
   function showForm() {
     review.hidden = true;
@@ -853,9 +787,9 @@ footer{background:var(--deep);padding:30px 0}
     copyStatus.textContent = "";
   }
 
-  document.querySelectorAll('a[href="#prijava"]').forEach(function(link){
-    link.addEventListener("click", function(e){
-      if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+  document.querySelectorAll('a[href="#prijava"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
       showForm();
       if (link.hasAttribute("data-plan")) plan.value = link.dataset.plan;
       closeMenu();
@@ -863,53 +797,55 @@ footer{background:var(--deep);padding:30px 0}
   });
 
   form.noValidate = true;
-  var requiredInputs = [nameField, companyField, emailField];
-  var missingValueHints = {
+  const requiredInputs = [nameField, companyField, emailField];
+  const missingValueHints = {
     "contact-name": "Unesite ime i prezime.",
     "contact-company": "Unesite naziv kompanije.",
     "contact-email": "Unesite poslovni imejl."
   };
   function validateInput(input) {
     input.setCustomValidity("");
-    if (!input.value.trim()) input.setCustomValidity(missingValueHints[input.id]);
-    else if (input.validity.typeMismatch) input.setCustomValidity("Unesite ispravnu imejl adresu.");
+    if (!input.value.trim()) {
+      input.setCustomValidity(missingValueHints[input.id]);
+    } else if (input.validity.typeMismatch) {
+      input.setCustomValidity("Unesite ispravnu imejl adresu.");
+    }
   }
-  requiredInputs.forEach(function(input){
-    input.addEventListener("input", function(){ input.setCustomValidity(""); });
+  requiredInputs.forEach((input) => {
+    input.addEventListener("input", () => input.setCustomValidity(""));
   });
 
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
     requiredInputs.forEach(validateInput);
     if (!form.reportValidity()) return;
 
-    var rows = [
+    const rows = [
       ["Ime i prezime", nameField.value.trim()],
       ["Kompanija", companyField.value.trim()],
       ["Poslovni imejl", emailField.value.trim()],
       ["Telefon", phoneField.value.trim()],
       ["Paket", plan.selectedOptions[0].textContent.trim()],
       ["Potrebe tima", messageField.value.trim()]
-    ].filter(function(r){ return r[1]; });
+    ].filter(([, value]) => value);
 
     reviewFields.replaceChildren();
-    rows.forEach(function(r){
-      var row = document.createElement("div");
-      var term = document.createElement("dt");
-      var detail = document.createElement("dd");
-      term.textContent = r[0];
-      detail.textContent = r[1];
+    for (const [label, value] of rows) {
+      const row = document.createElement("div");
+      const term = document.createElement("dt");
+      const detail = document.createElement("dd");
+      term.textContent = label;
+      detail.textContent = value;
       row.append(term, detail);
       reviewFields.append(row);
-    });
+    }
 
-    var subject = "Yearly Ticket | " + companyField.value.trim();
-    var opening = plan.value
+    const subject = "Yearly Ticket | " + companyField.value.trim();
+    const opening = plan.value
       ? "Molimo vas za ponudu za " + plan.value + " Ticket."
       : "Molimo vas za preporuku Yearly Ticket paketa za naš tim.";
-    var body = ["Poštovani,", "", opening, ""]
-      .concat(rows.map(function(r){ return r[0] + ": " + r[1]; }))
-      .concat(["", "Srdačan pozdrav,", nameField.value.trim()]).join("\n");
+    const body = ["Poštovani,", "", opening, "", ...rows.map(([label, value]) => label + ": " + value), "", "Srdačan pozdrav,", nameField.value.trim()].join("\n");
+    const recipient = "office@excelgrasic.com";
     sendEmail.href = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body.replace(/\r?\n/g, "\r\n"));
     manualCopy.value = "Za: " + recipient + "\nNaslov: " + subject + "\n\n" + body;
 
@@ -918,25 +854,150 @@ footer{background:var(--deep);padding:30px 0}
     document.getElementById("review-title").focus();
   });
 
-  document.getElementById("edit-request").addEventListener("click", function(){
+  document.getElementById("edit-request").addEventListener("click", () => {
     showForm();
     nameField.focus();
   });
 
-  document.getElementById("copy-request").addEventListener("click", function(){
-    function rucno(){
+  document.getElementById("copy-request").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(manualCopy.value);
+      manualCopy.hidden = true;
+      copyStatus.textContent = "Prijava je kopirana. Možete je nalepiti u novu imejl poruku.";
+    } catch {
       manualCopy.hidden = false;
       manualCopy.focus();
       manualCopy.select();
       copyStatus.textContent = "Tekst prijave je označen za ručno kopiranje.";
     }
-    if (!navigator.clipboard) return rucno();
-    navigator.clipboard.writeText(manualCopy.value).then(function(){
-      manualCopy.hidden = true;
-      copyStatus.textContent = "Prijava je kopirana. Možete je nalepiti u novu imejl poruku.";
-    }, rucno);
   });
 })();
 </script>
+  <script type="text/plain" id="licence-ikonica">
+LobeHub Icons (ChatGPT, Claude, Gemini, Perplexity, NotebookLM)
+https://github.com/lobehub/lobe-icons
+
+MIT License
+
+Copyright (c) 2023 LobeHub
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+SVGL (Canva)
+https://github.com/pheralb/svgl
+
+MIT License
+
+Copyright (c) 2022 Pablo Hdez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Official Gamma n8n integration (Gamma)
+https://github.com/gamma-app/n8n-nodes-gamma
+
+MIT License
+
+Copyright (c) 2025 Gamma
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Power Query product artwork
+Microsoft Corporation, Power BI Icons collection
+https://github.com/microsoft/PowerBI-Icons/blob/main/SVG/Power-Query-Colored.svg
+
+Microsoft Cloud Product Icons (Excel, Word, PowerPoint, Power BI, Copilot, Outlook, Teams, Copilot Studio)
+https://github.com/aidevme/microsoft-cloud-product-icons
+
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 aidevme
+
+This repository is a curated collection of Microsoft Cloud product icons,
+based on the work of DamoBird365:
+
+  - Website:  https://damobird365.com/
+  - Source:   https://damobird365.github.io/microsoft-cloud-icons/
+
+You are free to:
+  - Share     - copy and redistribute the material in any medium or format
+  - Adapt     - remix, transform, and build upon the material for any purpose,
+                even commercially
+
+Under the following terms:
+  - Attribution - You must give appropriate credit to both the original author
+                  (DamoBird365, https://damobird365.com/) and this repository,
+                  provide a link to the license, and indicate if changes were made.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/
+
+-------------------------------------------------------------------------------
+
+MICROSOFT TRADEMARK & USAGE DISCLAIMER
+
+All logos, icons, and trademarks included in this collection are the property
+of Microsoft Corporation. This collection is provided for personal reference
+and does not grant any rights to use Microsoft's icons or trademarks.
+
+Before using any Microsoft icon or logo in your own content, you must comply
+with Microsoft's official trademark and brand guidelines:
+
+  - Microsoft Trademark & Brand Guidelines:
+    https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
+
+  - Microsoft Branding Guidelines for Applications:
+    https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-branding-in-apps
+
+Do not modify the icons, do not use them to imply Microsoft endorsement, and
+always follow the official usage guidance.
+
+  </script>
 </body>
 </html>
