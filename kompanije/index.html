@@ -143,19 +143,20 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 }
 .tool-panel h3 { margin-bottom: 17px; font-size: clamp(22px,1.9vw,28px); font-weight: 650; letter-spacing: -.045em; }
 .tool-grid {
-  display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); grid-auto-rows: 1fr; gap: 1px;
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); grid-auto-rows: 1fr; gap: 1px;
   list-style: none; padding: 0; border: 1px solid #c8d6be; border-radius: 12px; overflow: hidden; background: #dce4d5;
 }
 .tool-grid li {
   min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 15px 2px 13px;
   background: #fdfef9; text-align: center; font-size: clamp(12px,.94vw,14px); font-weight: 580; line-height: 1.25; letter-spacing: -.025em;
 }
-.tool-grid img { width: 46px; height: 46px; object-fit: contain; padding: 5px; }
+/* ikonice alata sa slicica nasih kurseva (excelgrasic.com/kursevi) */
+.tool-grid img { width: 54px; height: 54px; object-fit: contain; padding: 0; }
 .tool-grid img.office-mark { padding: 0; }
 .tool-grid li > span { max-width: 100%; overflow-wrap: anywhere; }
 @container (max-width: 355px) {
   .tool-grid li { gap: 6px; padding: 12px 1px 10px; font-size: clamp(11px,4cqi,13px); }
-  .tool-grid img { width: 40px; height: 40px; padding: 4px; }
+  .tool-grid img { width: 46px; height: 46px; padding: 0; }
 }
 
 .pricing { background: #f0f3e9; border-block: 1px solid #d8dfd1; }
@@ -584,22 +585,15 @@ html body{line-height:1.55 !important;font-weight:400 !important}
         <div class="tool-panel">
           <h3 id="tools-title">Pokrivamo edukacije iz:</h3>
           <ul class="tool-grid" role="list" aria-labelledby="tools-title">
-            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/excel.svg" alt="" width="46" height="46"><span>Excel</span></li>
-            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/word.svg" alt="" width="46" height="46"><span>Word</span></li>
-            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/powerpoint.svg" alt="" width="46" height="46"><span>PowerPoint</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/power-bi.svg" alt="" width="46" height="46"><span>Power BI</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/chatgpt.svg" alt="" width="46" height="46"><span>ChatGPT</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/claude.svg" alt="" width="46" height="46"><span>Claude</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/gemini.svg" alt="" width="46" height="46"><span>Gemini</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/copilot.svg" alt="" width="46" height="46"><span>Copilot</span></li>
-            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outlook.svg" alt="" width="46" height="46"><span>Outlook</span></li>
-            <li><img class="office-mark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/teams.svg" alt="" width="46" height="46"><span>Teams</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/canva-ai.svg" alt="" width="46" height="46"><span>Canva AI</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/perplexity.svg" alt="" width="46" height="46"><span>Perplexity</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/power-query.svg" alt="" width="46" height="46"><span>Power Query</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/notebooklm.svg" alt="" width="46" height="46"><span>NotebookLM</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/gamma.svg" alt="" width="46" height="46"><span>Gamma</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/copilot-studio.svg" alt="" width="46" height="46"><span>Copilot Studio</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"><span>Excel</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerquery.png" alt="" width="54" height="54" loading="lazy"><span>Power Query</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerpivot.png" alt="" width="54" height="54" loading="lazy"><span>Power Pivot</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerbi.png" alt="" width="54" height="54" loading="lazy"><span>Power BI</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/python.png" alt="" width="54" height="54" loading="lazy"><span>Python</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/word.png" alt="" width="54" height="54" loading="lazy"><span>Word</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerpoint.png" alt="" width="54" height="54" loading="lazy"><span>PowerPoint</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/chatgpt.png" alt="" width="54" height="54" loading="lazy"><span>ChatGPT</span></li>
+            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/copilot.png" alt="" width="54" height="54" loading="lazy"><span>Copilot</span></li>
           </ul>
         </div>
       </div>
@@ -1010,131 +1004,5 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   });
 })();
 </script>
-  <script type="text/plain" id="licence-ikonica">
-LobeHub Icons (ChatGPT, Claude, Gemini, Perplexity, NotebookLM)
-https://github.com/lobehub/lobe-icons
-
-MIT License
-
-Copyright (c) 2023 LobeHub
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-SVGL (Canva)
-https://github.com/pheralb/svgl
-
-MIT License
-
-Copyright (c) 2022 Pablo Hdez
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-Official Gamma n8n integration (Gamma)
-https://github.com/gamma-app/n8n-nodes-gamma
-
-MIT License
-
-Copyright (c) 2025 Gamma
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-Power Query product artwork
-Microsoft Corporation, Power BI Icons collection
-https://github.com/microsoft/PowerBI-Icons/blob/main/SVG/Power-Query-Colored.svg
-
-Microsoft Cloud Product Icons (Excel, Word, PowerPoint, Power BI, Copilot, Outlook, Teams, Copilot Studio)
-https://github.com/aidevme/microsoft-cloud-product-icons
-
-Creative Commons Attribution 4.0 International (CC BY 4.0)
-
-Copyright (c) 2026 aidevme
-
-This repository is a curated collection of Microsoft Cloud product icons,
-based on the work of DamoBird365:
-
-  - Website:  https://damobird365.com/
-  - Source:   https://damobird365.github.io/microsoft-cloud-icons/
-
-You are free to:
-  - Share     - copy and redistribute the material in any medium or format
-  - Adapt     - remix, transform, and build upon the material for any purpose,
-                even commercially
-
-Under the following terms:
-  - Attribution - You must give appropriate credit to both the original author
-                  (DamoBird365, https://damobird365.com/) and this repository,
-                  provide a link to the license, and indicate if changes were made.
-
-Full license text: https://creativecommons.org/licenses/by/4.0/
-
--------------------------------------------------------------------------------
-
-MICROSOFT TRADEMARK & USAGE DISCLAIMER
-
-All logos, icons, and trademarks included in this collection are the property
-of Microsoft Corporation. This collection is provided for personal reference
-and does not grant any rights to use Microsoft's icons or trademarks.
-
-Before using any Microsoft icon or logo in your own content, you must comply
-with Microsoft's official trademark and brand guidelines:
-
-  - Microsoft Trademark & Brand Guidelines:
-    https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
-
-  - Microsoft Branding Guidelines for Applications:
-    https://learn.microsoft.com/en-us/entra/identity-platform/howto-add-branding-in-apps
-
-Do not modify the icons, do not use them to imply Microsoft endorsement, and
-always follow the official usage guidance.
-
-  </script>
 </body>
 </html>
