@@ -203,36 +203,22 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 .step-copy p { margin-top: 6px; font-size: 15.3px; line-height: 1.6; color: var(--body); }
 .answers { background: #fafaf5; }
 .answer-grid { display: grid; grid-template-columns: minmax(0,.72fr) minmax(0,1.28fr); align-items: center; gap: clamp(49px,8.5vw,133px); }
-/* O Aleksandru - isti princip kao bio sekcija na Masterclass stranici
-   (fotografija na zelenoj pozadini sa stubicima i avioncicem, pomeren ram,
-   MVP plocica), u bojama ove stranice */
-/* slika i tekst su jedna kartica; MVP plocica stoji na spoju, pomeren ram obuhvata celu karticu */
-.founder { position: relative; z-index: 0; width: 100%; max-width: 400px; background: #fff; border: 1px solid #d5ddd2;
-  border-radius: 18px; box-shadow: 0 18px 40px -18px rgba(0,40,25,.22); }
-.founder::after { content: ""; position: absolute; inset: 0; border: 1.5px solid #c5d5b9; border-radius: 18px;
-  transform: translate(14px,14px); z-index: -1; pointer-events: none; }
-.founder-photo { position: relative; }
-.founder-stage { position: relative; overflow: hidden; isolation: isolate; aspect-ratio: 1 / .92; border-radius: 17px 17px 0 0;
-  background: radial-gradient(ellipse 62% 48% at 50% 24%, #1d6248 0, transparent 70%), linear-gradient(140deg,#093e30 0%,#073b2f 55%,#094632 100%); }
-.founder-stage::before { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--grain); opacity: .26; pointer-events: none; }
-.founder-stage::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+/* O Aleksandru: kartica kao ostale na stranici; fotografija na istoj
+   zelenoj pozadini sa mrezom kao hero */
+.founder { width: 100%; max-width: 380px; overflow: hidden; background: #eef3e9; border: 1px solid #cddacb; border-radius: 16px; }
+.founder-stage { position: relative; overflow: hidden; isolation: isolate; aspect-ratio: 1 / .9;
+  background: radial-gradient(ellipse at 70% 30%, #185740 0, transparent 60%), linear-gradient(112deg,#093e30 0%,#073b2f 52%,#094632 100%); }
+.founder-stage::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--grain); opacity: .26; pointer-events: none; }
+.founder-stage::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image: linear-gradient(90deg,rgba(187,221,164,.11) 1px,transparent 1px),linear-gradient(0deg,rgba(187,221,164,.11) 1px,transparent 1px);
-  background-size: 42px 42px; mask-image: radial-gradient(ellipse 85% 70% at 50% 20%,#000 25%,transparent 80%); }
-.founder-bars { position: absolute; left: 0; bottom: 0; width: 100%; height: 80%; z-index: 2; }
-.founder-plane { position: absolute; right: 7%; top: 9%; width: 18%; z-index: 3;
-  filter: drop-shadow(0 10px 22px rgba(0,16,12,.35)); animation: planeFloat 5.5s ease-in-out infinite; }
-@keyframes planeFloat { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-9px) rotate(-3deg); } }
-.founder-man { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 92%; width: auto; max-width: none; z-index: 4; }
-.founder-chip { position: absolute; left: 22px; bottom: -24px; z-index: 5; display: flex; align-items: center; gap: 11px;
-  background: #fff; border: 1px solid #e1e8dc; border-radius: 12px; padding: 10px 15px 10px 12px; box-shadow: 0 14px 30px -10px rgba(0,25,13,.35); }
-.founder-chip img { height: 28px; width: auto; }
-.founder-chip span { font-size: 12px; font-weight: 620; line-height: 1.3; color: var(--ink); }
-.founder-info { padding: 44px 24px 24px; }
-.founder-role { display: flex; align-items: center; gap: 10px; color: #39694f; font-size: 11.5px; font-weight: 720; line-height: 1.45; letter-spacing: .14em; text-transform: uppercase; }
-.founder-role::before { content: ""; width: 23px; height: 2px; background: #75a763; flex: none; }
-.founder-info h3 { margin-top: 8px; font-size: clamp(26px,2.3vw,32px); font-weight: 650; }
-.founder-info p:last-child { color: var(--body); margin-top: 10px; font-size: 15px; line-height: 1.6; }
-@media (prefers-reduced-motion: reduce) { .founder-plane { animation: none; } }
+  background-size: 42px 42px; mask-image: linear-gradient(90deg,transparent 10%,#000 90%); }
+.founder-man { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); height: 94%; width: auto; max-width: none; z-index: 1; }
+.founder-info { padding: 20px 23px 23px; }
+.founder-role { font-size: 12px; line-height: 1.4; color: #4b694f; font-weight: 580; }
+.founder-name { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+.founder-name h3 { min-width: 0; font-size: 26px; font-weight: 650; }
+.mvp-badge { flex: none; width: clamp(57px,5.5vw,80px); height: auto; }
+.founder-info p:last-child { color: var(--body); margin-top: 9px; font-size: 14px; line-height: 1.6; }
 .faq-column h2 { margin-bottom: 24px; }
 /* PAKETI - dugme odvojeno od bonusa: isprekidana linija kao otcepak karte,
    krupnije dugme sa senkom, bonus kao rezultat a ne kao drugo dugme */
@@ -664,34 +650,15 @@ html body{line-height:1.55 !important;font-weight:400 !important}
     <section class="answers section-space" id="pitanja" aria-labelledby="faq-title">
       <div class="wrap answer-grid">
         <aside class="founder" aria-labelledby="founder-title">
-          <div class="founder-photo">
-            <div class="founder-stage" aria-hidden="true">
-              <svg class="founder-bars" viewBox="0 0 200 150" preserveAspectRatio="none">
-                <rect x="7"   y="92" width="26" height="58"  rx="4" fill="rgba(187,221,164,.12)"/>
-                <rect x="39"  y="74" width="26" height="76"  rx="4" fill="rgba(187,221,164,.15)"/>
-                <rect x="71"  y="52" width="26" height="98"  rx="4" fill="rgba(187,221,164,.18)"/>
-                <rect x="103" y="62" width="26" height="88"  rx="4" fill="rgba(187,221,164,.15)"/>
-                <rect x="135" y="32" width="26" height="118" rx="4" fill="rgba(187,221,164,.2)"/>
-                <rect x="167" y="14" width="26" height="136" rx="4" fill="rgba(159,228,122,.3)"/>
-                <polyline points="20,92 52,74 84,52 116,62 148,32 180,14" fill="none"
-                          stroke="rgba(159,228,122,.6)" stroke-width="2" vector-effect="non-scaling-stroke"
-                          stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <svg class="founder-plane" viewBox="0 0 100 100">
-                <path d="M97 6 3 45l37 13z" fill="#def16a"/>
-                <path d="M97 6 40 58l7 36z" fill="#c4d957"/>
-                <path d="M40 58l7 36 17-19z" fill="#a2b843"/>
-              </svg>
-              <img class="founder-man" src="https://excelgrasic.com/wp-content/uploads/2023/11/aleksandar-grasic-o-predavacu.png" alt="" loading="lazy">
-            </div>
-            <div class="founder-chip">
-              <img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft-mvp.png" alt="Microsoft MVP" width="258" height="106">
-              <span>Prvi i jedini Excel i Copilot<br>Microsoft MVP u Srbiji</span>
-            </div>
+          <div class="founder-stage" aria-hidden="true">
+            <img class="founder-man" src="https://excelgrasic.com/wp-content/uploads/2023/11/aleksandar-grasic-o-predavacu.png" alt="" loading="lazy">
           </div>
           <div class="founder-info">
             <p class="founder-role">Osnivač kompanije Outliers</p>
-            <h3 id="founder-title">Aleksandar Grašić</h3>
+            <div class="founder-name">
+              <h3 id="founder-title">Aleksandar Grašić</h3>
+              <img class="mvp-badge" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft-mvp.png" alt="Microsoft MVP" width="258" height="106">
+            </div>
             <p>Microsoft MVP šest godina zaredom. Sa svojim timom vodi edukacije iz Excela, Power <span style="white-space:nowrap">BI-ja</span> i primene AI alata u poslovanju.</p>
           </div>
         </aside>
@@ -737,7 +704,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
               <div class="form-field"><label for="contact-email">Poslovni imejl</label>
                 <input id="contact-email" name="Imejl" type="email" autocomplete="email" maxlength="200" required></div>
               <div class="form-field"><label for="contact-phone">Telefon <span>(opciono)</span></label>
-                <input id="contact-phone" name="Telefon" type="tel" autocomplete="tel" maxlength="40"></div>
+                <input id="contact-phone" name="Telefon" type="tel" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="+381 64 1234567"></div>
               <div class="form-field full"><label for="contact-package">Koji paket vas zanima?</label>
                 <select id="contact-package" name="Paket">
                   <option value="" selected>Potrebna nam je preporuka</option>
@@ -857,16 +824,79 @@ html body{line-height:1.55 !important;font-weight:400 !important}
     input.addEventListener("input", () => input.setCustomValidity(""));
   });
 
+  /* ---------- telefon: pozivni broj se upise sam, po drzavi iz IP adrese ----------
+     Pozivni i broj su u istom polju. Polje je opciono: ako ostane samo pozivni,
+     racuna se kao prazno. Broj se pri slanju sredi u oblik "+381 641234567". */
+  const POZIVNI = Object.fromEntries(("AD376 AE971 AF93 AG1 AI1 AL355 AM374 AO244 AR54 AS1 AT43 AU61 AW297 AZ994 BA387 BB1 BD880 BE32 BF226 BG359 BH973 BI257 BJ229 BM1 BN673 BO591 BR55 BS1 BT975 BW267 BY375 BZ501 CA1 CD243 CF236 CG242 CH41 CI225 CL56 CM237 CN86 CO57 CR506 CU53 CV238 CY357 CZ420 DE49 DJ253 DK45 DM1 DO1 DZ213 EC593 EE372 EG20 ER291 ES34 ET251 FI358 FJ679 FO298 FR33 GA241 GB44 GD1 GE995 GH233 GI350 GL299 GM220 GN224 GQ240 GR30 GT502 GU1 GW245 GY592 HK852 HN504 HR385 HT509 HU36 ID62 IE353 IL972 IN91 IQ964 IR98 IS354 IT39 JM1 JO962 JP81 KE254 KG996 KH855 KM269 KN1 KP850 KR82 KW965 KY1 KZ7 LA856 LB961 LC1 LI423 LK94 LR231 LS266 LT370 LU352 LV371 LY218 MA212 MC377 MD373 ME382 MG261 MK389 ML223 MM95 MN976 MO853 MR222 MT356 MU230 MV960 MW265 MX52 MY60 MZ258 NA264 NE227 NG234 NI505 NL31 NO47 NP977 NZ64 OM968 PA507 PE51 PG675 PH63 PK92 PL48 PR1 PS970 PT351 PY595 QA974 RO40 RS381 RU7 RW250 SA966 SC248 SD249 SE46 SG65 SI386 SK421 SL232 SM378 SN221 SO252 SR597 SS211 SV503 SY963 SZ268 TD235 TG228 TH66 TJ992 TM993 TN216 TR90 TT1 TW886 TZ255 UA380 UG256 US1 UY598 UZ998 VA39 VC1 VE58 VN84 XK383 YE967 ZA27 ZM260 ZW263")
+    .split(" ").map((x) => [x.slice(0, 2), "+" + x.slice(2)]));
+  const SVI_POZIVNI = new Set(Object.values(POZIVNI));
+  let pozivni = "";
+
+  function upisiPozivni(kod) {
+    const novi = POZIVNI[kod];
+    if (!novi) return;
+    const sad = phoneField.value.trim();
+    /* ne diramo broj koji je posetilac vec poceo da kuca */
+    if (!sad || sad === pozivni) phoneField.value = novi + " ";
+    pozivni = novi;
+  }
+  function uzmiDrzavu(url) {
+    return fetch(url).then((r) => r.json()).then((d) => (d && d.country) || "").catch(() => "");
+  }
+  uzmiDrzavu("https://api.country.is/")
+    .then((kod) => kod || uzmiDrzavu("https://get.geojs.io/v1/ip/country.json"))
+    .then((kod) => upisiPozivni(String(kod).toUpperCase()));
+  phoneField.addEventListener("focus", () => {
+    if (!phoneField.value.trim() && pozivni) phoneField.value = pozivni + " ";
+  });
+
+  /* vraca sredjen broj "+381 641234567", "" ako polje nema broj, ili null ako broj ne valja */
+  function srediTelefon() {
+    if (/[^\d+\s().\/-]/.test(phoneField.value)) return null;
+    let t = phoneField.value.replace(/[^\d+]/g, "");
+    if (t.startsWith("00")) t = "+" + t.slice(2);
+    if (!t || t === "+" || t === pozivni) return "";
+    if (t.indexOf("+", 1) > 0) return null;
+    let kod = "";
+    if (t[0] === "+") {
+      for (let n = 4; n >= 1 && !kod; n--) if (SVI_POZIVNI.has(t.slice(0, n + 1))) kod = t.slice(0, n + 1);
+      if (!kod) return null;
+    } else {
+      if (!pozivni) return null;
+      kod = pozivni;
+      t = kod + t;
+    }
+    const broj = t.slice(kod.length).replace(/^0+/, "");
+    const ukupno = (kod + broj).replace(/\D/g, "").length;
+    if (broj.length < 6 || ukupno > 15) return null;
+    return kod + " " + broj;
+  }
+  function validatePhone() {
+    phoneField.setCustomValidity("");
+    const v = srediTelefon();
+    if (v === null) {
+      phoneField.setCustomValidity("Unesite ispravan broj telefona sa pozivnim brojem, npr. +381 64 1234567.");
+      return "";
+    }
+    return v;
+  }
+  phoneField.addEventListener("input", () => phoneField.setCustomValidity(""));
+  phoneField.addEventListener("blur", () => {
+    const v = srediTelefon();
+    if (v) phoneField.value = v;
+  });
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     requiredInputs.forEach(validateInput);
+    const telefon = validatePhone();
     if (!form.reportValidity()) return;
 
     const rows = [
       ["Ime i prezime", nameField.value.trim()],
       ["Kompanija", companyField.value.trim()],
       ["Poslovni imejl", emailField.value.trim()],
-      ["Telefon", phoneField.value.trim()],
+      ["Telefon", telefon],
       ["Paket", plan.selectedOptions[0].textContent.trim()],
       ["Potrebe tima", messageField.value.trim()]
     ].filter(([, value]) => value);
