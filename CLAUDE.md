@@ -138,7 +138,9 @@ Ovo čeka podatke od klijenta, ne diraj dok ne stignu:
 - **ID polja u ActiveCampaignu za državu** - `ac.poljeDrzava` je prazan, pa
   država ne stiže u AC. U Make webhook sa optin-2 i u webhook ankete ide i
   bez toga (`drzava`, `drzava_kod`).
-- video na application i thankyou stranici vrti isti snimak kao landing
+- video na thankyou stranici je jos Vimeo (isti snimak kao stari landing).
+  Optin (optin-2) i application imaju svoje vturb plejere: embed kod stoji
+  direktno u HTML-u (`<vturb-smartplayer>` u `.vsl`), ne u `window.MC`.
 - slot za anketu na application stranici je prazan (`id="survey-box"`)
 - glavni pasus na application stranici je lorem ipsum
 - piksel: optin-2, application i thankyou su na GHL-u (masterclass.excelgrasic.com: `/`, `/application`, `/thank-you`). Osnovni kod piksela je u GHL Head tracking code svake stranice, a u kodu su samo događaji: Lead na optinu, SubmitApplication na application kad je anketa popunjena (jednom po osobi). Treba potvrda media buyera koji događaj koristi za optimizaciju.
