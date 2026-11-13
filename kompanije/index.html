@@ -310,6 +310,10 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 .edit-request { border: 0; padding: 5px 0; margin-top: 13px; color: var(--pine); background: transparent; text-decoration: underline; text-underline-offset: 4px; font-size: 14px; font-weight: 590; }
 .manual-copy { margin-top: 9px; }
 [hidden] { display: none !important; }
+/* iPhone zumira stranicu kad se dodirne polje manje od 16px - polja su uvek 16px, i kad GHL nametne svoj font */
+@media (hover: none) and (pointer: coarse) {
+  .form-field input, .form-field select, .form-field textarea { font-size: 16px !important; }
+}
 /* GHL: kod stoji u kontejneru ogranicene sirine - trake idu od ivice do ivice */
 .site-header,#sadrzaj>section,.footer{width:calc(100vw - var(--sb,0px));max-width:none;
   margin-left:calc(50% - 50vw + var(--sb,0px) / 2);margin-right:calc(50% - 50vw + var(--sb,0px) / 2)}
@@ -393,9 +397,12 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   .hero-grid { mask-image: linear-gradient(150deg,transparent 18%,rgba(0,0,0,.15) 45%,#000 95%); background-size: 38px 38px; }
   .ticket-stage { width: min(94%,435px); aspect-ratio: 1.69; }
   .proof-inner { display: block; padding-block: 19px 22px; min-height: 0; }
-  .proof-lead { display: flex; flex-direction: row; align-items: center; gap: 7px; padding: 0; border: 0; }
-  .proof-count { gap: 6px; }
-  .proof-lead strong { font-size: 25px; }.proof-prefix,.proof-detail { font-size: 12px; max-width: none; }
+  /* na telefonu jedna centrirana recenica: "Samo neke od 500+ kompanija sa kojima smo saradjivali" */
+  .proof-lead { display: block; padding: 0; border: 0; text-align: center; text-wrap: balance; line-height: 1.35; }
+  .proof-lead br { display: none; }
+  .proof-count { display: inline; white-space: normal; }
+  .proof-prefix,.proof-detail { display: inline; font-size: 14.5px; max-width: none; }
+  .proof-lead strong { font-size: 24px; margin: 0 2px; vertical-align: -2px; }
   .logo-marquee { margin-top: 14px; }
   .client-logos { gap: 36px; padding-right: 36px; }
   .client-logos img { zoom: .82; }
@@ -432,7 +439,6 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   h2 { font-size: 34px; }.overline { margin-bottom: 11px; }
   .hero-inner { row-gap: 19px; }
   .hero-actions { gap: 18px; }.text-link { font-size: 13.8px; }
-  .proof-lead { justify-content: center; }
   .plans { grid-template-columns: 1fr; }
   .form-fields { grid-template-columns: 1fr; gap: 14px; }
   .form-card { padding: 20px 17px; }
