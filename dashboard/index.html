@@ -13,7 +13,10 @@
      (kod je u dashboard/apps-script.gs). Stranica dobija SAMO zbirne brojke,
      nikad imena, mejlove ni telefone. Osvezava se sama na 30 sekundi.
      ?osoba=aleksandar (marijana, sanja, janko, vlada) -> red "Ćao, Aleksandre!".
-     Bez parametra tog reda nema. -->
+     Bez parametra tog reda nema.
+     PIN: stranica trazi PIN, proverava ga Apps Script (PIN NIJE u ovom fajlu,
+     stoji u Script Properties). Tacan PIN daje token koji vazi 30 dana i cuva
+     se u ovom pregledacu, pa se PIN ne kuca ponovo do isteka. -->
 <style>
   /* Isti izgled kao referral dashboard (excel-grasic-referral.vercel.app):
      mrezica u pozadini, sjaj, staklene kartice, limeta naslovi */
@@ -24,6 +27,7 @@
     --font: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
   html, body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.55;
     -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: clip; }
   body { position: relative; }
@@ -49,6 +53,10 @@
     color: var(--accent); font-weight: 600; margin-bottom: 16px; }
   .brand::before { content: ""; width: 18px; height: 2px; background: var(--accent); }
   .hello { font-size: clamp(20px, 3vw, 24px); font-weight: 600; color: var(--accent); margin-bottom: 6px; letter-spacing: -.01em; }
+  .hello-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 6px; }
+  .hello-row .hello { margin-bottom: 0; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);
+    box-shadow: 0 0 0 4px rgba(225,242,94,.14); }
   .masthead h1 { font-weight: 500; font-size: clamp(34px, 6vw, 48px); letter-spacing: -.025em; line-height: 1.08; }
   .masthead p { margin-top: 12px; color: var(--text-dim); }
   .live { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-size: 13px; color: var(--text-dim);
@@ -136,6 +144,30 @@
   .foot { margin-top: 22px; color: var(--muted); font-size: 13px; text-align: center; }
 
   .tiho * { transition: none !important; }
+  /* PIN ekran */
+  .gate { max-width: 440px; margin: 8px auto 0; text-align: center; padding: 34px 28px 30px; }
+  .gate .label { margin-bottom: 8px; }
+  .gate h2 { font-size: 26px; font-weight: 600; letter-spacing: -.02em; }
+  .gate p.sub { margin-top: 6px; color: var(--text-dim); font-size: 14px; }
+  .pin { position: relative; display: flex; justify-content: center; gap: 8px; margin: 26px auto 0; width: max-content; }
+  .pin span { width: 48px; height: 58px; display: flex; align-items: center; justify-content: center;
+    background: rgba(0,16,12,.55); border: 1px solid rgba(236,237,229,.18); border-radius: 12px; transition: border-color .15s, box-shadow .15s; }
+  .pin span.puna::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--text); }
+  .pin.fokus span.akt { border-color: rgba(225,242,94,.7); box-shadow: 0 0 0 4px rgba(225,242,94,.12); }
+  .pin input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; border: 0; font-size: 16px; color: transparent;
+    background: transparent; caret-color: transparent; cursor: text; }
+  .pin.greska span { border-color: #e0604b; }
+  .pin.trese { animation: trese .35s; }
+  @keyframes trese { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+  .pin-msg { min-height: 22px; margin-top: 12px; font-size: 14px; color: #f08a77; }
+  .btn { margin-top: 10px; width: 100%; border: 0; cursor: pointer; font: 700 15px var(--font); color: var(--accent-text);
+    background: linear-gradient(145deg, #f2ff8c 0%, #e1f25e 44%, #cde14c 100%); border-radius: 999px; padding: 15px 26px;
+    box-shadow: 0 4px 0 0 #a7bd3d, 0 12px 24px rgba(0,16,12,.3); transition: transform .16s cubic-bezier(.22,1,.36,1), box-shadow .16s ease; }
+  .btn:hover { transform: translateY(2px); box-shadow: 0 2px 0 0 #a7bd3d, 0 8px 16px rgba(0,16,12,.3); }
+  .btn:active { transform: translateY(4px); box-shadow: 0 0 0 0 #a7bd3d, 0 4px 10px rgba(0,16,12,.3); }
+  .btn[disabled] { opacity: .6; cursor: default; }
+  .gate .note { margin-top: 18px; font-size: 13px; color: var(--muted); }
+  @media (max-width: 420px) { .pin { gap: 6px; } .pin span { width: 42px; height: 52px; } .gate { padding: 28px 18px 24px; } }
   .msg { padding: 60px 0; text-align: center; color: var(--text-dim); }
 
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 5;
@@ -171,9 +203,9 @@
 <div class="fx" aria-hidden="true"><div class="grid"></div><div class="g g1"></div><div class="g g2"></div><div class="g g3"></div><div class="g g4"></div></div>
 <main>
   <div class="masthead">
-    <p class="hello" id="hello" hidden></p>
+    <div class="hello-row" id="hello-row" hidden><img class="avatar" id="avatar" alt="" hidden><p class="hello" id="hello"></p></div>
     <h1>Masterclass dashboard</h1>
-    <div class="live" id="live"><i></i><span id="live-txt">Učitavanje…</span></div>
+    <div class="live" id="live" hidden><i></i><span id="live-txt">Učitavanje…</span></div>
   </div>
 
   <div id="app"><div class="msg">Učitavanje podataka…</div></div>
@@ -190,8 +222,18 @@
   var CILJ = 15000;
   var STANICE = [2500, 5000, 7500, 10000, 12500, 15000];
 
-  /* Pozdrav po parametru ?osoba= (vec u vokativu). Bez parametra nema reda. */
-  var OSOBE = { aleksandar: 'Aleksandre', marijana: 'Marijana', sanja: 'Sanja', janko: 'Janko', vlada: 'Vlado' };
+  /* Pozdrav po parametru ?osoba= (ime je vec u vokativu). Bez parametra nema reda.
+     slika: putanja do fotke (npr. 'tim/vlada.jpg'); prazno = bez fotke. */
+  var OSOBE = {
+    aleksandar: { ime: 'Aleksandre', slika: '' },
+    marijana:   { ime: 'Marijana',   slika: '' },
+    sanja:      { ime: 'Sanja',      slika: '' },
+    janko:      { ime: 'Janko',      slika: '' },
+    vlada:      { ime: 'Vlado',      slika: '' }
+  };
+
+  /* Token posle tacnog PIN-a; vazi 30 dana (rok je upisan u sam token) */
+  var KLJUC = 'mc-dashboard-token';
 
   var app = document.getElementById('app'), live = document.getElementById('live'), liveTxt = document.getElementById('live-txt');
   var toast = document.getElementById('toast');
@@ -200,11 +242,28 @@
   (function pozdrav(){
     var p = new URLSearchParams(location.search).get('osoba');
     var k = String(p || '').trim().toLocaleLowerCase('sr-RS');
-    var el = document.getElementById('hello');
-    if (!k || !OSOBE[k]) { el.remove(); return; }
-    el.textContent = 'Ćao, ' + OSOBE[k] + '!';
-    el.hidden = false;
+    var red = document.getElementById('hello-row');
+    if (!k || !OSOBE[k]) { red.remove(); return; }
+    document.getElementById('hello').textContent = 'Ćao, ' + OSOBE[k].ime + '!';
+    if (OSOBE[k].slika) {
+      var img = document.getElementById('avatar');
+      img.src = OSOBE[k].slika; img.hidden = false;
+      img.onerror = function(){ img.remove(); };
+    }
+    red.hidden = false;
   })();
+
+  function citajToken(){
+    try {
+      var t = localStorage.getItem(KLJUC) || '';
+      if (t && Number(t.split('.')[0]) > Date.now()) return t;
+      if (t) localStorage.removeItem(KLJUC);
+    } catch (e) {}
+    return '';
+  }
+  function sacuvajToken(t){ try { localStorage.setItem(KLJUC, t); } catch (e) {} }
+  function obrisiToken(){ try { localStorage.removeItem(KLJUC); } catch (e) {} }
+  var token = citajToken();
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function br(n){ return Number(n || 0).toLocaleString('sr-RS'); }
@@ -342,17 +401,17 @@
     liveTxt.textContent = s < 5 ? 'Uživo · ažurirano upravo sada' : 'Uživo · ažurirano pre ' + (s < 60 ? s + ' s' : Math.round(s / 60) + ' min');
   }
 
+  function poziv(param){
+    return fetch(API + '?' + param + '&t=' + Date.now())
+      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); });
+  }
+
   function ucitaj(){
-    if (!API) { app.innerHTML = '<div class="msg">Izvor podataka još nije povezan.</div>'; liveTxt.textContent = 'Nije povezano'; return; }
-    fetch(API + (API.indexOf('?') > -1 ? '&' : '?') + 't=' + Date.now())
-      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+    if (!token) return;
+    poziv('token=' + encodeURIComponent(token))
       .then(function(d){
-        var razlika = podaci ? d.optini - podaci.optini : 0;
-        var isto = podaci && potpis(podaci) === potpis(d);
-        podaci = d; poslednje = Date.now(); live.classList.remove('greska');
-        if (!isto) render(d);
-        vreme();
-        if (razlika > 0) obavesti(razlika);
+        if (d.greska) { odjava(); return; }
+        prikazi(d);
       })
       .catch(function(){
         live.classList.add('greska');
@@ -361,7 +420,80 @@
       });
   }
 
-  ucitaj();
+  function prikazi(d){
+    delete d.token;
+    live.hidden = false;
+    var razlika = podaci ? d.optini - podaci.optini : 0;
+    var isto = podaci && potpis(podaci) === potpis(d);
+    podaci = d; poslednje = Date.now(); live.classList.remove('greska');
+    if (!isto) render(d);
+    vreme();
+    if (razlika > 0) obavesti(razlika);
+  }
+
+  /* Token je istekao ili je PIN promenjen: nazad na PIN ekran */
+  function odjava(){
+    obrisiToken(); token = ''; podaci = null; prviPut = true; poslednje = null;
+    app.classList.remove('tiho'); live.hidden = true;
+    pinEkran();
+  }
+
+  function pinEkran(){
+    var polja = '<input id="pin-in" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" aria-label="PIN, 6 cifara">';
+    for (var i = 0; i < 6; i++) polja += '<span aria-hidden="true"></span>';
+    app.innerHTML = '<form class="card gate" id="gate" novalidate>' +
+      '<div class="label">Pristup</div><h2>Unesi PIN</h2>' +
+      '<p class="sub">Dashboard je samo za tim. PIN se unosi jednom na 30 dana.</p>' +
+      '<div class="pin" id="pin">' + polja + '</div>' +
+      '<p class="pin-msg" id="pin-msg" role="alert"></p>' +
+      '<button class="btn" id="pin-btn" type="submit">Uđi</button>' +
+    '</form>';
+    var box = document.getElementById('pin'), inp = document.getElementById('pin-in');
+    var kucice = [].slice.call(box.querySelectorAll('span'));
+    var msg = document.getElementById('pin-msg'), btn = document.getElementById('pin-btn');
+    function vrednost(){ return inp.value; }
+    function osvezi(){
+      var n = inp.value.length;
+      kucice.forEach(function(k, i){ k.classList.toggle('puna', i < n); k.classList.toggle('akt', i === Math.min(n, 5)); });
+    }
+    inp.addEventListener('input', function(){
+      var v = inp.value.replace(/\D/g, '').slice(0, 6);
+      if (v !== inp.value) inp.value = v;
+      box.classList.remove('greska'); msg.textContent = '';
+      osvezi();
+      if (v.length === 6) posalji();
+    });
+    inp.addEventListener('focus', function(){ box.classList.add('fokus'); osvezi(); });
+    inp.addEventListener('blur', function(){ box.classList.remove('fokus'); });
+    var salje = false;
+    function posalji(){
+      var pin = vrednost();
+      if (salje) return;
+      if (pin.length < 6) { msg.textContent = 'PIN ima 6 cifara.'; inp.focus(); return; }
+      salje = true; btn.disabled = true; btn.textContent = 'Proveravam…'; msg.textContent = '';
+      poziv('pin=' + encodeURIComponent(pin))
+        .then(function(d){
+          if (d.greska || !d.token) {
+            salje = false; btn.disabled = false; btn.textContent = 'Uđi';
+            msg.textContent = 'Pogrešan PIN. Pokušaj ponovo.';
+            box.classList.add('greska', 'trese');
+            setTimeout(function(){ box.classList.remove('trese'); }, 400);
+            inp.value = ''; osvezi(); inp.focus();
+            return;
+          }
+          token = d.token; sacuvajToken(token);
+          prikazi(d);
+        })
+        .catch(function(){
+          salje = false; btn.disabled = false; btn.textContent = 'Uđi';
+          msg.textContent = 'Provera trenutno ne radi. Pokušaj ponovo za minut.';
+        });
+    }
+    document.getElementById('gate').addEventListener('submit', function(e){ e.preventDefault(); posalji(); });
+    osvezi(); inp.focus();
+  }
+
+  if (token) ucitaj(); else pinEkran();
   setInterval(function(){ if (!document.hidden) ucitaj(); }, OSVEZI_SEKUNDI * 1000);
   document.addEventListener('visibilitychange', function(){ if (!document.hidden) ucitaj(); });
   setInterval(vreme, 5000);

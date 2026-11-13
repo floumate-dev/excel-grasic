@@ -8,6 +8,15 @@
  * Vraca SAMO zbirne brojke (koliko optina, odakle, koliko applicationa).
  * Imena, mejlovi i telefoni nikad ne izlaze iz Sheeta.
  *
+ * PRISTUP: brojke dobija samo ko zna PIN. PIN i tajni kljuc NISU u ovom fajlu
+ * (repo je javan), nego u Apps Script > Project Settings > Script Properties:
+ *   PIN    = PIN za dashboard
+ *   SECRET = dugacak nasumican niz, njime se potpisuje token
+ * ?pin=...   tacan PIN -> brojke + token koji vazi 30 dana
+ * ?token=... vazeci token -> brojke
+ * Promena PIN-a: promeni PIN u Script Properties. Da svi moraju ponovo da
+ * ukucaju PIN: promeni i SECRET (svi stari tokeni prestaju da vaze).
+ *
  * Kolone u tabu "Optin" (kako ih Make upisuje, od 0):
  *  0 vreme, 1 ime i prezime, 5 email, 8 drzava, 9 termin, 10 source,
  *  11 specific source, 12 utm_source, 13 utm_medium, 14 utm_campaign, 15 utm_content
@@ -22,13 +31,61 @@ var TEST_MEJL = ['floumate', 'dusankocic', 'danilotest', 'danilozdravkovic', 'da
 
 var DANA_U_GRAFIKONU = 21;
 
-function doGet() {
+var TOKEN_DANA = 30;
+
+function doGet(e) {
+  var p = (e && e.parameter) || {};
+  var token = null;
+  if (p.pin != null) {
+    if (!pinOk_(String(p.pin))) return json_(JSON.stringify({ greska: 'pin' }));
+    token = napraviToken_();
+  } else if (!tokenOk_(String(p.token || ''))) {
+    return json_(JSON.stringify({ greska: 'token' }));
+  }
   var cache = CacheService.getScriptCache();
-  var hit = cache.get('dash');
-  if (hit) return json_(hit);
-  var out = JSON.stringify(izracunaj_());
-  cache.put('dash', out, 30); /* 30 sekundi */
+  var out = cache.get('dash');
+  if (!out) {
+    out = JSON.stringify(izracunaj_());
+    cache.put('dash', out, 30); /* 30 sekundi */
+  }
+  if (token) {
+    var d = JSON.parse(out);
+    d.token = token;
+    out = JSON.stringify(d);
+  }
   return json_(out);
+}
+
+function svojstvo_(k) { return PropertiesService.getScriptProperties().getProperty(k) || ''; }
+
+/* Previse pogresnih PIN-ova u kratkom roku -> pauza (zastita od pogadjanja) */
+function pinOk_(pin) {
+  var cache = CacheService.getScriptCache();
+  var promasaji = Number(cache.get('promasaji') || 0);
+  if (promasaji >= 20) return false;
+  var tacan = svojstvo_('PIN');
+  if (tacan && pin === tacan) return true;
+  cache.put('promasaji', String(promasaji + 1), 600); /* brojac traje 10 minuta */
+  return false;
+}
+
+function potpis_(s) {
+  var raw = Utilities.computeHmacSha256Signature(s, svojstvo_('SECRET'));
+  return Utilities.base64EncodeWebSafe(raw).replace(/=+$/, '');
+}
+
+function napraviToken_() {
+  var istice = String(Date.now() + TOKEN_DANA * 864e5);
+  return istice + '.' + potpis_(istice);
+}
+
+function tokenOk_(t) {
+  if (!svojstvo_('SECRET')) return false;
+  var i = t.indexOf('.');
+  if (i < 1) return false;
+  var istice = t.slice(0, i);
+  if (!(Number(istice) > Date.now())) return false;
+  return t.slice(i + 1) === potpis_(istice);
 }
 
 function json_(s) {

@@ -30,6 +30,11 @@ dashboard/           Masterclass dashboard (optini, izvori, applicationi), uzivo
                      Apps Script u Sheetu "Excel Grašić | Masterclass" (kod je u
                      dashboard/apps-script.gs, objavljen kao web app). Ako menjas
                      skriptu: Deploy > Manage deployments > Edit > New version.
+                     Ulaz je na PIN (proverava ga skripta; PIN i SECRET stoje u
+                     Apps Script > Project Settings > Script Properties, NIKAD u
+                     repou jer je javan). Tacan PIN = token na 30 dana.
+                     ?osoba=vlada (aleksandar, marijana, sanja, janko) = pozdrav;
+                     fotke idu u dashboard/tim/ i upisuju se u OSOBE.
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.
