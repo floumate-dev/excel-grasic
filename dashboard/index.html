@@ -11,36 +11,99 @@
 <!-- Masterclass dashboard: optini, odakle su dosli, applicationi.
      Podatke daje Apps Script u Google Sheetu "Excel Grašić | Masterclass"
      (kod je u dashboard/apps-script.gs). Stranica dobija SAMO zbirne brojke,
-     nikad imena, mejlove ni telefone. Osvezava se sama na 30 sekundi. -->
+     nikad imena, mejlove ni telefone. Osvezava se sama na 30 sekundi.
+     ?osoba=aleksandar (marijana, sanja, janko, vlada) -> red "Ćao, Aleksandre!".
+     Bez parametra tog reda nema. -->
 <style>
-  /* Isti tokeni kao referral dashboard (excel-grasic-referral.vercel.app) */
+  /* Isti izgled kao referral dashboard (excel-grasic-referral.vercel.app):
+     mrezica u pozadini, sjaj, staklene kartice, limeta naslovi */
   :root {
-    --bg: #004d3a; --card: #00372a; --border: #1e4f43; --muted: #8eada1;
-    --text: #ecede5; --text-dim: #c9d5cb; --accent: #e1f25e; --accent-text: #004d3a;
-    --app: #75a34d;
-    --font: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif; --radius: 12px;
+    --bg: #004d3a; --deep: #001812; --border: rgba(236,237,229,.13); --muted: #8eada1;
+    --text: #ecede5; --text-dim: rgba(236,237,229,.78); --accent: #e1f25e; --accent-text: #004d3a;
+    --leaf: #75a34d;
+    --font: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.55;
-    -webkit-font-smoothing: antialiased; min-height: 100vh; }
-  main { max-width: 1080px; margin: 0 auto; padding: 44px 16px 80px; }
-  .brand { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 28px; }
-  .hero { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
-  .hero h1 { font-weight: 700; font-size: clamp(32px, 5vw, 44px); letter-spacing: -.02em; line-height: 1.08; }
-  .hero p { margin-top: 8px; color: var(--text-dim); }
-  .live { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-dim); white-space: nowrap; }
+    -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: clip; }
+  body { position: relative; }
+
+  /* mrezica + sjaj */
+  .fx { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .fx .grid { position: absolute; left: 0; right: 0; top: 0; height: 1300px;
+    background-image: linear-gradient(rgba(236,237,229,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(236,237,229,.06) 1px, transparent 1px);
+    background-size: 68px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 18%, #000 20%, transparent 78%);
+            mask-image: radial-gradient(ellipse 90% 75% at 50% 18%, #000 20%, transparent 78%); }
+  .fx .g { position: absolute; border-radius: 50%; }
+  .fx .g1 { width: 760px; height: 760px; right: -240px; top: -330px; background: radial-gradient(circle, rgba(225,242,94,.26), transparent 62%); }
+  .fx .g2 { width: 820px; height: 820px; left: -380px; top: 260px; background: radial-gradient(circle, rgba(117,163,77,.30), transparent 64%); }
+  .fx .g3 { width: 900px; height: 520px; left: 50%; top: 120px; transform: translateX(-50%); border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(225,242,94,.10), transparent 66%); }
+  .fx .g4 { width: 700px; height: 700px; right: -260px; top: 1150px; background: radial-gradient(circle, rgba(225,242,94,.12), transparent 62%); }
+
+  main { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 52px 16px 80px; }
+
+  .masthead { text-align: center; margin-bottom: 34px; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+  .brand::before { content: ""; width: 18px; height: 2px; background: var(--accent); }
+  .hello { font-size: clamp(20px, 3vw, 24px); font-weight: 600; color: var(--accent); margin-bottom: 6px; letter-spacing: -.01em; }
+  .masthead h1 { font-weight: 500; font-size: clamp(34px, 6vw, 48px); letter-spacing: -.025em; line-height: 1.08; }
+  .masthead p { margin-top: 12px; color: var(--text-dim); }
+  .live { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; color: var(--text-dim);
+    padding: 6px 14px; border: 1px solid var(--border); border-radius: 999px; background: rgba(0,24,18,.35); }
   .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(225,242,94,.6); animation: puls 2s infinite; }
   .live.greska i { background: #e0604b; animation: none; }
   @keyframes puls { 70% { box-shadow: 0 0 0 8px rgba(225,242,94,0); } 100% { box-shadow: 0 0 0 0 rgba(225,242,94,0); } }
 
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; min-width: 0; }
-  .label { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-  .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
-  .count { font-weight: 800; font-size: clamp(52px, 7vw, 76px); line-height: .95; font-variant-numeric: tabular-nums; }
-  .count.lime { color: var(--accent); }
-  .count small { font-size: .45em; font-weight: 700; color: var(--text-dim); margin-left: 2px; }
+  .card { background: rgba(0,24,18,.42); border: 1px solid var(--border); border-radius: 18px; padding: 26px;
+    box-shadow: 0 20px 48px rgba(0,16,12,.26); min-width: 0; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .label { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
   .caption { margin-top: 10px; color: var(--text-dim); font-size: 14px; }
   .caption b { color: var(--accent); font-weight: 700; }
+
+  /* glavni cilj: 15.000 optina */
+  .goal-card { position: relative; overflow: hidden; padding: 30px; border-color: rgba(225,242,94,.28);
+    box-shadow: 0 0 0 1px rgba(225,242,94,.06), 0 24px 60px rgba(0,16,12,.32), 0 0 80px rgba(225,242,94,.08); }
+  .goal-card::before { content: ""; position: absolute; width: 420px; height: 420px; right: -140px; top: -200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(225,242,94,.16), transparent 64%); pointer-events: none; }
+  .goal-top { position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .big { font-weight: 600; font-size: clamp(64px, 10vw, 104px); line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .big .of { color: rgba(236,237,229,.28); font-size: .5em; letter-spacing: -.01em; }
+  .pct { text-align: right; color: var(--text-dim); font-size: 13px; }
+  .pct b { display: block; color: var(--accent); font-size: clamp(32px, 4.4vw, 44px); font-weight: 600; line-height: 1; margin-bottom: 6px;
+    font-variant-numeric: tabular-nums; text-shadow: 0 0 24px rgba(225,242,94,.35); }
+  .level { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent-text); background: var(--accent); padding: 5px 11px; border-radius: 999px;
+    box-shadow: 0 0 0 4px rgba(225,242,94,.14); }
+
+  .tl { position: relative; height: 22px; margin: 40px 19px 14px; background: rgba(0,16,12,.6); border: 1px solid rgba(236,237,229,.1); border-radius: 11px; }
+  .tl > i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; min-width: 20px; border-radius: 11px;
+    background: linear-gradient(90deg, #004d3a 0%, #75a34d 55%, #e1f25e 100%);
+    box-shadow: 0 0 18px rgba(225,242,94,.45); transition: width 1.6s cubic-bezier(.25,.46,.45,.94); }
+  .tl > i::after { content: ""; position: absolute; right: 2px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%;
+    background: #f2ff8c; box-shadow: 0 0 0 4px rgba(225,242,94,.25), 0 0 22px 6px rgba(225,242,94,.55); animation: tip 2.2s ease-in-out infinite; }
+  @keyframes tip { 50% { box-shadow: 0 0 0 7px rgba(225,242,94,.12), 0 0 30px 10px rgba(225,242,94,.4); } }
+  .stop { position: absolute; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; letter-spacing: -.02em;
+    background: #00372a; border: 2px solid rgba(236,237,229,.28); color: rgba(236,237,229,.75); box-shadow: 0 6px 16px rgba(0,16,12,.35);
+    transition: background .3s, color .3s, box-shadow .3s; }
+  .stop.on { background: var(--accent); border-color: var(--accent); color: var(--accent-text); box-shadow: 0 0 0 6px rgba(225,242,94,.18), 0 0 24px rgba(225,242,94,.35); }
+  .stop.next { border-color: rgba(225,242,94,.7); color: var(--accent); animation: sledeci 2.4s ease-in-out infinite; }
+  @keyframes sledeci { 50% { box-shadow: 0 0 0 7px rgba(225,242,94,.12), 0 6px 16px rgba(0,16,12,.35); } }
+  .stop.goal { width: 46px; height: 46px; margin: -23px 0 0 -23px; font-size: 13px; }
+
+  .goal-card .caption { margin-top: 26px; position: relative; }
+  .mini { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 26px; }
+  .mini > div { background: rgba(0,16,12,.45); border: 1px solid rgba(236,237,229,.1); border-radius: 14px; padding: 14px 16px; min-width: 0; }
+  .mini span { display: block; font-size: 12px; color: var(--text-dim); }
+  .mini b { display: block; font-size: 24px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .mini b.lime { color: var(--accent); }
+
+  .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .count { font-weight: 600; font-size: clamp(48px, 6.5vw, 68px); line-height: .95; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .count small { font-size: .45em; font-weight: 600; color: var(--text-dim); margin-left: 2px; }
 
   .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
   .wide { margin-top: 16px; }
@@ -52,57 +115,82 @@
   .chart { position: relative; height: 220px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px;
     align-items: end; border-bottom: 1px solid var(--border); padding-top: 8px; }
   .col { position: relative; height: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 2px; min-width: 0; }
-  .col b { display: block; width: 46%; max-width: 16px; border-radius: 3px 3px 0 0; min-height: 0; transition: height .5s cubic-bezier(.2,.8,.2,1); }
-  .col b.o { background: var(--accent); }
-  .col b.a { background: var(--app); }
+  .col b { display: block; width: 46%; max-width: 16px; border-radius: 4px 4px 0 0; min-height: 0; transition: height .6s cubic-bezier(.2,.8,.2,1); }
+  .col b.o { background: linear-gradient(180deg, #f2ff8c, #e1f25e 40%, #cde14c); box-shadow: 0 0 14px rgba(225,242,94,.3); }
+  .col b.a { background: var(--leaf); }
   .col:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-    background: #001812; border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 6px 9px; border-radius: 8px;
+    background: var(--deep); border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 6px 9px; border-radius: 8px;
     white-space: pre; z-index: 2; pointer-events: none; }
   .xaxis { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; margin-top: 6px; font-size: 11px; color: var(--muted);
     text-align: center; font-variant-numeric: tabular-nums; }
-  .xaxis span:nth-child(odd) { visibility: visible; }
-  .xaxis span:nth-child(even) { visibility: hidden; }
 
+  .xaxis.gusto span:nth-child(even) { visibility: hidden; }
   /* liste sa trakama */
   ul { list-style: none; }
-  .rows li { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .rows li { padding: 11px 0; border-bottom: 1px solid rgba(236,237,229,.12); }
   .rows li:last-child { border-bottom: 0; padding-bottom: 0; }
   .rows li:first-child { padding-top: 0; }
   .rowtop { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; }
   .rowtop .n { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .rowtop .n .r { display: inline-block; width: 22px; color: var(--muted); font-weight: 700; }
+  .rows li:first-child .rowtop .n .r { color: var(--accent); }
   .rowtop .v { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .rowtop .v em { font-style: normal; color: var(--muted); font-weight: 500; margin-left: 6px; }
-  .track { margin-top: 7px; height: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
-  .track i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  .track { margin-top: 8px; height: 8px; background: rgba(0,16,12,.55); border: 1px solid rgba(236,237,229,.1); border-radius: 999px; overflow: hidden; }
+  .track i { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #75a34d, #e1f25e);
+    transition: width .8s cubic-bezier(.2,.8,.2,1); }
   .empty { color: var(--text-dim); font-size: 14px; }
-  .foot { margin-top: 22px; color: var(--muted); font-size: 13px; }
+  .foot { margin-top: 22px; color: var(--muted); font-size: 13px; text-align: center; }
 
+  .tiho * { transition: none !important; }
   .msg { padding: 60px 0; text-align: center; color: var(--text-dim); }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); z-index: 5;
+    background: linear-gradient(145deg, #f2ff8c 0%, #e1f25e 44%, #cde14c 100%); color: var(--accent-text);
+    padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: 15px;
+    box-shadow: 0 4px 0 0 #a7bd3d, 0 16px 30px rgba(0,16,12,.4), 0 0 40px rgba(225,242,94,.35);
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   @media (max-width: 820px) {
     .kpis { grid-template-columns: 1fr; }
     .grid2 { grid-template-columns: 1fr; }
     .chart { height: 180px; gap: 2px; }
     .xaxis { gap: 2px; }
-    .xaxis span:nth-child(3n+2), .xaxis span:nth-child(3n) { visibility: hidden; }
-    .xaxis span:nth-child(3n+1) { visibility: visible; }
+    .xaxis.gusto span:nth-child(even) { visibility: visible; }
+    .xaxis.gusto span:nth-child(3n+2), .xaxis.gusto span:nth-child(3n) { visibility: hidden; }
   }
-  @media (prefers-reduced-motion: reduce) { .live i { animation: none; } .col b, .track i { transition: none; } }
+  @media (max-width: 560px) {
+    .goal-card { padding: 22px; } .card { padding: 22px; }
+    .goal-top { flex-direction: column; align-items: flex-start; }
+    .pct { text-align: left; }
+    .tl { margin: 36px 17px 12px; height: 18px; }
+    .stop { width: 34px; height: 34px; margin: -17px 0 0 -17px; font-size: 10.5px; }
+    .stop.goal { width: 38px; height: 38px; margin: -19px 0 0 -19px; font-size: 11px; }
+    .mini { grid-template-columns: 1fr; gap: 8px; }
+    .mini > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .mini b { margin-top: 0; font-size: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .live i, .tl > i::after, .stop.next { animation: none; }
+    .col b, .track i, .tl > i { transition: none; }
+  }
 </style>
 </head>
 <body>
+<div class="fx" aria-hidden="true"><div class="grid"></div><div class="g g1"></div><div class="g g2"></div><div class="g g3"></div><div class="g g4"></div></div>
 <main>
-  <div class="brand">Outliers · Excel Grašić</div>
-  <div class="hero">
-    <div>
-      <h1>Masterclass dashboard</h1>
-      <p>Prijave i applicationi za besplatan AI Masterclass.</p>
-    </div>
+  <div class="masthead">
+    <div class="brand">Outliers · Excel Grašić</div>
+    <p class="hello" id="hello" hidden></p>
+    <h1>Masterclass dashboard</h1>
+    <p>Prijave i applicationi za besplatan AI Masterclass.</p>
     <div class="live" id="live"><i></i><span id="live-txt">Učitavanje…</span></div>
   </div>
 
   <div id="app"><div class="msg">Učitavanje podataka…</div></div>
 </main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
@@ -110,11 +198,31 @@
   var API = "https://script.google.com/macros/s/AKfycbyF89GqaJCQ7LuF4fc5crirNhg8TsVNZ75Vjh9q2aXoyotjqMF7dKcAtJxuvAJIjD1q/exec";
   var OSVEZI_SEKUNDI = 30;
 
+  /* KPI: 15.000 optina. Stanice na traci su usputni ciljevi. */
+  var CILJ = 15000;
+  var STANICE = [2500, 5000, 7500, 10000, 12500, 15000];
+
+  /* Pozdrav po parametru ?osoba= (vec u vokativu). Bez parametra nema reda. */
+  var OSOBE = { aleksandar: 'Aleksandre', marijana: 'Marijana', sanja: 'Sanja', janko: 'Janko', vlada: 'Vlado' };
+
   var app = document.getElementById('app'), live = document.getElementById('live'), liveTxt = document.getElementById('live-txt');
-  var poslednje = null, podaci = null;
+  var toast = document.getElementById('toast');
+  var poslednje = null, podaci = null, prviPut = true;
+
+  (function pozdrav(){
+    var p = new URLSearchParams(location.search).get('osoba');
+    var k = String(p || '').trim().toLocaleLowerCase('sr-RS');
+    var el = document.getElementById('hello');
+    if (!k || !OSOBE[k]) { el.remove(); return; }
+    el.textContent = 'Ćao, ' + OSOBE[k] + '!';
+    el.hidden = false;
+  })();
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function br(n){ return Number(n || 0).toLocaleString('sr-RS'); }
+  function kk(n){ return n >= 1000 ? String(n / 1000).replace('.', ',') + 'k' : String(n); }
+  function pl(n, one, few, many){ var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return one; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few; return many; }
 
   /* lepsi nazivi izvora */
   var NAZIVI = { 'direktno': 'Direktno (bez izvora)', 'referral': 'Referral (preporuka)', 'fb': 'Facebook', 'facebook': 'Facebook',
@@ -125,9 +233,9 @@
   function lista(items, ukupno, mapiraj){
     if (!items || !items.length) return '<p class="empty">Još nema podataka.</p>';
     var max = items[0].broj || 1;
-    return '<ul class="rows">' + items.map(function(it){
+    return '<ul class="rows">' + items.map(function(it, i){
       var pct = ukupno ? Math.round(it.broj / ukupno * 100) : 0;
-      return '<li><div class="rowtop"><span class="n">' + esc(mapiraj ? mapiraj(it.naziv) : it.naziv) + '</span>' +
+      return '<li><div class="rowtop"><span class="n"><span class="r">' + (i + 1) + '</span>' + esc(mapiraj ? mapiraj(it.naziv) : it.naziv) + '</span>' +
         '<span class="v">' + br(it.broj) + '<em>' + pct + '%</em></span></div>' +
         '<div class="track"><i data-w="' + Math.max(2, Math.round(it.broj / max * 100)) + '"></i></div></li>';
     }).join('') + '</ul>';
@@ -144,23 +252,75 @@
              '<b class="a" data-h="' + (d.aplikacije / max * 100) + '"></b></div>';
     }).join('');
     var x = dani.map(function(d){ return '<span>' + dan(d.dan) + '</span>'; }).join('');
-    return '<div class="chart">' + kol + '</div><div class="xaxis">' + x + '</div>';
+    return '<div class="chart">' + kol + '</div><div class="xaxis' + (dani.length > 8 ? ' gusto' : '') + '">' + x + '</div>';
+  }
+
+  /* Tempo: prosek po danu od prvog dana sa optinima (ranije nule ne kvare prosek) */
+  function tempo(dani){
+    var i = 0; while (i < dani.length && !dani[i].optini) i++;
+    var aktivni = dani.slice(i);
+    if (!aktivni.length) return 0;
+    var zbir = aktivni.reduce(function(s, d){ return s + d.optini; }, 0);
+    return zbir / aktivni.length;
+  }
+  function rekord(dani){
+    var best = null;
+    dani.forEach(function(d){ if (d.optini && (!best || d.optini > best.optini)) best = d; });
+    return best;
+  }
+
+  function ciljKartica(d){
+    var n = d.optini, pct = Math.min(100, n / CILJ * 100);
+    var dostignuto = STANICE.filter(function(s){ return n >= s; }).length;
+    var sledeca = STANICE.filter(function(s){ return n < s; })[0];
+    var avg = tempo(d.poDanu);
+    var ostalo = Math.max(0, CILJ - n);
+    var dana = avg > 0 ? Math.ceil(ostalo / avg) : null;
+    var pctTxt = (pct < 10 ? pct.toFixed(1) : Math.round(pct)).toString().replace('.', ',') + '%';
+    var stanice = STANICE.map(function(s){
+      var cls = 'stop' + (n >= s ? ' on' : '') + (s === sledeca ? ' next' : '') + (s === CILJ ? ' goal' : '');
+      return '<span class="' + cls + '" style="left:' + (s / CILJ * 100) + '%" title="' + br(s) + ' optina">' + kk(s) + '</span>';
+    }).join('');
+    return '<div class="card goal-card">' +
+      '<div class="label">Cilj: ' + br(CILJ) + ' optina</div>' +
+      '<div class="goal-top">' +
+        '<div><div class="big"><span data-n="' + n + '">' + br(n) + '</span><span class="of"> / ' + br(CILJ) + '</span></div>' +
+          '<span class="level">Nivo ' + dostignuto + ' od ' + STANICE.length + '</span></div>' +
+        '<div class="pct"><b>' + pctTxt + '</b>pređeno do cilja</div>' +
+      '</div>' +
+      '<div class="tl"><i id="tl-fill" data-w="' + pct + '"></i>' + stanice + '</div>' +
+      '<p class="caption">' + (ostalo
+        ? 'Još <b>' + br(ostalo) + '</b> do cilja.' + (sledeca && sledeca !== CILJ ? ' Sledeća stanica: <b>' + br(sledeca) + '</b> (još ' + br(sledeca - n) + ').' : '')
+        : '<b>Cilj je dostignut!</b>') + '</p>' +
+      '<div class="mini">' +
+        '<div><span>Danas</span><b class="lime">+' + br(d.danas.optini) + '</b></div>' +
+        '<div><span>Prosek po danu</span><b>' + br(Math.round(avg)) + '</b></div>' +
+        '<div><span>Ovim tempom cilj za</span><b>' + (ostalo ? (dana ? '~' + br(dana) + ' ' + pl(dana, 'dan', 'dana', 'dana') : '-') : 'gotovo') + '</b></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* Grafikon krece od prvog dana sa podacima (najmanje 7 dana), bez praznih nedelja pre starta */
+  function odStarta(dani){
+    var i = 0; while (i < dani.length && !dani[i].optini && !dani[i].aplikacije) i++;
+    return dani.slice(Math.min(i, Math.max(0, dani.length - 7)));
   }
 
   function render(d){
-    var raz = d.danas.optini - d.juce.optini;
+    var rek = rekord(d.poDanu), dani = odStarta(d.poDanu);
     app.innerHTML =
+      ciljKartica(d) +
       '<div class="kpis">' +
-        '<div class="card"><div class="label">Optini</div><div class="count lime">' + br(d.optini) + '</div>' +
-          '<p class="caption">Danas <b>+' + br(d.danas.optini) + '</b> · juče ' + br(d.juce.optini) + '</p></div>' +
-        '<div class="card"><div class="label">Applicationi</div><div class="count">' + br(d.aplikacije) + '</div>' +
+        '<div class="card"><div class="label">Applicationi</div><div class="count"><span data-n="' + d.aplikacije + '">' + br(d.aplikacije) + '</span></div>' +
           '<p class="caption">Danas <b>+' + br(d.danas.aplikacije) + '</b> · juče ' + br(d.juce.aplikacije) + '</p></div>' +
         '<div class="card"><div class="label">Popunilo anketu</div><div class="count">' + String(d.stopaAplikacija).replace('.', ',') + '<small>%</small></div>' +
           '<p class="caption">optina je popunilo application</p></div>' +
+        '<div class="card"><div class="label">Rekordan dan</div><div class="count">' + (rek ? br(rek.optini) : '0') + '</div>' +
+          '<p class="caption">' + (rek ? 'optina, <b>' + dan(rek.dan) + '</b>' : 'još nema optina') + '</p></div>' +
       '</div>' +
-      '<div class="card wide"><div class="label">Poslednjih ' + d.poDanu.length + ' dana</div>' +
-        '<div class="legend"><span><i style="background:var(--accent)"></i>Optini</span><span><i style="background:var(--app)"></i>Applicationi</span></div>' +
-        grafikon(d.poDanu) + '</div>' +
+      '<div class="card wide"><div class="label">Po danima</div>' +
+        '<div class="legend"><span><i style="background:var(--accent)"></i>Optini</span><span><i style="background:var(--leaf)"></i>Applicationi</span></div>' +
+        grafikon(dani) + '</div>' +
       '<div class="grid2">' +
         '<div class="card"><div class="label">Odakle dolaze</div>' + lista(d.izvori, d.optini, naziv) + '</div>' +
         '<div class="card"><div class="label">Tačan izvor (specific source)</div>' + lista(d.specificni, d.optini) + '</div>' +
@@ -170,16 +330,41 @@
       '</div>' +
       '<p class="foot">Jedna osoba se broji jednom, i kad se prijavi više puta (' + br(d.prijava) + ' prijava ukupno). ' +
         'Test prijave tima se ne broje.</p>';
-    requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
       app.querySelectorAll('[data-w]').forEach(function(el){ el.style.width = el.getAttribute('data-w') + '%'; });
       app.querySelectorAll('[data-h]').forEach(function(el){ el.style.height = el.getAttribute('data-h') + '%'; });
-    });
+    }); });
+    if (prviPut) {
+      prviPut = false;
+      app.querySelectorAll('[data-n]').forEach(brojanje);
+      setTimeout(function(){ app.classList.add('tiho'); }, 2000); /* posle prvog ulaza osvezavanje bez ponovne animacije */
+    }
+  }
+
+  /* Brojevi se izbroje od nule kad se stranica otvori */
+  function brojanje(el){
+    var cilj = Number(el.getAttribute('data-n')) || 0;
+    if (!cilj || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var t0 = null, trajanje = 1200;
+    function korak(t){
+      if (!t0) t0 = t;
+      var p = Math.min(1, (t - t0) / trajanje), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = br(Math.round(cilj * e));
+      if (p < 1) requestAnimationFrame(korak);
+    }
+    requestAnimationFrame(korak);
+  }
+
+  function obavesti(razlika){
+    toast.textContent = '+' + br(razlika) + ' ' + pl(razlika, 'novi optin', 'nova optina', 'novih optina');
+    toast.classList.add('show');
+    clearTimeout(obavesti.t); obavesti.t = setTimeout(function(){ toast.classList.remove('show'); }, 3500);
   }
 
   function vreme(){
     if (!poslednje) return;
     var s = Math.round((Date.now() - poslednje) / 1000);
-    liveTxt.textContent = s < 5 ? 'Ažurirano upravo sada' : 'Ažurirano pre ' + (s < 60 ? s + ' s' : Math.round(s / 60) + ' min');
+    liveTxt.textContent = s < 5 ? 'Uživo · ažurirano upravo sada' : 'Uživo · ažurirano pre ' + (s < 60 ? s + ' s' : Math.round(s / 60) + ' min');
   }
 
   function ucitaj(){
@@ -187,7 +372,9 @@
     fetch(API + (API.indexOf('?') > -1 ? '&' : '?') + 't=' + Date.now())
       .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function(d){
+        var razlika = podaci ? d.optini - podaci.optini : 0;
         podaci = d; poslednje = Date.now(); live.classList.remove('greska'); render(d); vreme();
+        if (razlika > 0) obavesti(razlika);
       })
       .catch(function(){
         live.classList.add('greska');
