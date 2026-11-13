@@ -21,6 +21,10 @@ kompanije/           Yearly Ticket za kompanije (B2B). Tekst i dizajn su
                      sa 14 logoa klijenata. Lepi se u GHL ceo fajl; slike
                      iz kompanije/img/ se pozivaju punim github.io linkom,
                      SEO slika je kompanije/seo-yearly-ticket-1200x630.jpg.
+                     Forma salje sve na Make webhook (org "My Organization",
+                     scenario "Yearly Ticket Optin") i vodi na thank you:
+kompanije/hvala/     thank you za Yearly Ticket (GHL putanja /hvala);
+                     paket cita iz sessionStorage "yt_upit".
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.

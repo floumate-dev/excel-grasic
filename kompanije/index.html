@@ -727,7 +727,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
           </div>
         </div>
         <div class="form-card">
-          <form id="ticket-form" action="mailto:office@excelgrasic.com" method="post" enctype="text/plain" aria-labelledby="form-title">
+          <form id="ticket-form" novalidate aria-labelledby="form-title">
             <h3 id="form-title">Podaci za ponudu</h3>
             <div class="form-fields">
               <div class="form-field"><label for="contact-name">Ime i prezime</label>
@@ -757,22 +757,9 @@ html body{line-height:1.55 !important;font-weight:400 !important}
               <div class="form-field full"><label for="contact-message">Šta biste želeli da vaš tim savlada? <span>(opciono)</span></label>
                 <textarea id="contact-message" name="Potrebe tima" rows="3" maxlength="1500" placeholder="Na primer, želimo da ubrzamo izradu mesečnih izveštaja u Excelu."></textarea></div>
             </div>
-            <button class="btn btn-dark form-submit" type="submit">Pripremite prijavu</button>
-            <noscript><p class="form-note">Za slanje se otvara vaša imejl aplikacija.</p></noscript>
+            <button class="btn btn-dark form-submit" type="submit" id="form-submit">Pošaljite upit</button>
+            <p class="form-note" role="alert" id="form-status"></p>
           </form>
-          <div id="request-review" class="request-review" hidden>
-            <h3 id="review-title" tabindex="-1">Pregled vaše prijave</h3>
-            <p>Proverite podatke i otvorite pripremljen imejl. Prijavu šaljete iz svoje imejl aplikacije.</p>
-            <dl id="review-fields" class="review-fields"></dl>
-            <div class="review-actions">
-              <a href="mailto:office@excelgrasic.com" id="send-email" class="btn btn-dark">Otvorite imejl <span class="diagonal-arrow" aria-hidden="true"></span></a>
-              <button type="button" class="btn btn-outline" id="copy-request">Kopirajte prijavu</button>
-            </div>
-            <p class="form-note">Primalac je office@excelgrasic.com.</p>
-            <p class="form-note" role="status" id="copy-status"></p>
-            <textarea id="manual-copy" class="manual-copy" rows="6" aria-label="Prijava za ručno kopiranje" readonly hidden></textarea>
-            <button type="button" id="edit-request" class="edit-request">Izmenite podatke</button>
-          </div>
         </div>
       </div>
     </section>
@@ -824,18 +811,16 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   const emailField = document.getElementById("contact-email");
   const phoneField = document.getElementById("contact-phone");
   const messageField = document.getElementById("contact-message");
-  const review = document.getElementById("request-review");
-  const reviewFields = document.getElementById("review-fields");
-  const sendEmail = document.getElementById("send-email");
-  const manualCopy = document.getElementById("manual-copy");
-  const copyStatus = document.getElementById("copy-status");
+  const submitBtn = document.getElementById("form-submit");
+  const formStatus = document.getElementById("form-status");
 
-  function showForm() {
-    review.hidden = true;
-    form.hidden = false;
-    manualCopy.hidden = true;
-    copyStatus.textContent = "";
-  }
+  /* ---------- KONFIGURACIJA ----------
+     webhook: Make, organizacija "My Organization", scenario "Yearly Ticket Optin"
+     hvala:   thank you stranica u GHL-u (posle slanja posetilac ide ovde) */
+  const WEBHOOK = "https://hook.eu1.make.com/j7cehb9qm8ypsu1gt38w3qwbcj1h2k2a";
+  const HVALA_URL = "https://kompanije.excelgrasic.com/hvala";
+
+  function showForm() {}
 
   document.querySelectorAll('a[href="#prijava"]').forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -885,6 +870,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   const telList = document.getElementById("tel-list");
   let drzava = "RS";
   let rucnoBirano = false;
+  let ipDrzava = "";
   const pozivni = () => POZIVNI[drzava];
 
   function postaviDrzavu(k) {
@@ -971,7 +957,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   }
   uzmiDrzavu("https://api.country.is/")
     .then((kod) => kod || uzmiDrzavu("https://get.geojs.io/v1/ip/country.json"))
-    .then((kod) => { if (!rucnoBirano) postaviDrzavu(String(kod).toUpperCase()); });
+    .then((kod) => { ipDrzava = String(kod).toUpperCase(); if (!rucnoBirano) postaviDrzavu(ipDrzava); });
 
   /* nalepljen ili upisan ceo broj (+385..., 00385...) prebaci drzavu i ostavi samo broj */
   function preuzmiPozivni() {
@@ -1014,62 +1000,59 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   }
   phoneField.addEventListener("input", () => { phoneField.setCustomValidity(""); preuzmiPozivni(); });
 
+  /* posle provere: svi podaci idu na Make webhook, pa posetilac prelazi na
+     thank you stranicu. Slanje ne ceka duze od 4 s - prelazak se desava i ako
+     mreza zapne (keepalive zavrsi slanje u pozadini). */
+  let saljem = false;
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    if (saljem) return;
+    formStatus.textContent = "";
     requiredInputs.forEach(validateInput);
     const telefon = validatePhone();
     if (!form.reportValidity()) return;
 
-    const rows = [
-      ["Ime i prezime", nameField.value.trim()],
-      ["Kompanija", companyField.value.trim()],
-      ["Poslovni imejl", emailField.value.trim()],
-      ["Telefon", telefon],
-      ["Paket", plan.selectedOptions[0].textContent.trim()],
-      ["Potrebe tima", messageField.value.trim()]
-    ].filter(([, value]) => value);
+    const imePrezime = nameField.value.trim().replace(/\s+/g, " ");
+    const delovi = imePrezime.split(" ");
+    const q = new URLSearchParams(location.search);
+    const eventId = "yt_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const podaci = new URLSearchParams();
+    podaci.append("ime_prezime", imePrezime);
+    podaci.append("ime", delovi[0]);
+    podaci.append("prezime", delovi.slice(1).join(" "));
+    podaci.append("kompanija", companyField.value.trim());
+    podaci.append("email", emailField.value.trim().toLowerCase());
+    podaci.append("telefon", telefon);
+    podaci.append("telefon_drzava", telefon ? drzava : "");
+    podaci.append("paket", plan.value);
+    podaci.append("paket_tekst", plan.selectedOptions[0].textContent.trim());
+    podaci.append("potrebe_tima", messageField.value.trim());
+    podaci.append("drzava", ipDrzava ? imeDrzave(ipDrzava) : "");
+    podaci.append("drzava_kod", ipDrzava);
+    podaci.append("page_url", location.href);
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid"].forEach((k) => podaci.append(k, q.get(k) || ""));
+    podaci.append("vreme", new Date().toISOString());
+    podaci.append("event_id", eventId);
 
-    reviewFields.replaceChildren();
-    for (const [label, value] of rows) {
-      const row = document.createElement("div");
-      const term = document.createElement("dt");
-      const detail = document.createElement("dd");
-      term.textContent = label;
-      detail.textContent = value;
-      row.append(term, detail);
-      reviewFields.append(row);
-    }
+    saljem = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Šaljemo upit...";
 
-    const subject = "Yearly Ticket | " + companyField.value.trim();
-    const opening = plan.value
-      ? "Molimo vas za ponudu za " + plan.value + " Ticket."
-      : "Molimo vas za preporuku Yearly Ticket paketa za naš tim.";
-    const body = ["Poštovani,", "", opening, "", ...rows.map(([label, value]) => label + ": " + value), "", "Srdačan pozdrav,", nameField.value.trim()].join("\n");
-    const recipient = "office@excelgrasic.com";
-    sendEmail.href = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body.replace(/\r?\n/g, "\r\n"));
-    manualCopy.value = "Za: " + recipient + "\nNaslov: " + subject + "\n\n" + body;
+    /* thank you stranica cita paket iz sessionStorage (bez licnih podataka u adresi) */
+    try { sessionStorage.setItem("yt_upit", JSON.stringify({ paket: plan.value })); } catch (e) {}
 
-    form.hidden = true;
-    review.hidden = false;
-    document.getElementById("review-title").focus();
-  });
-
-  document.getElementById("edit-request").addEventListener("click", () => {
-    showForm();
-    nameField.focus();
-  });
-
-  document.getElementById("copy-request").addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(manualCopy.value);
-      manualCopy.hidden = true;
-      copyStatus.textContent = "Prijava je kopirana. Možete je nalepiti u novu imejl poruku.";
-    } catch {
-      manualCopy.hidden = false;
-      manualCopy.focus();
-      manualCopy.select();
-      copyStatus.textContent = "Tekst prijave je označen za ručno kopiranje.";
-    }
+    const slanje = fetch(WEBHOOK, { method: "POST", body: podaci, mode: "no-cors", keepalive: true });
+    const rok = new Promise((r) => setTimeout(r, 4000));
+    Promise.race([slanje, rok]).then(() => {
+      const dalje = new URL(HVALA_URL);
+      ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((k) => { if (q.get(k)) dalje.searchParams.set(k, q.get(k)); });
+      location.href = dalje.toString();
+    }, () => {
+      saljem = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Pošaljite upit";
+      formStatus.textContent = "Slanje nije uspelo. Proverite internet vezu i pokušajte ponovo, ili nam pišite na office@excelgrasic.com.";
+    });
   });
 })();
 </script>
