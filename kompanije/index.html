@@ -317,12 +317,14 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 
 
 .footer { background: #073527; color: #dae7d7; }
-.footer-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 26px; padding-block: 16px; }
-.footer-inner>a img { width: 122px; height: auto; }
-.footer-links { display: flex; align-items: center; gap: 26px; font-size: 13px; font-weight: 450; }
-.footer-links a { display: inline-flex; align-items: center; gap: 4px; padding-block: 3px; }
-.footer-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.footer .diagonal-arrow { transform: scale(.75); }
+/* footer kao na Masterclass stranicama: logo, prava, potpis; boja ostaje ova */
+.footer-inner { padding-block: 32px; text-align: center; }
+.footer-logo { display: inline-block; }
+.footer-logo img { height: 40px; width: auto; margin: 0 auto 14px; }
+.footer p { font-size: 12.5px; color: rgba(218,231,215,.55); }
+.footer .foot-by { font-size: 12px; color: rgba(218,231,215,.4); margin-top: 8px; }
+.footer .foot-by a { color: rgba(218,231,215,.7); font-weight: 600; transition: color .15s; }
+.footer .foot-by a:hover { color: #def16a; }
 
 @media (min-width:1550px) {
   .hero-inner { padding-block: 90px; }
@@ -361,7 +363,6 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   .steps li::before { width: 36px; height: 36px; }.steps li:not(:last-child)::after { left: 17px; top: 36px; }.steps li+li:not(:last-child)::after { top: 62px; }
   .step-copy h3 { font-size: 20px; }
   .answer-grid { gap: 40px; grid-template-columns: minmax(0,.77fr) minmax(0,1.23fr); }
-  .footer-links { gap: 18px; }
   .benefits-inner { gap: 22px; grid-template-columns: minmax(0,1fr) minmax(302px,.93fr); }
   .tool-panel { padding: 16px 12px; }
   .contact-inner { grid-template-columns: minmax(0,.7fr) minmax(0,1.3fr); gap: 23px; }
@@ -435,8 +436,6 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   .form-card { padding: 20px 17px; }
   .tool-panel h3 { margin-bottom: 13px; }
   .questions summary { font-size: 17px; }.answer { padding-right: 8px; }
-  .footer-inner,.footer-links { align-items: flex-start; flex-direction: column; gap: 12px; }
-  .footer-inner { padding-block: 22px; }.footer-links { gap: 6px; }
 }
 @media (max-width: 355px) {
   .wrap { width: calc(100% - 28px); }
@@ -453,7 +452,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   html { scroll-padding: 0; }body { background: white; font-size: 10pt; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .wrap { width: 100%; }.site-header { position: static; }.header-inner { min-height: 14mm; }
-  .header-actions,.main-nav,.hero-actions,.plan-cta,.contact .btn,.footer-links a:first-child { display: none !important; }
+  .header-actions,.main-nav,.hero-actions,.plan-cta,.contact .btn { display: none !important; }
   .hero-inner { grid-template-columns: 1.1fr 1fr; gap: 15px; padding: 9mm 6mm; }
   .hero h1 { font-size: 34pt; }.hero-intro { font-size: 10pt; }
   .proof-inner { min-height: auto; padding: 4mm 2mm; }.proof-lead strong { font-size: 18pt; }
@@ -469,7 +468,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   .tool-panel { padding: 3mm; break-inside: avoid; }.tool-panel h3 { font-size: 14pt; margin-bottom: 3mm; }
   .tool-grid li { padding: 2mm 0; gap: 1mm; font-size: 7.5pt; }.tool-grid img { width: 9mm; height: 9mm; }
   .benefit-list p { font-size: 9pt; }
-  .footer-inner { padding-inline: 6mm; min-height: 16mm; }
+  .footer-inner { padding-block: 6mm; }
 }
 </style>
 </head>
@@ -780,13 +779,12 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <a href="#vrh" aria-label="Outliers, na početak stranice"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outliers-for-business.webp" alt="Outliers For Business" width="145" height="41"></a>
-      <div class="footer-links">
-        <a href="https://excelgrasic.com/za-kompanije/" target="_blank" rel="noopener noreferrer">Excel Grašić za kompanije <span class="diagonal-arrow" aria-hidden="true"></span></a>
-        <a href="#vrh">Na početak stranice ↑</a>
-      </div>
+      <a class="footer-logo" href="#vrh" aria-label="Outliers For Business, na početak stranice"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outliers-for-business-white.png" alt="Outliers For Business" width="540" height="153"></a>
+      <p>© <span id="yr"></span> Outliers - Excel Grašić. Sva prava zadržana.</p>
+      <p class="foot-by">powered by <a href="https://www.floumate.com" target="_blank" rel="noopener">Floumate</a></p>
     </div>
   </footer>
+  <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
 
   <script>(() => {
   const nav = document.getElementById("navigacija");
