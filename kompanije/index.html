@@ -174,21 +174,28 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 .tool-icons.n3 img:nth-child(2) { left: 0; bottom: 0; z-index: 2; }
 .tool-icons.n3 img:nth-child(3) { right: 0; bottom: 0; z-index: 3; }
 
-/* utisci kompanija (placeholder dok ne stignu pravi utisci) */
+/* utisci kompanija (slajdovi 12 i 13 iz "Outliers for Business" prezentacije) */
+.nb { white-space: nowrap; }
 .testimonials { background: #fff; border-top: 1px solid #e3e9de; }
 .t-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 19px; margin-top: 32px; list-style: none; padding: 0; }
 .t-card { display: flex; flex-direction: column; gap: 18px; padding: 26px 26px 24px; background: #fafbf5; border: 1px solid var(--line); border-radius: 18px; }
 .t-mark { width: 34px; height: 26px; color: #75a763; flex: none; }
-.t-text { flex: 1; margin: 0; color: var(--ink); font-size: 16px; line-height: 1.62; letter-spacing: -.01em; }
+.t-text { flex: 1; margin: 0; color: var(--ink); font-size: 15px; line-height: 1.62; letter-spacing: -.01em; }
+.t-text strong { font-weight: 640; }
 .t-person { display: flex; align-items: center; gap: 13px; padding-top: 18px; border-top: 1px solid #e1e8da; }
 .t-avatar { width: 50px; height: 50px; flex: none; border-radius: 50%; object-fit: cover; display: grid; place-items: center;
   background: linear-gradient(135deg,#d9e9cc,#b7d2a4); color: #2f5e45; font-size: 15px; font-weight: 650; letter-spacing: .02em; }
 .t-name { display: block; font-size: 15.5px; font-weight: 650; letter-spacing: -.02em; line-height: 1.3; }
 .t-role { display: block; margin-top: 2px; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
 @media (max-width: 900px) {
-  .t-grid { grid-template-columns: 1fr; max-width: 560px; }
-  .t-card { padding: 22px 20px 20px; }
+  /* na telefonu utisci idu u red koji se prevlači, sledeći viri sa strane */
+  .t-grid { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .t-grid::-webkit-scrollbar { display: none; }
+  .t-card { flex: 0 0 min(86%, 420px); scroll-snap-align: start; padding: 22px 20px 20px; }
+  .t-hint { display: block; }
 }
+.t-hint { display: none; margin-top: 12px; color: var(--muted); font-size: 13.5px; }
 
 .pricing { background: #f0f3e9; border-block: 1px solid #d8dfd1; }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 36px; }
@@ -647,29 +654,54 @@ html body{line-height:1.55 !important;font-weight:400 !important}
         <ul class="t-grid" role="list">
           <li class="t-card">
             <svg class="t-mark" viewBox="0 0 34 26" aria-hidden="true"><path fill="currentColor" d="M0 26V15.6C0 6.9 4.6 1.7 13.2 0l1.6 3.9C10 5.4 7.9 8.2 7.6 12.4H14V26H0Zm19.2 0V15.6C19.2 6.9 23.8 1.7 32.4 0L34 3.9c-4.8 1.5-6.9 4.3-7.2 8.5h6.4V26h-14Z"/></svg>
-            <blockquote class="t-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</blockquote>
+            <blockquote class="t-text">U okviru razvoja zaposlenih na nivou kompanije Milšped, izuzetno nam znači partnerstvo sa Outliersom. Njihova online platforma <strong>omogućila je našim kolegama da u potpunosti usklade učenje sa svojim poslovnim obavezama</strong>. Kao najveći benefit prepoznajem mogućnost <strong>uključivanja u kurseve kada im to najviše odgovara i da samostalno procene tempo kojim će ih završavati, a da sve vreme imaju podršku stručnjaka.</strong> Outliers su se pokazali kao izuzetna podrška kompaniji koja želi da strateški razvija svoje ljude, <strong>kroz rešenja koja su prilagodljiva, savremena i za svaku preporuku.</strong></blockquote>
             <div class="t-person">
-              <span class="t-avatar" aria-hidden="true">IP</span>
-              <span><span class="t-name">Ime Prezime</span><span class="t-role">Pozicija, Naziv kompanije</span></span>
+              <img class="t-avatar" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/utisci/iva-lepojevic.jpg" alt="Iva Lepojević" width="50" height="50" loading="lazy">
+              <span><span class="t-name">Iva Lepojević</span><span class="t-role">Learning &amp; Development Manager, Milšped Group</span></span>
             </div>
           </li>
           <li class="t-card">
             <svg class="t-mark" viewBox="0 0 34 26" aria-hidden="true"><path fill="currentColor" d="M0 26V15.6C0 6.9 4.6 1.7 13.2 0l1.6 3.9C10 5.4 7.9 8.2 7.6 12.4H14V26H0Zm19.2 0V15.6C19.2 6.9 23.8 1.7 32.4 0L34 3.9c-4.8 1.5-6.9 4.3-7.2 8.5h6.4V26h-14Z"/></svg>
-            <blockquote class="t-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</blockquote>
+            <blockquote class="t-text">Nama iz <strong>Learning &amp; Development</strong> tima je bilo važno da razumemo kakve potrebe za obukama imaju kolege iz <strong>Excela</strong> i <strong>Microsoft 365 okruženja</strong>, a uz pomoć Outliers tima smo uspeli to da identifikujemo i onda sprovedemo radionice koje su bile <strong>pun pogodak</strong> za naše zaposlene. Posebno mi je drago jer su kolege bile <strong>angažovane</strong> i <strong>motivisane</strong> tokom edukacija za usvajanjem novih i primenjivih znanja, što pripisujem dvosmernoj komunikaciji i odličnoj organizaciji i implementaciji od strane <span class="nb">Outliers-a</span>.</blockquote>
             <div class="t-person">
-              <span class="t-avatar" aria-hidden="true">IP</span>
-              <span><span class="t-name">Ime Prezime</span><span class="t-role">Pozicija, Naziv kompanije</span></span>
+              <img class="t-avatar" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/utisci/marko-matic.jpg" alt="Marko Matić" width="50" height="50" loading="lazy">
+              <span><span class="t-name">Marko Matić</span><span class="t-role">L&amp;D Specialist, Generali osiguranje</span></span>
             </div>
           </li>
           <li class="t-card">
             <svg class="t-mark" viewBox="0 0 34 26" aria-hidden="true"><path fill="currentColor" d="M0 26V15.6C0 6.9 4.6 1.7 13.2 0l1.6 3.9C10 5.4 7.9 8.2 7.6 12.4H14V26H0Zm19.2 0V15.6C19.2 6.9 23.8 1.7 32.4 0L34 3.9c-4.8 1.5-6.9 4.3-7.2 8.5h6.4V26h-14Z"/></svg>
-            <blockquote class="t-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</blockquote>
+            <blockquote class="t-text">Edukacija pruža dobar uvod u rad sa Excelom, Power Query i Power Pivot, posebno za one koji tek počinju ili se prvi put susreću sa ovim alatima. Aleksandar na jasan i pristupačan način objašnjava osnovne funkcije, koristeći praktične primere iz svakodnevice. <strong>Ono što se posebno izdvaja je pristup koji podstiče drugačije razmišljanje pri rešavanju problema.</strong> Kroz lekcije se ne uči samo kako da se koristi alat, već i <strong>kako da se razvije efikasan način razmišljanja</strong> koji može biti vrlo koristan kasnije u praksi. Zbog toga je ovaj kurs idealan za one koji prave prve korake ili žele da učvrste temeljna znanja iz navedenih oblasti koje edukacija pokriva.</blockquote>
             <div class="t-person">
-              <span class="t-avatar" aria-hidden="true">IP</span>
-              <span><span class="t-name">Ime Prezime</span><span class="t-role">Pozicija, Naziv kompanije</span></span>
+              <img class="t-avatar" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/utisci/jelena-aritonovic.jpg" alt="Jelena Aritonović" width="50" height="50" loading="lazy">
+              <span><span class="t-name">Jelena Aritonović</span><span class="t-role">Commercial Finance Manager, <span class="nb">Coca-Cola</span> HBC</span></span>
+            </div>
+          </li>
+          <li class="t-card">
+            <svg class="t-mark" viewBox="0 0 34 26" aria-hidden="true"><path fill="currentColor" d="M0 26V15.6C0 6.9 4.6 1.7 13.2 0l1.6 3.9C10 5.4 7.9 8.2 7.6 12.4H14V26H0Zm19.2 0V15.6C19.2 6.9 23.8 1.7 32.4 0L34 3.9c-4.8 1.5-6.9 4.3-7.2 8.5h6.4V26h-14Z"/></svg>
+            <blockquote class="t-text">Ono što mi je posebno kao zaposlenom u <span class="nb">HR-u</span> bilo važno jeste <strong>uvid u napredak zaposlenih</strong>. Jasno se u procentima može videti na kom koraku obuke se zaposleni nalazi kao i za koji nivo znanja već može da se testira. <strong>Samim tim mogu da vidim gde postoji „rupa" u znanju ili potencijal za sledeći nivo obuke.</strong> Pored stručnog dela njihovog posla Outliers je jedna mala slatka porodica uvek spremna da izađe u susret, sasluša sve ideje, želje i da konstruktivan savet.</blockquote>
+            <div class="t-person">
+              <img class="t-avatar" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/utisci/jovana-ilic.jpg" alt="Jovana Ilić" width="50" height="50" loading="lazy">
+              <span><span class="t-name">Jovana Ilić</span><span class="t-role">Chief HR Specialist, NIS a.d.</span></span>
+            </div>
+          </li>
+          <li class="t-card">
+            <svg class="t-mark" viewBox="0 0 34 26" aria-hidden="true"><path fill="currentColor" d="M0 26V15.6C0 6.9 4.6 1.7 13.2 0l1.6 3.9C10 5.4 7.9 8.2 7.6 12.4H14V26H0Zm19.2 0V15.6C19.2 6.9 23.8 1.7 32.4 0L34 3.9c-4.8 1.5-6.9 4.3-7.2 8.5h6.4V26h-14Z"/></svg>
+            <blockquote class="t-text">Najviše mi se dopalo kako ste nas uključili <strong>energijom</strong> i <strong>načinom</strong> predavanja. Držali ste nam pažnju, a svako je mogao odmah da poveže lekcije sa svojim poslom i da ih primeni u praksi. Edukacije se nisu zadržale samo u finansijama. Uključili smo prodaju, administraciju i tim project menadžera, svima je bilo korisno. <strong>Ljudi su se motivisali međusobno, delili zapažanja i jedni druge podsticali da nastave dalje sa učenjem.</strong> Prijalo nam je što imamo dovoljno vremena i dug pristup materijalu. Možemo da se vratimo lekcijama kad god zatreba, da obnovimo i uhvatimo logiku. <strong>Vremenom povezujemo naučeno i shvatamo da se isti problem može rešiti na više načina.</strong></blockquote>
+            <div class="t-person">
+              <img class="t-avatar" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/utisci/sofija-antonijev.jpg" alt="Sofija Antonijev" width="50" height="50" loading="lazy">
+              <span><span class="t-name">Sofija Antonijev</span><span class="t-role">Medior Finance Associate, Silver Bell Group</span></span>
+            </div>
+          </li>
+          <li class="t-card">
+            <svg class="t-mark" viewBox="0 0 34 26" aria-hidden="true"><path fill="currentColor" d="M0 26V15.6C0 6.9 4.6 1.7 13.2 0l1.6 3.9C10 5.4 7.9 8.2 7.6 12.4H14V26H0Zm19.2 0V15.6C19.2 6.9 23.8 1.7 32.4 0L34 3.9c-4.8 1.5-6.9 4.3-7.2 8.5h6.4V26h-14Z"/></svg>
+            <blockquote class="t-text">Hteo bih da se zahvalim na detaljnim lekcijama, <strong>mnoge izveštaje koje sam radio po nekoliko sati</strong>, danas završavam za <strong>mnooogo manje vremena</strong>. Većinu sam automatizovao po uputstvima koje sam naučio baš u ovom kursu i <strong>nešto za šta mi je trebalo 45/60 min</strong>, danas se završava <strong>za manje od 5 minuta.</strong></blockquote>
+            <div class="t-person">
+              <img class="t-avatar" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/utisci/jovan-jelisavac.jpg" alt="Jovan Jelisavac" width="50" height="50" loading="lazy">
+              <span><span class="t-name">Jovan Jelisavac</span><span class="t-role">Regional Logistics Coordinator, Alumil Industry</span></span>
             </div>
           </li>
         </ul>
+        <p class="t-hint">Prevuci levo za još utisaka</p>
       </div>
     </section>
 
