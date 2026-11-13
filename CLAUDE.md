@@ -25,6 +25,11 @@ kompanije/           Yearly Ticket za kompanije (B2B). Tekst i dizajn su
                      scenario "Yearly Ticket Optin") i vodi na thank you:
 kompanije/hvala/     thank you za Yearly Ticket (GHL putanja /hvala);
                      jedna sekcija: upit je poslat, javice se neko iz tima.
+dashboard/           Masterclass dashboard (optini, izvori, applicationi), uzivo na
+                     floumate-dev.github.io/excel-grasic/dashboard/. Brojke daje
+                     Apps Script u Sheetu "Excel Grašić | Masterclass" (kod je u
+                     dashboard/apps-script.gs, objavljen kao web app). Ako menjas
+                     skriptu: Deploy > Manage deployments > Edit > New version.
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.

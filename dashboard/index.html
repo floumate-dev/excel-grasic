@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Masterclass dashboard · Outliers (Excel Grašić)</title>
+<link rel="icon" type="image/png" href="https://excel-grasic-referral.vercel.app/dashboard/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
+<!-- Masterclass dashboard: optini, odakle su dosli, applicationi.
+     Podatke daje Apps Script u Google Sheetu "Excel Grašić | Masterclass"
+     (kod je u dashboard/apps-script.gs). Stranica dobija SAMO zbirne brojke,
+     nikad imena, mejlove ni telefone. Osvezava se sama na 30 sekundi. -->
+<style>
+  /* Isti tokeni kao referral dashboard (excel-grasic-referral.vercel.app) */
+  :root {
+    --bg: #004d3a; --card: #00372a; --border: #1e4f43; --muted: #8eada1;
+    --text: #ecede5; --text-dim: #c9d5cb; --accent: #e1f25e; --accent-text: #004d3a;
+    --app: #75a34d;
+    --font: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif; --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  main { max-width: 1080px; margin: 0 auto; padding: 44px 16px 80px; }
+  .brand { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 28px; }
+  .hero { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+  .hero h1 { font-weight: 700; font-size: clamp(32px, 5vw, 44px); letter-spacing: -.02em; line-height: 1.08; }
+  .hero p { margin-top: 8px; color: var(--text-dim); }
+  .live { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-dim); white-space: nowrap; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(225,242,94,.6); animation: puls 2s infinite; }
+  .live.greska i { background: #e0604b; animation: none; }
+  @keyframes puls { 70% { box-shadow: 0 0 0 8px rgba(225,242,94,0); } 100% { box-shadow: 0 0 0 0 rgba(225,242,94,0); } }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; min-width: 0; }
+  .label { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+  .count { font-weight: 800; font-size: clamp(52px, 7vw, 76px); line-height: .95; font-variant-numeric: tabular-nums; }
+  .count.lime { color: var(--accent); }
+  .count small { font-size: .45em; font-weight: 700; color: var(--text-dim); margin-left: 2px; }
+  .caption { margin-top: 10px; color: var(--text-dim); font-size: 14px; }
+  .caption b { color: var(--accent); font-weight: 700; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .wide { margin-top: 16px; }
+
+  /* grafikon po danima */
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--text-dim); margin: -4px 0 14px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .chart { position: relative; height: 220px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px;
+    align-items: end; border-bottom: 1px solid var(--border); padding-top: 8px; }
+  .col { position: relative; height: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 2px; min-width: 0; }
+  .col b { display: block; width: 46%; max-width: 16px; border-radius: 3px 3px 0 0; min-height: 0; transition: height .5s cubic-bezier(.2,.8,.2,1); }
+  .col b.o { background: var(--accent); }
+  .col b.a { background: var(--app); }
+  .col:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    background: #001812; border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 6px 9px; border-radius: 8px;
+    white-space: pre; z-index: 2; pointer-events: none; }
+  .xaxis { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; margin-top: 6px; font-size: 11px; color: var(--muted);
+    text-align: center; font-variant-numeric: tabular-nums; }
+  .xaxis span:nth-child(odd) { visibility: visible; }
+  .xaxis span:nth-child(even) { visibility: hidden; }
+
+  /* liste sa trakama */
+  ul { list-style: none; }
+  .rows li { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .rows li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .rows li:first-child { padding-top: 0; }
+  .rowtop { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; }
+  .rowtop .n { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .rowtop .v { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .rowtop .v em { font-style: normal; color: var(--muted); font-weight: 500; margin-left: 6px; }
+  .track { margin-top: 7px; height: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+  .track i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+  .empty { color: var(--text-dim); font-size: 14px; }
+  .foot { margin-top: 22px; color: var(--muted); font-size: 13px; }
+
+  .msg { padding: 60px 0; text-align: center; color: var(--text-dim); }
+
+  @media (max-width: 820px) {
+    .kpis { grid-template-columns: 1fr; }
+    .grid2 { grid-template-columns: 1fr; }
+    .chart { height: 180px; gap: 2px; }
+    .xaxis { gap: 2px; }
+    .xaxis span:nth-child(3n+2), .xaxis span:nth-child(3n) { visibility: hidden; }
+    .xaxis span:nth-child(3n+1) { visibility: visible; }
+  }
+  @media (prefers-reduced-motion: reduce) { .live i { animation: none; } .col b, .track i { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">Outliers · Excel Grašić</div>
+  <div class="hero">
+    <div>
+      <h1>Masterclass dashboard</h1>
+      <p>Prijave i applicationi za besplatan AI Masterclass.</p>
+    </div>
+    <div class="live" id="live"><i></i><span id="live-txt">Učitavanje…</span></div>
+  </div>
+
+  <div id="app"><div class="msg">Učitavanje podataka…</div></div>
+</main>
+
+<script>
+(function(){
+  /* Adresa Apps Script web appa (Deploy > Web app URL). */
+  var API = "https://script.google.com/macros/s/AKfycbyF89GqaJCQ7LuF4fc5crirNhg8TsVNZ75Vjh9q2aXoyotjqMF7dKcAtJxuvAJIjD1q/exec";
+  var OSVEZI_SEKUNDI = 30;
+
+  var app = document.getElementById('app'), live = document.getElementById('live'), liveTxt = document.getElementById('live-txt');
+  var poslednje = null, podaci = null;
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function br(n){ return Number(n || 0).toLocaleString('sr-RS'); }
+
+  /* lepsi nazivi izvora */
+  var NAZIVI = { 'direktno': 'Direktno (bez izvora)', 'referral': 'Referral (preporuka)', 'fb': 'Facebook', 'facebook': 'Facebook',
+    'ig': 'Instagram', 'instagram': 'Instagram', 'meta': 'Meta oglasi', 'email': 'Mejl', 'ac': 'Mejl (ActiveCampaign)',
+    'activecampaign': 'Mejl (ActiveCampaign)', 'google': 'Google', 'linkedin': 'LinkedIn', 'youtube': 'YouTube', 'tiktok': 'TikTok' };
+  function naziv(k){ return NAZIVI[String(k).toLowerCase()] || (String(k).charAt(0).toUpperCase() + String(k).slice(1)); }
+
+  function lista(items, ukupno, mapiraj){
+    if (!items || !items.length) return '<p class="empty">Još nema podataka.</p>';
+    var max = items[0].broj || 1;
+    return '<ul class="rows">' + items.map(function(it){
+      var pct = ukupno ? Math.round(it.broj / ukupno * 100) : 0;
+      return '<li><div class="rowtop"><span class="n">' + esc(mapiraj ? mapiraj(it.naziv) : it.naziv) + '</span>' +
+        '<span class="v">' + br(it.broj) + '<em>' + pct + '%</em></span></div>' +
+        '<div class="track"><i data-w="' + Math.max(2, Math.round(it.broj / max * 100)) + '"></i></div></li>';
+    }).join('') + '</ul>';
+  }
+
+  function dan(iso){ var p = iso.split('-'); return +p[2] + '.' + +p[1] + '.'; }
+
+  function grafikon(dani){
+    var max = 1;
+    dani.forEach(function(d){ max = Math.max(max, d.optini, d.aplikacije); });
+    var kol = dani.map(function(d){
+      var tip = dan(d.dan) + '\nOptini: ' + d.optini + '\nApplicationi: ' + d.aplikacije;
+      return '<div class="col" data-tip="' + esc(tip) + '"><b class="o" data-h="' + (d.optini / max * 100) + '"></b>' +
+             '<b class="a" data-h="' + (d.aplikacije / max * 100) + '"></b></div>';
+    }).join('');
+    var x = dani.map(function(d){ return '<span>' + dan(d.dan) + '</span>'; }).join('');
+    return '<div class="chart">' + kol + '</div><div class="xaxis">' + x + '</div>';
+  }
+
+  function render(d){
+    var raz = d.danas.optini - d.juce.optini;
+    app.innerHTML =
+      '<div class="kpis">' +
+        '<div class="card"><div class="label">Optini</div><div class="count lime">' + br(d.optini) + '</div>' +
+          '<p class="caption">Danas <b>+' + br(d.danas.optini) + '</b> · juče ' + br(d.juce.optini) + '</p></div>' +
+        '<div class="card"><div class="label">Applicationi</div><div class="count">' + br(d.aplikacije) + '</div>' +
+          '<p class="caption">Danas <b>+' + br(d.danas.aplikacije) + '</b> · juče ' + br(d.juce.aplikacije) + '</p></div>' +
+        '<div class="card"><div class="label">Popunilo anketu</div><div class="count">' + String(d.stopaAplikacija).replace('.', ',') + '<small>%</small></div>' +
+          '<p class="caption">optina je popunilo application</p></div>' +
+      '</div>' +
+      '<div class="card wide"><div class="label">Poslednjih ' + d.poDanu.length + ' dana</div>' +
+        '<div class="legend"><span><i style="background:var(--accent)"></i>Optini</span><span><i style="background:var(--app)"></i>Applicationi</span></div>' +
+        grafikon(d.poDanu) + '</div>' +
+      '<div class="grid2">' +
+        '<div class="card"><div class="label">Odakle dolaze</div>' + lista(d.izvori, d.optini, naziv) + '</div>' +
+        '<div class="card"><div class="label">Tačan izvor (specific source)</div>' + lista(d.specificni, d.optini) + '</div>' +
+        '<div class="card"><div class="label">Kampanje (utm_campaign)</div>' + lista(d.kampanje, d.optini) + '</div>' +
+        '<div class="card"><div class="label">Termin</div>' + lista(d.termini, d.optini) + '</div>' +
+        '<div class="card"><div class="label">Država</div>' + lista(d.drzave, d.optini) + '</div>' +
+      '</div>' +
+      '<p class="foot">Jedna osoba se broji jednom, i kad se prijavi više puta (' + br(d.prijava) + ' prijava ukupno). ' +
+        'Test prijave tima se ne broje.</p>';
+    requestAnimationFrame(function(){
+      app.querySelectorAll('[data-w]').forEach(function(el){ el.style.width = el.getAttribute('data-w') + '%'; });
+      app.querySelectorAll('[data-h]').forEach(function(el){ el.style.height = el.getAttribute('data-h') + '%'; });
+    });
+  }
+
+  function vreme(){
+    if (!poslednje) return;
+    var s = Math.round((Date.now() - poslednje) / 1000);
+    liveTxt.textContent = s < 5 ? 'Ažurirano upravo sada' : 'Ažurirano pre ' + (s < 60 ? s + ' s' : Math.round(s / 60) + ' min');
+  }
+
+  function ucitaj(){
+    if (!API) { app.innerHTML = '<div class="msg">Izvor podataka još nije povezan.</div>'; liveTxt.textContent = 'Nije povezano'; return; }
+    fetch(API + (API.indexOf('?') > -1 ? '&' : '?') + 't=' + Date.now())
+      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(d){
+        podaci = d; poslednje = Date.now(); live.classList.remove('greska'); render(d); vreme();
+      })
+      .catch(function(){
+        live.classList.add('greska');
+        liveTxt.textContent = 'Podaci trenutno nisu dostupni, pokušavam ponovo';
+        if (!podaci) app.innerHTML = '<div class="msg">Podaci trenutno nisu dostupni. Stranica pokušava ponovo za ' + OSVEZI_SEKUNDI + ' s.</div>';
+      });
+  }
+
+  ucitaj();
+  setInterval(function(){ if (!document.hidden) ucitaj(); }, OSVEZI_SEKUNDI * 1000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) ucitaj(); });
+  setInterval(vreme, 5000);
+})();
+</script>
+</body>
+</html>
