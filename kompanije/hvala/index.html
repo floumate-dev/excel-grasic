@@ -19,7 +19,7 @@
   color-scheme: light;
 }
 *,*::before,*::after { box-sizing: border-box; }
-html { scroll-padding-top: 86px; }
+html { scroll-padding-top: 0; }
 body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--font); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -371,7 +371,6 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   .plan .plan-value { flex-wrap: wrap; padding: 8px; }
 }
 @media (max-width: 720px) {
-  html { scroll-padding-top: 72px; }
   .wrap { width: calc(100% - 40px); }
   .section-space { padding-block: 55px; }
   .header-inner { min-height: 62px; gap: 9px; }
@@ -474,7 +473,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 }
 
 /* THANK YOU */
-.ty-hero .hero-inner { min-height: calc(100vh - 75px - 160px); padding-block: clamp(54px,5.4vw,84px) clamp(58px,5.6vw,88px); }
+.ty-hero .hero-inner { min-height: calc(100vh - 160px); padding-block: clamp(54px,5.4vw,84px) clamp(58px,5.6vw,88px); }
 .ty-check { display: inline-grid; place-items: center; width: 54px; height: 54px; margin-bottom: 24px; border-radius: 50%;
   background: #def16a; color: #173b21; box-shadow: 0 0 0 8px rgba(222,241,106,.14); }
 .ty-check svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -494,25 +493,14 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   </script>
   <a class="skip-link" href="#sadrzaj">Pređite na sadržaj</a>
   <div id="vrh"></div>
-  <header class="site-header">
-    <div class="wrap header-inner">
-      <a class="brand-home" href="https://kompanije.excelgrasic.com/landing-page" aria-label="Outliers For Business, na stranicu Yearly Ticket">
-        <img class="brand-dark" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/outliers-for-business-dark.png" width="540" height="153" alt="Outliers For Business">
-      </a>
-      <div class="header-actions">
-        <a class="btn btn-outline header-cta" href="https://kompanije.excelgrasic.com/landing-page">Nazad na ponudu</a>
-      </div>
-    </div>
-  </header>
-
   <main id="sadrzaj">
     <section class="hero ty-hero" aria-labelledby="hero-title">
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="wrap hero-inner">
         <div class="hero-copy">
           <span class="ty-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
-          <h1 id="hero-title"><span class="hero-line">Hvala vam,</span> <span class="hero-line"><em>upit je uspešno poslat.</em></span></h1>
-          <p class="hero-intro">Uskoro će vas kontaktirati neko iz našeg tima.</p>
+          <h1 id="hero-title"><span class="hero-line">Hvala Vam,</span> <span class="hero-line"><em>upit je uspešno poslat.</em></span></h1>
+          <p class="hero-intro">Uskoro će Vas kontaktirati neko iz našeg tima.</p>
         </div>
         <div class="ticket-stage" role="img" aria-label="Outliers Yearly Ticket za kompanije">
           <div class="ticket-cast"></div>
