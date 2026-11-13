@@ -152,11 +152,17 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 }
 /* ikonice alata sa slicica nasih kurseva (excelgrasic.com/kursevi) */
 .tool-grid img { width: 54px; height: 54px; object-fit: contain; padding: 0; }
+.tool-icons { display: flex; align-items: center; justify-content: center; gap: 6px; height: 54px; }
+.tool-icons.n2 img { width: 42px; height: 42px; }
+.tool-icons.n3 img { width: 34px; height: 34px; }
 .tool-grid img.office-mark { padding: 0; }
-.tool-grid li > span { max-width: 100%; overflow-wrap: break-word; text-wrap: balance; }
+.tool-grid li > span:last-child { max-width: 100%; overflow-wrap: break-word; text-wrap: balance; }
 @container (max-width: 355px) {
   .tool-grid li { gap: 6px; padding: 12px 5px 10px; font-size: clamp(11px,3.6cqi,13px); }
   .tool-grid img { width: 46px; height: 46px; padding: 0; }
+  .tool-icons { gap: 4px; height: 46px; }
+  .tool-icons.n2 img { width: 34px; height: 34px; }
+  .tool-icons.n3 img { width: 26px; height: 26px; }
 }
 
 .pricing { background: #f0f3e9; border-block: 1px solid #d8dfd1; }
@@ -591,15 +597,15 @@ html body{line-height:1.55 !important;font-weight:400 !important}
         <div class="tool-panel">
           <h3 id="tools-title">Pokrivamo edukacije iz:</h3>
           <ul class="tool-grid" role="list" aria-labelledby="tools-title">
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"><span>Microsoft Excel 0&nbsp;to Hero</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"><span>Microsoft Excel&nbsp;- Expert nivo</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerquery.png" alt="" width="54" height="54" loading="lazy"><span>Power Excel&nbsp;- Power Query i&nbsp;Data Modeling</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerpivot.png" alt="" width="54" height="54" loading="lazy"><span>Power Excel&nbsp;- Power Pivot i&nbsp;DAX</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerbi.png" alt="" width="54" height="54" loading="lazy"><span>Power BI&nbsp;- Transformacija podataka u&nbsp;odluke</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/python.png" alt="" width="54" height="54" loading="lazy"><span>Analiza podataka kroz Python i&nbsp;Excel</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/word.png" alt="" width="54" height="54" loading="lazy"><span>Microsoft Word</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerpoint.png" alt="" width="54" height="54" loading="lazy"><span>Microsoft PowerPoint i&nbsp;prezentacioni trikovi</span></li>
-            <li><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/ai.png" alt="" width="54" height="54" loading="lazy"><span>AI u&nbsp;poslovanju (ChatGPT, Copilot &amp; Claude)</span></li>
+            <li><span class="tool-icons n1"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"></span><span>Microsoft Excel 0&nbsp;to Hero</span></li>
+            <li><span class="tool-icons n1"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"></span><span>Microsoft Excel&nbsp;- Expert nivo</span></li>
+            <li><span class="tool-icons n2"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerquery.png" alt="" width="54" height="54" loading="lazy"></span><span>Power Excel&nbsp;- Power Query i&nbsp;Data Modeling</span></li>
+            <li><span class="tool-icons n2"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerpivot.png" alt="" width="54" height="54" loading="lazy"></span><span>Power Excel&nbsp;- Power Pivot i&nbsp;DAX</span></li>
+            <li><span class="tool-icons n2"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerbi.png" alt="" width="54" height="54" loading="lazy"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerquery.png" alt="" width="54" height="54" loading="lazy"></span><span>Power BI&nbsp;- Transformacija podataka u&nbsp;odluke</span></li>
+            <li><span class="tool-icons n2"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/python.png" alt="" width="54" height="54" loading="lazy"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/excel.png" alt="" width="54" height="54" loading="lazy"></span><span>Analiza podataka kroz Python i&nbsp;Excel</span></li>
+            <li><span class="tool-icons n1"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/word.png" alt="" width="54" height="54" loading="lazy"></span><span>Microsoft Word</span></li>
+            <li><span class="tool-icons n1"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/powerpoint.png" alt="" width="54" height="54" loading="lazy"></span><span>Microsoft PowerPoint i&nbsp;prezentacioni trikovi</span></li>
+            <li><span class="tool-icons n3"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/chatgpt.png" alt="" width="54" height="54" loading="lazy"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/copilot.png" alt="" width="54" height="54" loading="lazy"><img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/alati/claude.png" alt="" width="54" height="54" loading="lazy"></span><span>AI u&nbsp;poslovanju (ChatGPT, Copilot &amp; Claude)</span></li>
           </ul>
         </div>
       </div>
