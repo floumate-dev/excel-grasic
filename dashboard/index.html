@@ -58,7 +58,7 @@
   @keyframes puls { 70% { box-shadow: 0 0 0 8px rgba(225,242,94,0); } 100% { box-shadow: 0 0 0 0 rgba(225,242,94,0); } }
 
   .card { background: rgba(0,24,18,.42); border: 1px solid var(--border); border-radius: 18px; padding: 26px;
-    box-shadow: 0 20px 48px rgba(0,16,12,.26); min-width: 0; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    box-shadow: 0 20px 48px rgba(0,16,12,.26); min-width: 0; }
   .label { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
   .caption { margin-top: 10px; color: var(--text-dim); font-size: 14px; }
   .caption b { color: var(--accent); font-weight: 700; }
@@ -83,15 +83,13 @@
     background: linear-gradient(90deg, #004d3a 0%, #75a34d 55%, #e1f25e 100%);
     box-shadow: 0 0 18px rgba(225,242,94,.45); transition: width 1.6s cubic-bezier(.25,.46,.45,.94); }
   .tl > i::after { content: ""; position: absolute; right: 2px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%;
-    background: #f2ff8c; box-shadow: 0 0 0 4px rgba(225,242,94,.25), 0 0 22px 6px rgba(225,242,94,.55); animation: tip 2.2s ease-in-out infinite; }
-  @keyframes tip { 50% { box-shadow: 0 0 0 7px rgba(225,242,94,.12), 0 0 30px 10px rgba(225,242,94,.4); } }
+    background: #f2ff8c; box-shadow: 0 0 0 4px rgba(225,242,94,.25), 0 0 22px 6px rgba(225,242,94,.5); }
   .stop { position: absolute; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; letter-spacing: -.02em;
     background: #00372a; border: 2px solid rgba(236,237,229,.28); color: rgba(236,237,229,.75); box-shadow: 0 6px 16px rgba(0,16,12,.35);
     transition: background .3s, color .3s, box-shadow .3s; }
   .stop.on { background: var(--accent); border-color: var(--accent); color: var(--accent-text); box-shadow: 0 0 0 6px rgba(225,242,94,.18), 0 0 24px rgba(225,242,94,.35); }
-  .stop.next { border-color: rgba(225,242,94,.7); color: var(--accent); animation: sledeci 2.4s ease-in-out infinite; }
-  @keyframes sledeci { 50% { box-shadow: 0 0 0 7px rgba(225,242,94,.12), 0 6px 16px rgba(0,16,12,.35); } }
+  .stop.next { border-color: rgba(225,242,94,.7); color: var(--accent); box-shadow: 0 0 0 5px rgba(225,242,94,.12), 0 6px 16px rgba(0,16,12,.35); }
   .stop.goal { width: 46px; height: 46px; margin: -23px 0 0 -23px; font-size: 13px; }
 
   .goal-card .caption { margin-top: 26px; position: relative; }
@@ -164,7 +162,7 @@
     .stop.goal { width: 38px; height: 38px; margin: -19px 0 0 -19px; font-size: 11px; }
         }
   @media (prefers-reduced-motion: reduce) {
-    .live i, .tl > i::after, .stop.next { animation: none; }
+    .live i { animation: none; }
     .col b, .track i, .tl > i { transition: none; }
   }
 </style>
@@ -335,6 +333,9 @@
     clearTimeout(obavesti.t); obavesti.t = setTimeout(function(){ toast.classList.remove('show'); }, 3500);
   }
 
+  /* sve osim vremena azuriranja; ako je isto, stranica se ne crta ponovo */
+  function potpis(d){ var c = {}; for (var k in d) if (k !== 'azurirano') c[k] = d[k]; return JSON.stringify(c); }
+
   function vreme(){
     if (!poslednje) return;
     var s = Math.round((Date.now() - poslednje) / 1000);
@@ -347,7 +348,10 @@
       .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function(d){
         var razlika = podaci ? d.optini - podaci.optini : 0;
-        podaci = d; poslednje = Date.now(); live.classList.remove('greska'); render(d); vreme();
+        var isto = podaci && potpis(podaci) === potpis(d);
+        podaci = d; poslednje = Date.now(); live.classList.remove('greska');
+        if (!isto) render(d);
+        vreme();
         if (razlika > 0) obavesti(razlika);
       })
       .catch(function(){
