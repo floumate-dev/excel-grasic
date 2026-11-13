@@ -8,6 +8,15 @@
 <link rel="icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-32x32.png" sizes="32x32">
 <link rel="icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="https://excelgrasic.com/wp-content/uploads/2023/12/cropped-excel-favicon-180x180.png">
+<!-- vturb: brze ucitavanje plejera -->
+<script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+<link rel="preload" href="https://scripts.converteai.net/6c98d0bf-9819-4924-b563-537898de7fd3/players/6af70d77d5fac6a4f3b4eee7/v4/player.js" as="script">
+<link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+<link rel="preload" href="https://cdn.converteai.net/6c98d0bf-9819-4924-b563-537898de7fd3/6af70d66316ca0a2a4f47c04/main.m3u8" as="fetch">
+<link rel="dns-prefetch" href="https://cdn.converteai.net">
+<link rel="dns-prefetch" href="https://scripts.converteai.net">
+<link rel="dns-prefetch" href="https://images.converteai.net">
+<link rel="dns-prefetch" href="https://license.vturb.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,9 +26,6 @@
    KONFIGURACIJA - sve sto se menja je ovde
    ============================================================ */
 window.MC = {
-  /* Video u heroju. TODO: zameniti ID-em pravog videa za ovu stranicu. */
-  vimeoId:     "1193208786",
-
   /* Adresa sa koje smo poslali potvrdu - na nju ide i odgovor. */
   posiljalac:  "office@excelgrasic.com",
 
@@ -132,8 +138,6 @@ p,li{text-wrap:pretty}
 .vsl-shell::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.5);
   border-radius:var(--r);transform:translate(14px,14px);pointer-events:none}
 .vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,0,0,.4)}
-.vsl::before{content:"";display:block;padding-top:56.25%}
-.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 /* ============================================================
    SEKCIJE
@@ -252,7 +256,10 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     <p class="sub">Mesto na Masterclassu je rezervisano. Link za pristup stiže ti na mejl, a podsetnik dobijaš i pre samog početka.</p>
 
     <div class="vsl-shell">
-      <div class="vsl"><iframe id="vsl" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vidimo se na Masterclassu"></iframe></div>
+      <div class="vsl" id="vsl">
+        <!-- VSL: vturb (converteai) plejer -->
+        <vturb-smartplayer id="vid-6af70d77d5fac6a4f3b4eee7" style="display: block; margin: 0 auto; width: 100%; "><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 56.25% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/6c98d0bf-9819-4924-b563-537898de7fd3/players/6af70d77d5fac6a4f3b4eee7/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+      </div>
     </div>
 
     <div class="steps-in">
@@ -357,10 +364,6 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     ime = ime.charAt(0).toLocaleUpperCase('sr-RS') + ime.slice(1).toLocaleLowerCase('sr-RS');
     document.getElementById('hello').textContent = vokativ(ime) + ', vidimo se uskoro.';
   }
-
-  /* ---------- video ---------- */
-  document.getElementById('vsl').src =
-    'https://player.vimeo.com/video/' + C.vimeoId + '?autoplay=1&title=0&portrait=0&byline=0';
 
   /* ---------- korak 1: otvaranje mejla ---------- */
   var mail = (p.get('email') || '').trim().toLowerCase();
