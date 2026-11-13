@@ -11,6 +11,15 @@
      Posle poslednjeg termina vratiti na noindex (stari datumi u pretrazi). -->
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://masterclass.excelgrasic.com/">
+<!-- vturb: brze ucitavanje plejera -->
+<script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+<link rel="preload" href="https://scripts.converteai.net/6c98d0bf-9819-4924-b563-537898de7fd3/players/6af70185586808a8c153ec61/v4/player.js" as="script">
+<link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+<link rel="preload" href="https://cdn.converteai.net/6c98d0bf-9819-4924-b563-537898de7fd3/6af7016faa4d6c7f9588e0e6/main.m3u8" as="fetch">
+<link rel="dns-prefetch" href="https://cdn.converteai.net">
+<link rel="dns-prefetch" href="https://scripts.converteai.net">
+<link rel="dns-prefetch" href="https://images.converteai.net">
+<link rel="dns-prefetch" href="https://license.vturb.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -210,8 +219,6 @@ p{color:var(--ink)}
 .vsl-shell::before{content:"";position:absolute;inset:0;border:1.5px solid rgba(225,242,94,.5);border-radius:var(--r);
   transform:translate(14px,14px);pointer-events:none}
 .vsl{position:relative;border-radius:var(--r);overflow:hidden;background:#000;box-shadow:0 28px 64px rgba(0,0,0,.4)}
-.vsl::before{content:"";display:block;padding-top:56.25%}
-.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .gift{display:flex;gap:13px;align-items:center;margin-top:26px;background:rgba(236,237,229,.07);
   border:1px solid rgba(236,237,229,.14);border-radius:14px;padding:15px 17px}
 .gift svg{width:36px;height:36px;flex:0 0 36px;display:block}
@@ -620,9 +627,8 @@ footer p{font-size:.78rem;color:rgba(236,237,229,.5)}
     <div class="hero-media">
       <div class="vsl-shell">
         <div class="vsl">
-          <!-- VSL: Vimeo video sa postojeceg optin pagea -->
-          <iframe src="https://player.vimeo.com/video/1193208786?autoplay=1&loop=1&muted=1&title=0&portrait=0&byline=0"
-                  allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Masterclass najava"></iframe>
+          <!-- VSL: vturb (converteai) plejer -->
+          <vturb-smartplayer id="vid-6af70185586808a8c153ec61" style="display: block; margin: 0 auto; width: 100%; "><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 56.25% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/6c98d0bf-9819-4924-b563-537898de7fd3/players/6af70185586808a8c153ec61/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
         </div>
       </div>
       <div class="gift">
