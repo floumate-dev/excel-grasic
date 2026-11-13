@@ -152,18 +152,27 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 }
 /* ikonice alata sa slicica nasih kurseva (excelgrasic.com/kursevi) */
 .tool-grid img { width: 54px; height: 54px; object-fit: contain; padding: 0; }
-.tool-icons { display: flex; align-items: center; justify-content: center; gap: 6px; height: 54px; }
-.tool-icons.n2 img { width: 42px; height: 42px; }
-.tool-icons.n3 img { width: 34px; height: 34px; }
 .tool-grid img.office-mark { padding: 0; }
 .tool-grid li > span:last-child { max-width: 100%; overflow-wrap: break-word; text-wrap: balance; }
 @container (max-width: 355px) {
   .tool-grid li { gap: 6px; padding: 12px 5px 10px; font-size: clamp(11px,3.6cqi,13px); }
   .tool-grid img { width: 46px; height: 46px; padding: 0; }
-  .tool-icons { gap: 4px; height: 46px; }
-  .tool-icons.n2 img { width: 34px; height: 34px; }
-  .tool-icons.n3 img { width: 26px; height: 26px; }
 }
+/* vise ikonica po kursu: slozene jedna preko druge, svaka u beloj plocici */
+.tool-icons { position: relative; display: block; flex: none; width: 54px; height: 64px; }
+.tool-icons img, .tool-icons.n2 img, .tool-icons.n3 img {
+  position: absolute; box-sizing: border-box; width: 42px; height: 42px; padding: 7px;
+  background: #fff; border: 1px solid #e1e8da; border-radius: 12px; box-shadow: 0 4px 10px rgba(17,52,33,.13);
+}
+.tool-icons.n1 img { width: 52px; height: 52px; padding: 8px; left: 1px; top: 6px; }
+.tool-icons.n2 { width: 68px; }
+.tool-icons.n2 img:nth-child(1) { left: 0; top: 2px; }
+.tool-icons.n2 img:nth-child(2) { right: 0; bottom: 2px; z-index: 2; }
+.tool-icons.n3 { width: 78px; height: 64px; }
+.tool-icons.n3 img { width: 38px; height: 38px; padding: 6px; }
+.tool-icons.n3 img:nth-child(1) { left: 50%; top: 0; transform: translateX(-50%); }
+.tool-icons.n3 img:nth-child(2) { left: 0; bottom: 0; z-index: 2; }
+.tool-icons.n3 img:nth-child(3) { right: 0; bottom: 0; z-index: 3; }
 
 .pricing { background: #f0f3e9; border-block: 1px solid #d8dfd1; }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 36px; }
