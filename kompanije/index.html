@@ -903,8 +903,12 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   });
 
   /* drzava po IP adresi, samo ako posetilac jos nije sam izabrao */
+  let ipAdresa = "";
   function uzmiDrzavu(url) {
-    return fetch(url).then((r) => r.json()).then((d) => (d && d.country) || "").catch(() => "");
+    return fetch(url).then((r) => r.json()).then((d) => {
+      if (d && d.ip && !ipAdresa) ipAdresa = String(d.ip);   /* za Conversions API (client_ip_address) */
+      return (d && d.country) || "";
+    }).catch(() => "");
   }
   uzmiDrzavu("https://api.country.is/")
     .then((kod) => kod || uzmiDrzavu("https://get.geojs.io/v1/ip/country.json"))
@@ -954,6 +958,22 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   /* posle provere: svi podaci idu na Make webhook, pa posetilac prelazi na
      thank you stranicu. Slanje ne ceka duze od 4 s - prelazak se desava i ako
      mreza zapne (keepalive zavrsi slanje u pozadini). */
+  /* vrednost kolacica (Meta _fbp / _fbc) */
+  function kolacic(ime) {
+    const m = document.cookie.match(new RegExp("(?:^|; )" + ime + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : "";
+  }
+  /* stalni ID posetioca (external_id): isti na svakoj poseti sa istog pregledaca */
+  function idPosetioca() {
+    let id = "";
+    try { id = localStorage.getItem("yt_vid") || ""; } catch (e) {}
+    if (!id) {
+      id = "yt-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+      try { localStorage.setItem("yt_vid", id); } catch (e) {}
+    }
+    return id;
+  }
+
   let saljem = false;
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -984,6 +1004,20 @@ html body{line-height:1.55 !important;font-weight:400 !important}
     ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid"].forEach((k) => podaci.append(k, q.get(k) || ""));
     podaci.append("vreme", new Date().toISOString());
     podaci.append("event_id", eventId);
+
+    /* Meta Conversions API - polja imenovana tacno kao Meta parametri, da se u
+       Make-u mapiraju jedan na jedan (Lead ide samo preko CAPI, piksel salje samo PageView) */
+    podaci.append("em", emailField.value.trim().toLowerCase());
+    podaci.append("fn", delovi[0].toLowerCase());
+    podaci.append("ln", delovi.slice(1).join(" ").toLowerCase());
+    podaci.append("ph", telefon.replace(/\D/g, ""));
+    podaci.append("country", (ipDrzava || (telefon ? drzava : "")).toLowerCase());
+    podaci.append("external_id", idPosetioca());
+    podaci.append("fbp", kolacic("_fbp"));
+    podaci.append("fbc", kolacic("_fbc") || (q.get("fbclid") ? "fb.1." + Date.now() + "." + q.get("fbclid") : ""));
+    podaci.append("client_ip_address", ipAdresa);
+    podaci.append("client_user_agent", navigator.userAgent || "");
+    podaci.append("event_source_url", location.href.split("#")[0]);
 
     saljem = true;
     submitBtn.disabled = true;
