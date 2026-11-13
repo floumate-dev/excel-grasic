@@ -46,7 +46,7 @@
     background: radial-gradient(ellipse, rgba(225,242,94,.10), transparent 66%); }
   .fx .g4 { width: 700px; height: 700px; right: -260px; top: 1150px; background: radial-gradient(circle, rgba(225,242,94,.12), transparent 62%); }
 
-  main { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 52px 16px 80px; }
+  main { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 52px 16px 44px; }
 
   .masthead { text-align: center; margin-bottom: 34px; }
   .brand { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
@@ -141,6 +141,13 @@
   .track i { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #75a34d, #e1f25e);
     transition: width .8s cubic-bezier(.2,.8,.2,1); }
   .empty { color: var(--text-dim); font-size: 14px; }
+  .powered { position: relative; z-index: 1; text-align: center; padding: 0 16px 44px; }
+  .powered a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px;
+    border: 1px solid var(--border); background: rgba(0,24,18,.35); color: var(--muted); font-size: 12px; font-weight: 500;
+    letter-spacing: .04em; text-decoration: none; transition: color .2s, border-color .2s; }
+  .powered a b { color: var(--text); font-weight: 700; letter-spacing: .02em; }
+  .powered a i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .powered a:hover { color: var(--text); border-color: rgba(225,242,94,.4); }
   .foot { margin-top: 22px; color: var(--muted); font-size: 13px; text-align: center; }
 
   .tiho * { transition: none !important; }
@@ -210,6 +217,7 @@
 
   <div id="app"><div class="msg">Učitavanje podataka…</div></div>
 </main>
+<footer class="powered"><a href="https://www.floumate.com" target="_blank" rel="noopener"><i></i>Powered by <b>Floumate</b></a></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -223,7 +231,8 @@
   var STANICE = [2500, 5000, 7500, 10000, 12500, 15000];
 
   /* Pozdrav po parametru ?osoba= (ime je vec u vokativu). Bez parametra nema reda.
-     slika: putanja do fotke (npr. 'tim/vlada.jpg'); prazno = bez fotke. */
+     slika: PUN link do fotke (stranica se hostuje i na GHL-u, pa relativna putanja ne radi),
+     npr. 'https://floumate-dev.github.io/excel-grasic/dashboard/tim/vlada.jpg'; prazno = bez fotke. */
   var OSOBE = {
     aleksandar: { ime: 'Aleksandre', slika: '' },
     marijana:   { ime: 'Marijana',   slika: '' },
