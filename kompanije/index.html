@@ -217,7 +217,11 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 .founder-role { font-size: 12px; line-height: 1.4; color: #4b694f; font-weight: 580; }
 .founder-name { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
 .founder-name h3 { min-width: 0; font-size: 26px; font-weight: 650; }
-.mvp-badge { flex: none; width: clamp(57px,5.5vw,80px); height: auto; }
+/* MVP plocica na slici, prislonjena uz levu ivicu */
+.founder-chip { position: absolute; left: 0; bottom: 22px; z-index: 2; display: flex; align-items: center; gap: 12px;
+  background: #fff; border-radius: 0 16px 16px 0; padding: 10px 18px 10px 14px; box-shadow: 0 14px 30px -10px rgba(0,25,13,.4); }
+.founder-chip img { height: 30px; width: auto; }
+.founder-chip span { font-size: 12.5px; font-weight: 620; line-height: 1.3; color: var(--ink); }
 .founder-info p:last-child { color: var(--body); margin-top: 9px; font-size: 14px; line-height: 1.6; }
 .faq-column h2 { margin-bottom: 24px; }
 /* PAKETI - dugme odvojeno od bonusa: isprekidana linija kao otcepak karte,
@@ -263,6 +267,32 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 .form-field textarea,.manual-copy { resize: vertical; min-height: 76px; }
 .form-field textarea::placeholder { color: #66756b; opacity: 1; font-size: 14px; }
 .form-field :is(input,textarea):focus-visible { border-color: #447548; }
+/* telefon: pozivni (zastava + broj) i broj su u istom okviru */
+.tel-field { position: relative; display: flex; align-items: stretch; border: 1px solid #a9b9a8; border-radius: 8px; background: #fff; }
+.tel-field:focus-within { border-color: #447548; }
+.form-field .tel-field > input { border: 0; border-radius: 0 8px 8px 0; min-width: 0; flex: 1; min-height: 41px; }
+.form-field .tel-field > input:focus-visible { outline: 0; }
+.tel-field:has(> input:focus-visible) { outline: 3px solid #37823a; outline-offset: 4px; }
+.tel-code { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 0 10px 0 11px; border: 0; border-right: 1px solid #d5ddd2;
+  border-radius: 8px 0 0 8px; background: #f3f6ef; color: var(--ink); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tel-code:hover { background: #eaf0e4; }
+.tel-code img { width: 22px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px rgba(16,62,51,.12); }
+.tel-caret { width: 7px; height: 7px; margin: -3px 1px 0 2px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(45deg); opacity: .65; }
+.tel-code[aria-expanded="true"] .tel-caret { transform: rotate(225deg); margin-top: 3px; }
+.tel-menu { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; width: min(330px, 100%); min-width: 260px; padding: 8px; background: #fff;
+  border: 1px solid #c7d4c8; border-radius: 10px; box-shadow: 0 18px 40px -12px rgba(0,40,25,.28); }
+.form-field .tel-search { min-height: 38px; padding: 8px 10px; border-color: #d5ddd2; border-radius: 7px; }
+.form-field .tel-search:focus-visible { outline: 2px solid #37823a; outline-offset: 0; border-color: transparent; }
+.tel-list { list-style: none; padding: 0; margin: 6px 0 0; max-height: 236px; overflow-y: auto; overscroll-behavior: contain; }
+.tel-list li.tel-sep { height: 1px; margin: 5px 6px; background: #e1e8dc; }
+.tel-opt { width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 9px; border: 0; border-radius: 6px; background: transparent;
+  color: var(--ink); font-size: 14px; text-align: left; line-height: 1.3; }
+.tel-opt:hover,.tel-opt:focus-visible { background: #eef4e9; outline: 0; }
+.tel-opt[aria-selected="true"] { font-weight: 650; }
+.tel-opt img { flex: none; width: 22px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 0 0 1px rgba(16,62,51,.12); }
+.tel-opt .ime { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tel-opt .kod { color: var(--muted); font-variant-numeric: tabular-nums; }
+.tel-prazno { padding: 10px 9px; color: var(--muted); font-size: 13.5px; }
 .form-field input:user-invalid { border-color: #a44a3a; }
 .form-submit { width: 100%; margin-top: 20px; }
 .form-note { margin-top: 8px; color: #506256; font-size: 12.5px; line-height: 1.5; }
@@ -650,14 +680,17 @@ html body{line-height:1.55 !important;font-weight:400 !important}
     <section class="answers section-space" id="pitanja" aria-labelledby="faq-title">
       <div class="wrap answer-grid">
         <aside class="founder" aria-labelledby="founder-title">
-          <div class="founder-stage" aria-hidden="true">
+          <div class="founder-stage">
             <img class="founder-man" src="https://excelgrasic.com/wp-content/uploads/2023/11/aleksandar-grasic-o-predavacu.png" alt="" loading="lazy">
+            <div class="founder-chip">
+              <img src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft-mvp.png" alt="" width="258" height="106">
+              <span>Prvi i jedini Excel i Copilot<br>Microsoft MVP u Srbiji</span>
+            </div>
           </div>
           <div class="founder-info">
             <p class="founder-role">Osnivač kompanije Outliers</p>
             <div class="founder-name">
               <h3 id="founder-title">Aleksandar Grašić</h3>
-              <img class="mvp-badge" src="https://floumate-dev.github.io/excel-grasic/kompanije/img/microsoft-mvp.png" alt="Microsoft MVP" width="258" height="106">
             </div>
             <p>Microsoft MVP šest godina zaredom. Sa svojim timom vodi edukacije iz Excela, Power <span style="white-space:nowrap">BI-ja</span> i primene AI alata u poslovanju.</p>
           </div>
@@ -704,7 +737,16 @@ html body{line-height:1.55 !important;font-weight:400 !important}
               <div class="form-field"><label for="contact-email">Poslovni imejl</label>
                 <input id="contact-email" name="Imejl" type="email" autocomplete="email" maxlength="200" required></div>
               <div class="form-field"><label for="contact-phone">Telefon <span>(opciono)</span></label>
-                <input id="contact-phone" name="Telefon" type="tel" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="+381 64 1234567"></div>
+                <div class="tel-field" id="tel-field">
+                  <button type="button" class="tel-code" id="tel-code" aria-haspopup="listbox" aria-expanded="false" aria-controls="tel-menu" aria-label="Pozivni broj +381">
+                    <img id="tel-flag" src="https://flagcdn.com/w40/rs.png" srcset="https://flagcdn.com/w80/rs.png 2x" alt="" width="22" height="16"><span id="tel-dial">+381</span><span class="tel-caret" aria-hidden="true"></span>
+                  </button>
+                  <input id="contact-phone" name="Telefon" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="20" placeholder="64 1234567">
+                  <div class="tel-menu" id="tel-menu" hidden>
+                    <input type="search" class="tel-search" id="tel-search" placeholder="Država ili pozivni broj" aria-label="Pretraga država" autocomplete="off">
+                    <ul class="tel-list" id="tel-list" role="listbox" aria-label="Pozivni brojevi"></ul>
+                  </div>
+                </div></div>
               <div class="form-field full"><label for="contact-package">Koji paket vas zanima?</label>
                 <select id="contact-package" name="Paket">
                   <option value="" selected>Potrebna nam je preporuka</option>
@@ -824,67 +866,154 @@ html body{line-height:1.55 !important;font-weight:400 !important}
     input.addEventListener("input", () => input.setCustomValidity(""));
   });
 
-  /* ---------- telefon: pozivni broj se upise sam, po drzavi iz IP adrese ----------
-     Pozivni i broj su u istom polju. Polje je opciono: ako ostane samo pozivni,
-     racuna se kao prazno. Broj se pri slanju sredi u oblik "+381 641234567". */
+  /* ---------- telefon: pozivni (zastava + broj) i broj u istom polju ----------
+     Drzava se prepozna po IP adresi i upise sama; posetilac je menja klikom na
+     zastavu (pretraga po imenu ili broju). Ko nalepi ceo broj sa +385 ili 00385,
+     drzava se prebaci sama. Polje je opciono; broj se sredi u "+381 641234567". */
   const POZIVNI = Object.fromEntries(("AD376 AE971 AF93 AG1 AI1 AL355 AM374 AO244 AR54 AS1 AT43 AU61 AW297 AZ994 BA387 BB1 BD880 BE32 BF226 BG359 BH973 BI257 BJ229 BM1 BN673 BO591 BR55 BS1 BT975 BW267 BY375 BZ501 CA1 CD243 CF236 CG242 CH41 CI225 CL56 CM237 CN86 CO57 CR506 CU53 CV238 CY357 CZ420 DE49 DJ253 DK45 DM1 DO1 DZ213 EC593 EE372 EG20 ER291 ES34 ET251 FI358 FJ679 FO298 FR33 GA241 GB44 GD1 GE995 GH233 GI350 GL299 GM220 GN224 GQ240 GR30 GT502 GU1 GW245 GY592 HK852 HN504 HR385 HT509 HU36 ID62 IE353 IL972 IN91 IQ964 IR98 IS354 IT39 JM1 JO962 JP81 KE254 KG996 KH855 KM269 KN1 KP850 KR82 KW965 KY1 KZ7 LA856 LB961 LC1 LI423 LK94 LR231 LS266 LT370 LU352 LV371 LY218 MA212 MC377 MD373 ME382 MG261 MK389 ML223 MM95 MN976 MO853 MR222 MT356 MU230 MV960 MW265 MX52 MY60 MZ258 NA264 NE227 NG234 NI505 NL31 NO47 NP977 NZ64 OM968 PA507 PE51 PG675 PH63 PK92 PL48 PR1 PS970 PT351 PY595 QA974 RO40 RS381 RU7 RW250 SA966 SC248 SD249 SE46 SG65 SI386 SK421 SL232 SM378 SN221 SO252 SR597 SS211 SV503 SY963 SZ268 TD235 TG228 TH66 TJ992 TM993 TN216 TR90 TT1 TW886 TZ255 UA380 UG256 US1 UY598 UZ998 VA39 VC1 VE58 VN84 XK383 YE967 ZA27 ZM260 ZW263")
     .split(" ").map((x) => [x.slice(0, 2), "+" + x.slice(2)]));
-  const SVI_POZIVNI = new Set(Object.values(POZIVNI));
-  let pozivni = "";
+  const PRVE = ["RS", "BA", "HR", "ME", "MK", "SI"];
+  const imeDrzave = (() => {
+    try { const d = new Intl.DisplayNames(["sr-Latn"], { type: "region" }); return (k) => d.of(k) || k; }
+    catch (e) { return (k) => k; }
+  })();
+  const zastava = (k, w) => "https://flagcdn.com/w" + w + "/" + k.toLowerCase() + ".png";
+  const telCode = document.getElementById("tel-code");
+  const telFlag = document.getElementById("tel-flag");
+  const telDial = document.getElementById("tel-dial");
+  const telMenu = document.getElementById("tel-menu");
+  const telSearch = document.getElementById("tel-search");
+  const telList = document.getElementById("tel-list");
+  let drzava = "RS";
+  let rucnoBirano = false;
+  const pozivni = () => POZIVNI[drzava];
 
-  function upisiPozivni(kod) {
-    const novi = POZIVNI[kod];
-    if (!novi) return;
-    const sad = phoneField.value.trim();
-    /* ne diramo broj koji je posetilac vec poceo da kuca */
-    if (!sad || sad === pozivni) phoneField.value = novi + " ";
-    pozivni = novi;
+  function postaviDrzavu(k) {
+    if (!POZIVNI[k]) return;
+    drzava = k;
+    telFlag.src = zastava(k, 40);
+    telFlag.srcset = zastava(k, 80) + " 2x";
+    telDial.textContent = POZIVNI[k];
+    telCode.setAttribute("aria-label", "Pozivni broj " + POZIVNI[k] + " (" + imeDrzave(k) + "), promenite");
   }
+
+  /* spisak se pravi tek kad se prvi put otvori */
+  let sveDrzave = null;
+  function napraviSpisak(upit) {
+    if (!sveDrzave) {
+      sveDrzave = Object.keys(POZIVNI).map((k) => ({ k, ime: imeDrzave(k), kod: POZIVNI[k] }))
+        .sort((a, b) => a.ime.localeCompare(b.ime, "sr"));
+    }
+    const q = (upit || "").trim().toLowerCase().replace(/^00/, "+");
+    const pogodi = (d) => !q || d.ime.toLowerCase().includes(q) || d.kod.includes(q.startsWith("+") ? q : "+" + q) || d.k.toLowerCase() === q;
+    const prve = q ? [] : PRVE.map((k) => sveDrzave.find((d) => d.k === k));
+    const ostale = sveDrzave.filter((d) => pogodi(d) && (q || !PRVE.includes(d.k)));
+    telList.replaceChildren();
+    const dodaj = (d) => {
+      const li = document.createElement("li");
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tel-opt"; b.setAttribute("role", "option");
+      b.setAttribute("aria-selected", d.k === drzava ? "true" : "false");
+      b.dataset.k = d.k;
+      const img = document.createElement("img");
+      img.src = zastava(d.k, 40); img.srcset = zastava(d.k, 80) + " 2x"; img.alt = ""; img.width = 22; img.height = 16; img.loading = "lazy";
+      const ime = document.createElement("span"); ime.className = "ime"; ime.textContent = d.ime;
+      const kod = document.createElement("span"); kod.className = "kod"; kod.textContent = d.kod;
+      b.append(img, ime, kod); li.append(b); telList.append(li);
+    };
+    prve.forEach(dodaj);
+    if (prve.length && ostale.length) { const sep = document.createElement("li"); sep.className = "tel-sep"; sep.setAttribute("aria-hidden", "true"); telList.append(sep); }
+    ostale.forEach(dodaj);
+    if (!telList.children.length) {
+      const li = document.createElement("li"); li.className = "tel-prazno"; li.textContent = "Nema države za ovu pretragu."; telList.append(li);
+    }
+  }
+  function otvoriMeni() {
+    telSearch.value = "";
+    napraviSpisak("");
+    telMenu.hidden = false;
+    telCode.setAttribute("aria-expanded", "true");
+    const izabrana = telList.querySelector('[aria-selected="true"]');
+    if (izabrana) izabrana.scrollIntoView({ block: "nearest" });
+    telSearch.focus();
+  }
+  function zatvoriMeni(vratiFokus) {
+    if (telMenu.hidden) return;
+    telMenu.hidden = true;
+    telCode.setAttribute("aria-expanded", "false");
+    if (vratiFokus) telCode.focus();
+  }
+  telCode.addEventListener("click", () => (telMenu.hidden ? otvoriMeni() : zatvoriMeni(true)));
+  telSearch.addEventListener("input", () => napraviSpisak(telSearch.value));
+  telList.addEventListener("click", (e) => {
+    const b = e.target.closest(".tel-opt");
+    if (!b) return;
+    rucnoBirano = true;
+    postaviDrzavu(b.dataset.k);
+    phoneField.setCustomValidity("");
+    zatvoriMeni(false);
+    phoneField.focus();
+  });
+  telMenu.addEventListener("keydown", (e) => {
+    const opcije = [...telList.querySelectorAll(".tel-opt")];
+    const i = opcije.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); (opcije[i + 1] || opcije[0])?.focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); i <= 0 ? telSearch.focus() : opcije[i - 1].focus(); }
+    else if (e.key === "Enter" && document.activeElement === telSearch && opcije.length) { e.preventDefault(); opcije[0].click(); }
+    else if (e.key === "Escape") { e.preventDefault(); zatvoriMeni(true); }
+  });
+  document.addEventListener("click", (e) => {
+    if (!document.getElementById("tel-field").contains(e.target)) zatvoriMeni(false);
+  });
+
+  /* drzava po IP adresi, samo ako posetilac jos nije sam izabrao */
   function uzmiDrzavu(url) {
     return fetch(url).then((r) => r.json()).then((d) => (d && d.country) || "").catch(() => "");
   }
   uzmiDrzavu("https://api.country.is/")
     .then((kod) => kod || uzmiDrzavu("https://get.geojs.io/v1/ip/country.json"))
-    .then((kod) => upisiPozivni(String(kod).toUpperCase()));
-  phoneField.addEventListener("focus", () => {
-    if (!phoneField.value.trim() && pozivni) phoneField.value = pozivni + " ";
-  });
+    .then((kod) => { if (!rucnoBirano) postaviDrzavu(String(kod).toUpperCase()); });
+
+  /* nalepljen ili upisan ceo broj (+385..., 00385...) prebaci drzavu i ostavi samo broj */
+  function preuzmiPozivni() {
+    const v = phoneField.value.trim();
+    if (!/^(\+|00)/.test(v)) return;
+    const cifre = v.replace(/^00/, "+").replace(/[^\d+]/g, "");
+    for (let n = 4; n >= 1; n--) {
+      const kod = cifre.slice(0, n + 1);
+      const kandidati = Object.keys(POZIVNI).filter((k) => POZIVNI[k] === kod);
+      if (!kandidati.length) continue;
+      const k = kandidati.includes(drzava) ? drzava : (kandidati.find((x) => PRVE.includes(x)) || kandidati.find((x) => x === "US") || kandidati[0]);
+      postaviDrzavu(k);
+      rucnoBirano = true;
+      const ostatak = v.replace(/^00/, "+");
+      let skinuto = 0, poz = 0;
+      while (poz < ostatak.length && skinuto < kod.length) { if (/[\d+]/.test(ostatak[poz])) skinuto++; poz++; }
+      phoneField.value = ostatak.slice(poz).trim();
+      return;
+    }
+  }
 
   /* vraca sredjen broj "+381 641234567", "" ako polje nema broj, ili null ako broj ne valja */
   function srediTelefon() {
-    if (/[^\d+\s().\/-]/.test(phoneField.value)) return null;
-    let t = phoneField.value.replace(/[^\d+]/g, "");
-    if (t.startsWith("00")) t = "+" + t.slice(2);
-    if (!t || t === "+" || t === pozivni) return "";
-    if (t.indexOf("+", 1) > 0) return null;
-    let kod = "";
-    if (t[0] === "+") {
-      for (let n = 4; n >= 1 && !kod; n--) if (SVI_POZIVNI.has(t.slice(0, n + 1))) kod = t.slice(0, n + 1);
-      if (!kod) return null;
-    } else {
-      if (!pozivni) return null;
-      kod = pozivni;
-      t = kod + t;
-    }
-    const broj = t.slice(kod.length).replace(/^0+/, "");
-    const ukupno = (kod + broj).replace(/\D/g, "").length;
-    if (broj.length < 6 || ukupno > 15) return null;
-    return kod + " " + broj;
+    const v = phoneField.value;
+    if (/[^\d\s().\/-]/.test(v)) return null;
+    const broj = v.replace(/\D/g, "").replace(/^0+/, "");
+    if (!broj) return "";
+    if (broj.length < 6 || (pozivni().replace(/\D/g, "") + broj).length > 15) return null;
+    return pozivni() + " " + broj;
   }
   function validatePhone() {
     phoneField.setCustomValidity("");
+    preuzmiPozivni();
     const v = srediTelefon();
     if (v === null) {
-      phoneField.setCustomValidity("Unesite ispravan broj telefona sa pozivnim brojem, npr. +381 64 1234567.");
+      phoneField.setCustomValidity("Unesite ispravan broj telefona, npr. 64 1234567.");
       return "";
     }
     return v;
   }
-  phoneField.addEventListener("input", () => phoneField.setCustomValidity(""));
-  phoneField.addEventListener("blur", () => {
-    const v = srediTelefon();
-    if (v) phoneField.value = v;
-  });
+  phoneField.addEventListener("input", () => { phoneField.setCustomValidity(""); preuzmiPozivni(); });
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
