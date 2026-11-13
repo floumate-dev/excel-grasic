@@ -24,7 +24,7 @@ kompanije/           Yearly Ticket za kompanije (B2B). Tekst i dizajn su
                      Forma salje sve na Make webhook (org "My Organization",
                      scenario "Yearly Ticket Optin") i vodi na thank you:
 kompanije/hvala/     thank you za Yearly Ticket (GHL putanja /hvala);
-                     paket cita iz sessionStorage "yt_upit".
+                     jedna sekcija: upit je poslat, javice se neko iz tima.
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.

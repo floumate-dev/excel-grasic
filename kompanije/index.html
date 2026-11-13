@@ -321,7 +321,8 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 /* footer kao na Masterclass stranicama: logo, prava, potpis; boja ostaje ova */
 .footer-inner { padding-block: 32px; text-align: center; }
 .footer-logo { display: inline-block; }
-.footer-logo img { height: 40px; width: auto; margin: 0 auto 14px; }
+/* ista velicina kao logo u footeru Masterclass stranica (24px visine, ~126px sirine) */
+.footer-logo img { width: 126px; height: auto; margin: 0 auto 12px; }
 .footer p { font-size: 12.5px; color: rgba(218,231,215,.55); }
 .footer .foot-by { font-size: 12px; color: rgba(218,231,215,.4); margin-top: 8px; }
 .footer .foot-by a { color: rgba(218,231,215,.7); font-weight: 600; transition: color .15s; }
@@ -1037,9 +1038,6 @@ html body{line-height:1.55 !important;font-weight:400 !important}
     saljem = true;
     submitBtn.disabled = true;
     submitBtn.textContent = "Šaljemo upit...";
-
-    /* thank you stranica cita paket iz sessionStorage (bez licnih podataka u adresi) */
-    try { sessionStorage.setItem("yt_upit", JSON.stringify({ paket: plan.value })); } catch (e) {}
 
     const slanje = fetch(WEBHOOK, { method: "POST", body: podaci, mode: "no-cors", keepalive: true });
     const rok = new Promise((r) => setTimeout(r, 4000));
