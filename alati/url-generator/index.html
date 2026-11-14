@@ -51,6 +51,13 @@ label .req { color: var(--accent); margin-left: 3px; }
 label code { margin-left: auto; padding-left: 10px; font-family: var(--mono); font-size: 11.5px; font-weight: 400; color: var(--muted); }
 input[type="text"], input[type="url"] { width: 100%; font: 400 15px var(--font); color: var(--fg); background: var(--field);
   border: 1px solid var(--line-strong); border-radius: 10px; padding: 11px 13px; outline: none; transition: border-color .15s, box-shadow .15s; }
+[hidden] { display: none !important; }
+select { width: 100%; font: 400 15px var(--font); color: var(--fg); background-color: var(--field); border: 1px solid var(--line-strong);
+  border-radius: 10px; padding: 11px 40px 11px 13px; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23e1f25e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; transition: border-color .15s, box-shadow .15s; }
+select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(225,242,94,.16); }
+select option { background: var(--panel); color: var(--fg); }
 input::placeholder { color: rgba(236,237,229,.35); }
 input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(225,242,94,.16); }
 input.bad { border-color: var(--err); }
@@ -143,8 +150,22 @@ input.bad { border-color: var(--err); }
         <div class="group-head"><h2>UTM parametri</h2><p>Google standard</p></div>
         <div class="fields">
           <div class="field">
-            <label for="utm_source">Campaign source<span class="req">*</span><code>utm_source</code></label>
-            <input type="text" id="utm_source" placeholder="instagram, facebook, newsletter" autocomplete="off" spellcheck="false">
+            <label for="utm_source_izbor">Campaign source<span class="req">*</span><code>utm_source</code></label>
+            <select id="utm_source_izbor">
+              <option value="">Izaberi izvor</option>
+              <option value="meta">Meta (oglasi)</option>
+              <option value="instagram">Instagram</option>
+              <option value="facebook">Facebook</option>
+              <option value="youtube">YouTube</option>
+              <option value="tiktok">TikTok</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="google">Google</option>
+              <option value="email">Email</option>
+              <option value="website">Website</option>
+              <option value="referral">Referral</option>
+              <option value="__drugo">Drugo (ručni unos)</option>
+            </select>
+            <input type="text" id="utm_source" placeholder="Upiši izvor" autocomplete="off" spellcheck="false" aria-label="Drugi izvor" hidden>
             <span class="hint">Odakle dolazi saobraćaj.</span>
           </div>
           <div class="field">
@@ -205,6 +226,20 @@ input.bad { border-color: var(--err); }
 
   var $ = function (id) { return document.getElementById(id); };
   var inputs = {}; ['url'].concat(POLJA).forEach(function (k) { inputs[k] = $(k); });
+  var izbor = $('utm_source_izbor');
+  /* Dropdown upisuje vrednost u polje utm_source; "Drugo" otvara polje za ručni unos */
+  function uskladiIzbor() {
+    var v = sredi(inputs.utm_source.value);
+    var ima = v && [].some.call(izbor.options, function (o) { return o.value === v && o.value !== '__drugo'; });
+    if (!v) { izbor.value = ''; inputs.utm_source.hidden = true; }
+    else if (ima) { izbor.value = v; inputs.utm_source.hidden = true; }
+    else { izbor.value = '__drugo'; inputs.utm_source.hidden = false; }
+  }
+  izbor.addEventListener('change', function () {
+    if (izbor.value === '__drugo') { inputs.utm_source.value = ''; inputs.utm_source.hidden = false; inputs.utm_source.focus(); }
+    else { inputs.utm_source.value = izbor.value; inputs.utm_source.hidden = true; }
+    osvezi();
+  });
   var out = $('out'), checks = $('checks'), params = $('params'), status = $('status');
   var kopiraj = $('kopiraj'), otvori = $('otvori'), norm = $('norm');
   var gotovLink = '';
@@ -307,7 +342,7 @@ input.bad { border-color: var(--err); }
       var u = new URL(link);
       POLJA.forEach(function (k) { inputs[k].value = u.searchParams.get(k) || ''; u.searchParams.delete(k); });
       inputs.url.value = u.toString();
-      osvezi();
+      uskladiIzbor(); osvezi();
       status.className = 'status'; status.textContent = 'Učitan link iz istorije.';
     } catch (err) {}
   });
@@ -329,7 +364,7 @@ input.bad { border-color: var(--err); }
 
   $('ocisti').addEventListener('click', function () {
     POLJA.forEach(function (k) { inputs[k].value = ''; });
-    osvezi(); inputs.utm_source.focus(); poruka('Polja su očišćena. Adresa stranice je ostala.');
+    uskladiIzbor(); osvezi(); izbor.focus(); poruka('Polja su očišćena. Adresa stranice je ostala.');
   });
   $('forma').addEventListener('submit', function (e) { e.preventDefault(); });
   $('forma').addEventListener('input', osvezi);
@@ -339,6 +374,7 @@ input.bad { border-color: var(--err); }
   var sacuvano = (citaj() || {}).polja, start = sacuvano || PRIMER;
   if (sacuvano && typeof sacuvano.norm === 'boolean') norm.checked = sacuvano.norm;
   ['url'].concat(POLJA).forEach(function (k) { inputs[k].value = start[k] || ''; });
+  uskladiIzbor();
   if (!sacuvano) status.textContent = 'Popunjeno je primerom. „Očisti polja” ga briše.';
   osvezi();
   nedavni();
