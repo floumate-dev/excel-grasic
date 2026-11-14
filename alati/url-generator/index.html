@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="https://excel-grasic-referral.vercel.app/dashboard/favicon.png">
-<!-- URL generator za kampanje (UTM + source/specificsource). Isti fajl se lepi
+<!-- URL generator za kampanje (UTM parametri). Isti fajl se lepi
      u GHL: funnel "Dashboards", step "URL generator". Dashboard "Odakle dolaze"
      cita utm_source, pa source, pa "direktno". -->
 <title>Outliers URL generator</title>
@@ -123,7 +123,7 @@ input.bad { border-color: var(--err); }
   <header>
     <div class="eyebrow">Outliers · Excel Grašić</div>
     <h1>URL generator za kampanje</h1>
-    <p class="lead">Popuni polja i link se slaže sam. Masterclass dashboard „Odakle dolaze” čita iz <code>utm_source</code>, a „Tačan izvor” iz <code>specificsource</code>.</p>
+    <p class="lead">Popuni polja i link se slaže sam. Masterclass dashboard „Odakle dolaze” čita iz <code>utm_source</code>.</p>
   </header>
 
   <div class="layout">
@@ -135,23 +135,6 @@ input.bad { border-color: var(--err); }
             <label for="url">Adresa stranice<span class="req">*</span><code>website URL</code></label>
             <input type="url" id="url" placeholder="https://masterclass.excelgrasic.com/" autocomplete="off" spellcheck="false">
             <span class="hint" id="url-hint">Cela adresa, sa https://</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="group">
-        <div class="group-head"><h2>Naš izvor</h2><p>za Masterclass dashboard</p></div>
-        <p class="note">Upisuje se u Sheet uz prijavu. Dashboard <code>source</code> koristi samo kad nema <code>utm_source</code> (na primer referral linkovi), a <code>specificsource</code> prikazuje kao „Tačan izvor”.</p>
-        <div class="fields">
-          <div class="field">
-            <label for="source">Source<code>source</code></label>
-            <input type="text" id="source" placeholder="instagram" autocomplete="off" spellcheck="false">
-            <div class="chips" id="chips-source" aria-label="Brzi izbor za source"></div>
-          </div>
-          <div class="field">
-            <label for="specificsource">Specific source<code>specificsource</code></label>
-            <input type="text" id="specificsource" placeholder="instagram_story" autocomplete="off" spellcheck="false">
-            <div class="chips" id="chips-specificsource" aria-label="Brzi izbor za specific source"></div>
           </div>
         </div>
       </div>
@@ -218,14 +201,10 @@ input.bad { border-color: var(--err); }
 
 <script>
 (function () {
-  /* Redosled u linku: naš source prvi, pa UTM kao kod Googlea */
-  var POLJA = ['source', 'specificsource', 'utm_id', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
-  var BRZO = {
-    source: ['instagram', 'facebook', 'referral', 'website', 'email', 'youtube', 'tiktok', 'linkedin'],
-    specificsource: ['instagram_story', 'instagram_comment', 'instagram_dm', 'instagram_bio', 'referral_thank_you']
-  };
+  /* Redosled u linku kao kod Googlea */
+  var POLJA = ['utm_id', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
   /* Primer da se odmah vidi kako izgleda; "Očisti polja" ga briše */
-  var PRIMER = { url: 'https://masterclass.excelgrasic.com/', source: 'instagram', specificsource: 'instagram_story',
+  var PRIMER = { url: 'https://masterclass.excelgrasic.com/', 
     utm_source: 'instagram', utm_medium: 'story', utm_campaign: 'masterclass_novembar' };
   var KLJUC = 'outliers-url-generator';
 
@@ -283,15 +262,8 @@ input.bad { border-color: var(--err); }
       if (!vrednosti.utm_medium) upozorenja.push('Fali campaign medium (utm_medium).');
       if (!vrednosti.utm_campaign && !vrednosti.utm_id) upozorenja.push('Upiši campaign name ili campaign ID.');
     }
-    if (!vrednosti.source && !vrednosti.utm_source && u) upozorenja.push('Bez source i utm_source dashboard ovu prijavu vodi kao „direktno”.');
-    var tacan = vrednosti.specificsource ? ', tačan izvor = ' + vrednosti.specificsource : '';
-    if (vrednosti.utm_source) {
-      ok.push('Dashboard: „Odakle dolaze” = ' + vrednosti.utm_source + tacan + '.');
-      if (vrednosti.source && vrednosti.source !== vrednosti.utm_source)
-        ok.push('source „' + vrednosti.source + '” ide samo u Sheet, dashboard ga ne koristi jer postoji utm_source.');
-    } else if (vrednosti.source) {
-      ok.push('Dashboard: „Odakle dolaze” = ' + vrednosti.source + ' (iz source, jer nema utm_source)' + tacan + '.');
-    }
+    if (!vrednosti.utm_source && u) upozorenja.push('Bez utm_source dashboard ovu prijavu vodi kao „direktno”.');
+    if (vrednosti.utm_source) ok.push('Dashboard: „Odakle dolaze” = ' + vrednosti.utm_source + '.');
 
     if (!u) {
       gotovLink = '';
@@ -362,14 +334,12 @@ input.bad { border-color: var(--err); }
 
   $('ocisti').addEventListener('click', function () {
     POLJA.forEach(function (k) { inputs[k].value = ''; });
-    osvezi(); inputs.source.focus(); poruka('Polja su očišćena. Adresa stranice je ostala.');
+    osvezi(); inputs.utm_source.focus(); poruka('Polja su očišćena. Adresa stranice je ostala.');
   });
   $('forma').addEventListener('submit', function (e) { e.preventDefault(); });
   $('forma').addEventListener('input', osvezi);
   norm.addEventListener('change', osvezi);
 
-  chipovi('chips-source', BRZO.source, 'source');
-  chipovi('chips-specificsource', BRZO.specificsource, 'specificsource');
 
   var sacuvano = (citaj() || {}).polja, start = sacuvano || PRIMER;
   if (sacuvano && typeof sacuvano.norm === 'boolean') norm.checked = sacuvano.norm;

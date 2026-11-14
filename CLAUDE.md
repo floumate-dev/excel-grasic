@@ -39,7 +39,7 @@ dashboard/           Masterclass dashboard (optini, izvori, applicationi), uzivo
                      (dashboard.excelgrasic.com/masterclass),
                      ceo fajl u jednom Custom Code elementu. Posle izmene nalepi
                      ponovo u GHL i Publish.
-alati/url-generator/ URL generator za kampanje (UTM + source/specificsource).
+alati/url-generator/ URL generator za kampanje (samo UTM parametri).
                      Hostuje se na GitHub Pages i na GHL-u (funnel "Dashboards",
                      step "URL generator"), ceo fajl u Custom Code elementu.
 ```
