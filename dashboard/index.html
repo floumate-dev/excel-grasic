@@ -33,8 +33,9 @@
   body { position: relative; }
 
   /* mrezica + sjaj */
-  .fx { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-  .fx .grid { position: absolute; left: 0; right: 0; top: 0; height: 1300px;
+  /* fixed: pozadina pokriva ceo ekran i kad je stranica u GHL kontejneru (bez ivica) */
+  .fx { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; overflow: hidden; z-index: 0; background: var(--bg); }
+  .fx .grid { position: absolute; left: 0; right: 0; top: 0; height: 100%;
     background-image: linear-gradient(rgba(236,237,229,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(236,237,229,.06) 1px, transparent 1px);
     background-size: 68px 44px;
     -webkit-mask-image: radial-gradient(ellipse 90% 75% at 50% 18%, #000 20%, transparent 78%);
@@ -44,7 +45,7 @@
   .fx .g2 { width: 820px; height: 820px; left: -380px; top: 260px; background: radial-gradient(circle, rgba(117,163,77,.30), transparent 64%); }
   .fx .g3 { width: 900px; height: 520px; left: 50%; top: 120px; transform: translateX(-50%); border-radius: 50%;
     background: radial-gradient(ellipse, rgba(225,242,94,.10), transparent 66%); }
-  .fx .g4 { width: 700px; height: 700px; right: -260px; top: 1150px; background: radial-gradient(circle, rgba(225,242,94,.12), transparent 62%); }
+  .fx .g4 { width: 700px; height: 700px; right: -260px; bottom: -320px; background: radial-gradient(circle, rgba(225,242,94,.12), transparent 62%); }
 
   main { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 52px 16px 44px; }
 
