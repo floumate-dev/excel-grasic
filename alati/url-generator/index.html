@@ -80,7 +80,7 @@ input.bad { border-color: var(--err); }
 .tog input:checked + span::after { transform: translateX(14px); background: var(--fg); }
 
 /* rezultat */
-.result { position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); display: grid; gap: 16px;
+.result { position: sticky; top: calc(16px + env(safe-area-inset-top, 0px)); display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px;
   border-color: rgba(225,242,94,.3); box-shadow: 0 20px 48px rgba(0,16,12,.3); }
 .result h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 .url { font: 400 13.5px/1.6 var(--mono); background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 14px;
@@ -88,6 +88,8 @@ input.bad { border-color: var(--err); }
 .url .base { color: var(--dim); }
 .url .k { color: var(--accent); }
 .url .s { color: var(--muted); }
+.result > * { min-width: 0; }
+.url.nespreman { opacity: .5; }
 .url.empty { color: var(--muted); font-family: var(--font); font-size: 14px; word-break: normal; }
 .actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .btn { font: 700 14px var(--font); border-radius: 999px; padding: 12px 20px; cursor: pointer; border: 1px solid var(--line-strong);
@@ -110,7 +112,8 @@ input.bad { border-color: var(--err); }
 .params td:first-child { font-family: var(--mono); color: var(--accent); padding-right: 12px; white-space: nowrap; }
 .params td:last-child { color: var(--fg); word-break: break-all; }
 .recent h3 { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.recent ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.recent ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.recent li { min-width: 0; }
 .recent button { width: 100%; text-align: left; font: 400 12px var(--mono); color: var(--dim); background: var(--field); border: 1px solid var(--line);
   border-radius: 8px; padding: 8px 10px; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .recent button:hover { color: var(--fg); border-color: var(--line-strong); }
@@ -195,7 +198,7 @@ input.bad { border-color: var(--err); }
       </div>
 
       <div class="foot-row">
-        <label class="tog" for="norm"><input type="checkbox" id="norm" checked><span></span>Mala slova i _ umesto razmaka</label>
+        <label class="tog" for="norm"><input type="checkbox" id="norm" checked><span></span>Mala slova, bez kvačica i razmaka</label>
         <button type="button" class="btn ghost" id="ocisti">Očisti polja</button>
       </div>
     </form>
@@ -223,6 +226,8 @@ input.bad { border-color: var(--err); }
   /* Redosled polja i parametara u linku */
   var POLJA = ['utm_source', 'utm_campaign', 'utm_medium', 'utm_content', 'utm_term'];
   /* Primer da se odmah vidi kako izgleda; "Očisti polja" ga briše */
+  var OBAVEZNA = ['utm_source', 'utm_campaign', 'utm_medium'];
+  var NAZIV = { utm_source: 'campaign source', utm_campaign: 'campaign name', utm_medium: 'campaign medium' };
   var PRIMER = { url: 'https://masterclass.excelgrasic.com/', 
     utm_source: 'instagram', utm_medium: 'story', utm_campaign: 'masterclass_novembar' };
   var KLJUC = 'outliers-url-generator';
@@ -253,7 +258,10 @@ input.bad { border-color: var(--err); }
 
   function sredi(v) {
     v = String(v || '').trim();
-    if (norm.checked) v = v.toLocaleLowerCase('sr-RS').replace(/\s+/g, '_');
+    if (norm.checked) {
+      v = v.toLocaleLowerCase('sr-RS').replace(/đ/g, 'dj').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '_').replace(/[^a-z0-9._-]/g, '_').replace(/_+/g, '_').replace(/^[_-]+|[_-]+$/g, '');
+    }
     return v;
   }
 
@@ -284,19 +292,17 @@ input.bad { border-color: var(--err); }
     var baza = inputs.url.value.trim(), u = null;
     if (baza && !/^https?:\/\//i.test(baza)) baza = 'https://' + baza;
     try { if (baza) u = new URL(baza); } catch (e) { u = null; }
+    if (u && (!/^https?:$/.test(u.protocol) || u.hostname.indexOf('.') < 1 || /\s/.test(inputs.url.value.trim()))) u = null;
     var losUrl = !!inputs.url.value.trim() && !u;
     inputs.url.classList.toggle('bad', losUrl);
     $('url-hint').textContent = losUrl ? 'Adresa nije ispravna. Primer: https://masterclass.excelgrasic.com/' : 'Cela adresa, sa https://';
     $('url-hint').classList.toggle('err', losUrl);
 
-    var imaUtm = POLJA.some(function (k) { return vrednosti[k]; });
-    if (imaUtm) {
-      if (!vrednosti.utm_source) upozorenja.push('Fali campaign source (utm_source).');
-      if (!vrednosti.utm_medium) upozorenja.push('Fali campaign medium (utm_medium).');
-      if (!vrednosti.utm_campaign) upozorenja.push('Fali campaign name (utm_campaign).');
-    }
-    if (!vrednosti.utm_source && u) upozorenja.push('Bez utm_source dashboard ovu prijavu vodi kao „direktno”.');
-    if (vrednosti.utm_source) ok.push('Dashboard: „Odakle dolaze” = ' + vrednosti.utm_source + '.');
+    var fali = OBAVEZNA.filter(function (k) { return !vrednosti[k]; });
+    if (!u) upozorenja.push(losUrl ? 'Adresa stranice nije ispravna.' : 'Upiši adresu stranice.');
+    fali.forEach(function (k) { upozorenja.push('Fali ' + NAZIV[k] + ' (' + k + ').'); });
+    var spreman = !!u && !fali.length;
+    if (spreman) ok.push('Link je spreman. Dashboard: „Odakle dolaze” = ' + vrednosti.utm_source + '.');
 
     if (!u) {
       gotovLink = '';
@@ -311,7 +317,7 @@ input.bad { border-color: var(--err); }
       var pre = q > -1 ? gotovLink.slice(0, q) : (h > -1 ? gotovLink.slice(0, h) : gotovLink);
       var upit = q > -1 ? gotovLink.slice(q + 1, h > q ? h : undefined) : '';
       var hes = h > -1 ? gotovLink.slice(h) : '';
-      out.className = 'url';
+      out.className = 'url' + (spreman ? '' : ' nespreman');
       out.innerHTML = '<span class="base">' + esc(pre) + '</span>' + (upit ? '<span class="s">?</span>' + upit.split('&').map(function (p) {
         var i = p.indexOf('='); return '<span class="k">' + esc(i > -1 ? p.slice(0, i) : p) + '</span>' + (i > -1 ? '<span class="s">=</span>' + esc(p.slice(i + 1)) : '');
       }).join('<span class="s">&amp;</span>') : '') + esc(hes);
@@ -319,9 +325,11 @@ input.bad { border-color: var(--err); }
         return '<tr><td>' + k + '</td><td>' + esc(vrednosti[k]) + '</td></tr>';
       }).join('');
     }
-    kopiraj.disabled = !gotovLink;
-    otvori.setAttribute('aria-disabled', String(!gotovLink));
-    otvori.href = gotovLink || '#';
+    if (!spreman) gotovLink = '';
+    kopiraj.disabled = !spreman;
+    otvori.setAttribute('aria-disabled', String(!spreman));
+    otvori.tabIndex = spreman ? 0 : -1;
+    otvori.href = spreman ? gotovLink : '#';
     checks.innerHTML = upozorenja.map(function (t) { return '<li class="warn">' + esc(t) + '</li>'; }).join('') +
       ok.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
     oznaciChipove();
@@ -333,8 +341,13 @@ input.bad { border-color: var(--err); }
     var s = citaj() || {}; var l = (s.nedavni || []).filter(function (x) { return x !== link; });
     l.unshift(link); s.nedavni = l.slice(0, 5); pisi(s); nedavni();
   }
+  function ispravan(link) {
+    try { var u = new URL(link); return /^https?:$/.test(u.protocol) && OBAVEZNA.every(function (k) { return u.searchParams.get(k); }); }
+    catch (e) { return false; }
+  }
   function nedavni() {
-    var l = (citaj() || {}).nedavni || [];
+    var s = citaj() || {}, l = (s.nedavni || []).filter(ispravan);
+    if (s.nedavni && l.length !== s.nedavni.length) { s.nedavni = l; pisi(s); }
     $('recent').hidden = !l.length;
     $('recent-list').innerHTML = l.map(function (x, i) { return '<li><button type="button" data-i="' + i + '" title="' + esc(x) + '">' + esc(x.replace(/^https?:\/\//, '')) + '</button></li>'; }).join('');
   }
@@ -364,6 +377,8 @@ input.bad { border-color: var(--err); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(gotovLink).then(gotovo, rezerva);
     else rezerva();
   });
+
+  otvori.addEventListener('click', function (e) { if (!gotovLink) e.preventDefault(); });
 
   $('ocisti').addEventListener('click', function () {
     POLJA.forEach(function (k) { inputs[k].value = ''; });
