@@ -41,7 +41,7 @@ dashboard/           Masterclass dashboard (optini, izvori, applicationi), uzivo
                      ponovo u GHL i Publish.
 alati/url-generator/ URL generator za kampanje (samo UTM parametri).
                      Hostuje se na GitHub Pages i na GHL-u (funnel "Dashboards",
-                     dashboard.excelgrasic.com/parameter-generator), ceo fajl u Custom Code elementu.
+                     dashboard.excelgrasic.com/url-generator), ceo fajl u Custom Code elementu.
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.
