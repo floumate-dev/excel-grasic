@@ -143,14 +143,14 @@ input.bad { border-color: var(--err); }
         <div class="group-head"><h2>UTM parametri</h2><p>Google standard</p></div>
         <div class="fields">
           <div class="field">
-            <label for="utm_id">Campaign ID<code>utm_id</code></label>
-            <input type="text" id="utm_id" placeholder="ID kampanje u Ads Manageru" autocomplete="off" spellcheck="false">
-            <span class="hint">ID kampanje iz oglasa.</span>
-          </div>
-          <div class="field">
             <label for="utm_source">Campaign source<span class="req">*</span><code>utm_source</code></label>
             <input type="text" id="utm_source" placeholder="instagram, facebook, newsletter" autocomplete="off" spellcheck="false">
             <span class="hint">Odakle dolazi saobraćaj.</span>
+          </div>
+          <div class="field">
+            <label for="utm_campaign">Campaign name<span class="req">*</span><code>utm_campaign</code></label>
+            <input type="text" id="utm_campaign" placeholder="masterclass_novembar" autocomplete="off" spellcheck="false">
+            <span class="hint">Naziv kampanje.</span>
           </div>
           <div class="field">
             <label for="utm_medium">Campaign medium<span class="req">*</span><code>utm_medium</code></label>
@@ -158,19 +158,14 @@ input.bad { border-color: var(--err); }
             <span class="hint">Vrsta kanala.</span>
           </div>
           <div class="field">
-            <label for="utm_campaign">Campaign name<span class="req">*</span><code>utm_campaign</code></label>
-            <input type="text" id="utm_campaign" placeholder="masterclass_novembar" autocomplete="off" spellcheck="false">
-            <span class="hint">Naziv kampanje. Obavezan je naziv ili ID.</span>
-          </div>
-          <div class="field">
-            <label for="utm_term">Campaign term<code>utm_term</code></label>
-            <input type="text" id="utm_term" placeholder="excel kurs" autocomplete="off" spellcheck="false">
-            <span class="hint">Plaćene ključne reči.</span>
-          </div>
-          <div class="field">
             <label for="utm_content">Campaign content<code>utm_content</code></label>
             <input type="text" id="utm_content" placeholder="video_1" autocomplete="off" spellcheck="false">
             <span class="hint">Razlikuje oglase u istoj kampanji.</span>
+          </div>
+          <div class="field full">
+            <label for="utm_term">Campaign term<code>utm_term</code></label>
+            <input type="text" id="utm_term" placeholder="excel kurs" autocomplete="off" spellcheck="false">
+            <span class="hint">Plaćene ključne reči.</span>
           </div>
         </div>
       </div>
@@ -201,8 +196,8 @@ input.bad { border-color: var(--err); }
 
 <script>
 (function () {
-  /* Redosled u linku kao kod Googlea */
-  var POLJA = ['utm_id', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+  /* Redosled polja i parametara u linku */
+  var POLJA = ['utm_source', 'utm_campaign', 'utm_medium', 'utm_content', 'utm_term'];
   /* Primer da se odmah vidi kako izgleda; "Očisti polja" ga briše */
   var PRIMER = { url: 'https://masterclass.excelgrasic.com/', 
     utm_source: 'instagram', utm_medium: 'story', utm_campaign: 'masterclass_novembar' };
@@ -256,11 +251,11 @@ input.bad { border-color: var(--err); }
     $('url-hint').textContent = losUrl ? 'Adresa nije ispravna. Primer: https://masterclass.excelgrasic.com/' : 'Cela adresa, sa https://';
     $('url-hint').classList.toggle('err', losUrl);
 
-    var imaUtm = ['utm_id', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].some(function (k) { return vrednosti[k]; });
+    var imaUtm = POLJA.some(function (k) { return vrednosti[k]; });
     if (imaUtm) {
       if (!vrednosti.utm_source) upozorenja.push('Fali campaign source (utm_source).');
       if (!vrednosti.utm_medium) upozorenja.push('Fali campaign medium (utm_medium).');
-      if (!vrednosti.utm_campaign && !vrednosti.utm_id) upozorenja.push('Upiši campaign name ili campaign ID.');
+      if (!vrednosti.utm_campaign) upozorenja.push('Fali campaign name (utm_campaign).');
     }
     if (!vrednosti.utm_source && u) upozorenja.push('Bez utm_source dashboard ovu prijavu vodi kao „direktno”.');
     if (vrednosti.utm_source) ok.push('Dashboard: „Odakle dolaze” = ' + vrednosti.utm_source + '.');
