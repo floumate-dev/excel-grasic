@@ -134,7 +134,6 @@ input.bad { border-color: var(--err); }
           <div class="field full">
             <label for="url">Adresa stranice<span class="req">*</span><code>website URL</code></label>
             <input type="url" id="url" placeholder="https://masterclass.excelgrasic.com/" autocomplete="off" spellcheck="false">
-            <div class="chips" id="chips-url" aria-label="Brzi izbor stranice"></div>
             <span class="hint" id="url-hint">Cela adresa, sa https://</span>
           </div>
         </div>
@@ -221,10 +220,6 @@ input.bad { border-color: var(--err); }
 (function () {
   /* Redosled u linku: naš source prvi, pa UTM kao kod Googlea */
   var POLJA = ['source', 'specificsource', 'utm_id', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
-  var STRANICE = [
-    ['masterclass', 'https://masterclass.excelgrasic.com/'],
-    ['kompanije', 'https://kompanije.excelgrasic.com/landing-page']
-  ];
   var BRZO = {
     source: ['instagram', 'facebook', 'referral', 'website', 'email', 'youtube', 'tiktok', 'linkedin'],
     specificsource: ['instagram_story', 'instagram_comment', 'instagram_dm', 'instagram_bio', 'referral_thank_you']
@@ -266,7 +261,7 @@ input.bad { border-color: var(--err); }
   function oznaciChipove() {
     document.querySelectorAll('.chips').forEach(function (box) {
       var polje = box.id.replace('chips-', '');
-      var tren = polje === 'url' ? inputs.url.value.trim() : sredi(inputs[polje].value);
+      var tren = sredi(inputs[polje].value);
       box.querySelectorAll('.chip').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === tren)); });
     });
   }
@@ -373,7 +368,6 @@ input.bad { border-color: var(--err); }
   $('forma').addEventListener('input', osvezi);
   norm.addEventListener('change', osvezi);
 
-  chipovi('chips-url', STRANICE, 'url');
   chipovi('chips-source', BRZO.source, 'source');
   chipovi('chips-specificsource', BRZO.specificsource, 'specificsource');
 
