@@ -112,12 +112,13 @@ function ocisti_(v) {
   return v;
 }
 
-/* Glavni izvor jedne prijave: source -> utm_source -> direktno */
+/* Glavni izvor jedne prijave: utm_source -> source -> direktno.
+   (referral linkovi nemaju utm_source, nose source=referral, pa ostaju "referral") */
 function izvor_(r) {
-  var s = ocisti_(r[10]).toLowerCase();
-  if (s) return s;
   var u = ocisti_(r[12]).toLowerCase();
   if (u) return u;
+  var s = ocisti_(r[10]).toLowerCase();
+  if (s) return s;
   return 'direktno';
 }
 
