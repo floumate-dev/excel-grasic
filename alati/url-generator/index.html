@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="https://excel-grasic-referral.vercel.app/dashboard/favicon.png">
-<!-- URL generator za kampanje (UTM parametri). Isti fajl se lepi
-     u GHL: funnel "Dashboards", step "URL generator". Dashboard "Odakle dolaze"
-     cita utm_source, pa source, pa "direktno". -->
+<!-- URL generator za kampanje (UTM parametri). Isti fajl se lepi u GHL:
+     funnel "Dashboards", dashboard.excelgrasic.com/parameter-generator.
+     Dashboard "Odakle dolaze" cita utm_source. -->
 <title>Outliers URL generator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -23,11 +23,13 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; }
+/* fixed sloj pozadine: pokriva ceo ekran i kad je stranica u GHL kontejneru */
+.bgfx { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; background-color: var(--bg);
   background-image: linear-gradient(rgba(236,237,229,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(236,237,229,.045) 1px, transparent 1px);
   background-size: 68px 44px; }
-.page { max-width: 1120px; margin: 0 auto; padding-block: 36px 64px;
+.page { position: relative; z-index: 1; color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5; max-width: 1120px; margin: 0 auto; padding-block: 36px 64px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 header { margin-bottom: 26px; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: .14em;
@@ -126,6 +128,7 @@ input.bad { border-color: var(--err); }
 </style>
 </head>
 <body>
+<div class="bgfx" aria-hidden="true"></div>
 <main class="page">
   <header>
     <div class="eyebrow">Outliers · Excel Grašić</div>
