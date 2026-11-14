@@ -35,6 +35,10 @@ dashboard/           Masterclass dashboard (optini, izvori, applicationi), uzivo
                      repou jer je javan). Tacan PIN = token na 30 dana.
                      ?osoba=vlada (aleksandar, marijana, sanja, janko) = pozdrav;
                      fotke idu u dashboard/tim/ i upisuju se u OSOBE.
+                     Hostuje se i na GHL-u: funnel "Dashboards", step "Masterclass
+                     Dashboard" (dashboard.excelgrasic.com/masterclass-dashboard),
+                     ceo fajl u jednom Custom Code elementu. Posle izmene nalepi
+                     ponovo u GHL i Publish.
 ```
 
 Sve je u jednom fajlu po stranici: HTML, CSS u `<style>`, JS u `<script>`.
