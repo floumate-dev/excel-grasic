@@ -285,6 +285,8 @@
   var NAZIVI = { 'direktno': 'Direktno (bez izvora)', 'referral': 'Referral (preporuka)', 'fb': 'Facebook', 'facebook': 'Facebook',
     'ig': 'Instagram', 'instagram': 'Instagram', 'meta': 'Meta oglasi', 'email': 'Mejl', 'ac': 'Mejl (ActiveCampaign)',
     'activecampaign': 'Mejl (ActiveCampaign)', 'google': 'Google', 'linkedin': 'LinkedIn', 'youtube': 'YouTube', 'tiktok': 'TikTok' };
+  /* "instagram · post" -> "Instagram · post" */
+  function tacan(k){ var i = String(k).indexOf(' · '); return i < 0 ? k : naziv(k.slice(0, i)) + ' · ' + k.slice(i + 3); }
   function naziv(k){ return NAZIVI[String(k).toLowerCase()] || (String(k).charAt(0).toUpperCase() + String(k).slice(1)); }
 
   function lista(items, ukupno, mapiraj){
@@ -365,7 +367,7 @@
         grafikon(dani) + '</div>' +
       '<div class="grid2">' +
         '<div class="card"><div class="label">Odakle dolaze</div>' + lista(d.izvori, d.optini, naziv) + '</div>' +
-        '<div class="card"><div class="label">Tačan izvor (specific source)</div>' + lista(d.specificni, d.optini) + '</div>' +
+        '<div class="card"><div class="label">Tačan izvor (utm_medium, za Metu kampanja)</div>' + lista(d.specificni, d.optini, tacan) + '</div>' +
         '<div class="card"><div class="label">Termin</div>' + lista(d.termini, d.optini) + '</div>' +
         '<div class="card"><div class="label">Država</div>' + lista(d.drzave, d.optini) + '</div>' +
       '</div>' +

@@ -122,6 +122,13 @@ function izvor_(r) {
   return 'direktno';
 }
 
+/* Tacan izvor jedne prijave: "izvor · utm_medium", a za Metu "meta · utm_campaign"
+   (kod Mete je medium uvek isti, pa kampanja govori vise). Bez vrednosti -> ne broji se. */
+function tacanIzvor_(r, iz) {
+  var v = iz === 'meta' ? ocisti_(r[14]) : ocisti_(r[13]).toLowerCase();
+  return v ? iz + ' · ' + v : '';
+}
+
 function broji_(mapa, kljuc) { mapa[kljuc] = (mapa[kljuc] || 0) + 1; }
 
 function sortiraj_(mapa, max) {
@@ -160,7 +167,7 @@ function izracunaj_() {
     }
     var iz = izvor_(r);
     broji_(izvori, iz);
-    var sp = ocisti_(r[11]);
+    var sp = tacanIzvor_(r, iz);
     if (sp) broji_(specificni, sp);
     var kp = ocisti_(r[14]);
     if (kp) broji_(kampanje, kp);
@@ -198,7 +205,7 @@ function izracunaj_() {
     danas: { optini: optinDanas, aplikacije: appDanas },
     juce: { optini: optinJuce, aplikacije: appJuce },
     izvori: sortiraj_(izvori),
-    specificni: sortiraj_(specificni, 15),
+    specificni: sortiraj_(specificni, 20),
     kampanje: sortiraj_(kampanje, 15),
     termini: sortiraj_(termini),
     drzave: sortiraj_(drzave, 10),
