@@ -7,6 +7,16 @@
        Naslov, opis, robots, SEO slika i ikonica se podesavaju u GHL-u, ne ovde.
        Slike su na github.io (kompanije/img/), font je Onest sa Google Fonts.
        Prethodna verzija u nasem stilu je u git istoriji (commit d59f614). -->
+  <script>
+  /* KONFIGURACIJA - linkovi se menjaju samo ovde */
+  window.MC = {
+    /* Microsoft Bookings: zakazivanje besplatnih konsultacija (Outliers nalog).
+       Bookings dozvoljava ugradnju samo na https stranicama (frame-ancestors https:),
+       pa se kalendar NE vidi u lokalnom pregledu na http://localhost - samo na GHL-u i GitHub Pages. */
+    booking: "https://bookings.cloud.microsoft/book/SastanakoMicrosoftedukacijamasaOutlierstimom@excelgrasic.com/?ismsaljsauthenabled"
+  };
+  </script>
+  <link rel="preconnect" href="https://bookings.cloud.microsoft">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
@@ -473,7 +483,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 }
 
 /* THANK YOU */
-.ty-hero .hero-inner { min-height: calc(100vh - 160px); padding-block: clamp(54px,5.4vw,84px) clamp(58px,5.6vw,88px); }
+.ty-hero .hero-inner { padding-block: clamp(54px,5.4vw,84px) clamp(58px,5.6vw,88px); }
 .ty-check { display: inline-grid; place-items: center; width: 54px; height: 54px; margin-bottom: 24px; border-radius: 50%;
   background: #def16a; color: #173b21; box-shadow: 0 0 0 8px rgba(222,241,106,.14); }
 .ty-check svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -481,6 +491,20 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 .steps li.done::before { content: "\2713"; background: #7dd855; color: #103e33; font-weight: 700; }
 .ty-contact { margin-top: 22px; color: var(--body); font-size: 15px; }
 .ty-contact a { color: var(--pine); font-weight: 610; text-decoration: underline; text-underline-offset: 4px; }
+
+/* ZAKAZIVANJE (Microsoft Bookings u okviru) */
+.booking { background: var(--paper); padding-block: clamp(46px,6vw,84px); }
+.booking:focus { outline: 0; }
+.booking-head { max-width: 640px; margin: 0 auto clamp(22px,3vw,34px); text-align: center; }
+.booking-head h2 { font-size: clamp(30px,3.2vw,46px); }
+.booking-head p { margin-top: 12px; color: var(--body); font-size: 16px; }
+.booking-frame { background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 15px 34px #012a231a; }
+/* Bookings je u uskom rasporedu dok je okvir uzi od ~1024px (tada je duzi), a u sirokom kad je siri;
+   visina je toliko da se vidi i dugme "Book" bez skrolovanja unutar okvira */
+.booking-frame iframe { display: block; width: 100%; height: 1900px; border: 0; }
+@media (min-width: 1160px) { .booking-frame iframe { height: 1620px; } }
+.booking-alt { margin-top: 14px; text-align: center; font-size: 14px; color: var(--muted); }
+.booking-alt a { color: var(--pine); font-weight: 610; text-decoration: underline; text-underline-offset: 3px; }
 </style>
 </head>
 <body>
@@ -500,7 +524,8 @@ html body{line-height:1.55 !important;font-weight:400 !important}
         <div class="hero-copy">
           <span class="ty-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
           <h1 id="hero-title"><span class="hero-line">Hvala Vam,</span> <span class="hero-line"><em>upit je uspešno poslat.</em></span></h1>
-          <p class="hero-intro">Uskoro će Vas kontaktirati neko iz našeg tima.</p>
+          <p class="hero-intro">Izaberite termin za besplatne konsultacije sa našim timom.</p>
+          <div class="hero-actions"><a class="btn btn-bright" href="#termin">Izaberite termin</a></div>
         </div>
         <div class="ticket-stage" role="img" aria-label="Outliers Yearly Ticket za kompanije">
           <div class="ticket-cast"></div>
@@ -534,6 +559,20 @@ html body{line-height:1.55 !important;font-weight:400 !important}
       </div>
     </section>
 
+    <!-- zakazivanje: Microsoft Bookings u okviru; link je u window.MC -->
+    <section class="booking" id="termin" tabindex="-1" aria-labelledby="booking-title">
+      <div class="wrap">
+        <div class="booking-head">
+          <h2 id="booking-title">Zakažite besplatne konsultacije</h2>
+          <p>Izaberite dan i vreme koji Vam odgovaraju. Sastanak traje 30&nbsp;minuta.</p>
+        </div>
+        <div class="booking-frame">
+          <iframe id="booking-frame" title="Zakazivanje sastanka sa Outliers timom" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+        <p class="booking-alt">Ako se kalendar ne učita, <a id="booking-link" target="_blank" rel="noopener">otvorite ga u novom&nbsp;prozoru</a>.</p>
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer">
@@ -545,6 +584,9 @@ html body{line-height:1.55 !important;font-weight:400 !important}
   </footer>
   <script>
   document.getElementById("yr").textContent = new Date().getFullYear();
+  /* kalendar i rezervni link dobijaju adresu iz window.MC */
+  document.getElementById("booking-frame").src = window.MC.booking;
+  document.getElementById("booking-link").href = window.MC.booking;
   </script>
 </body>
 </html>
