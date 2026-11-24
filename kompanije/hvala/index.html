@@ -493,12 +493,12 @@ html body{line-height:1.55 !important;font-weight:400 !important}
 .ty-contact a { color: var(--pine); font-weight: 610; text-decoration: underline; text-underline-offset: 4px; }
 
 /* ZAKAZIVANJE (Microsoft Bookings u okviru) */
-.booking { background: var(--paper); padding-block: clamp(46px,6vw,84px); }
+/* ista siva kao pozadina Bookings stranice (#f4f4f4), da se kalendar stopi sa sekcijom, bez vidljivog okvira */
+.booking { background: #f4f4f4; padding-block: clamp(46px,6vw,84px); }
 .booking:focus { outline: 0; }
 .booking-head { max-width: 640px; margin: 0 auto clamp(22px,3vw,34px); text-align: center; }
 .booking-head h2 { font-size: clamp(26px,3.2vw,46px); }
 .booking-head p { margin-top: 12px; color: var(--body); font-size: 16px; }
-.booking-frame { background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 15px 34px #012a231a; }
 /* Bookings je u uskom rasporedu dok je okvir uzi od ~1024px, a u sirokom kad je siri.
    Visina je cela stranica Bookings-a (izmereno 24.11.2026: usko ~2115px, siroko ~1805px),
    da ne bude skrolovanja unutar okvira */
