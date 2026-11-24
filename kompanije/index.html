@@ -298,12 +298,11 @@ h3 { line-height: 1.22; letter-spacing: -.038em; }
 .contact-grid { mask-image: linear-gradient(115deg,transparent 8%,#000 85%); }
 .contact-inner { display: grid; grid-template-columns: minmax(0,.82fr) minmax(0,1.18fr); align-items: start; gap: clamp(26px,6vw,100px); padding-block: clamp(57px,6vw,88px); }
 .contact-copy { padding-top: clamp(6px,2.1vw,32px); }
-/* naslov u dva reda kao u dizajnu: velicina prati sirinu kolone (cqi), ne ekrana */
+/* naslov u dva reda ("Zakazite / besplatne konsultacije"): velicina prati sirinu kolone (cqi), ne ekrana,
+   da spojeno "besplatne konsultacije" uvek stane u kolonu */
 .contact-copy { container-type: inline-size; }
-.contact-copy h2 { max-width: 560px; font-size: clamp(34px,3.6vw,54px); font-size: clamp(26px,10.8cqi,54px); }
+.contact-copy h2 { max-width: 560px; font-size: clamp(30px,3.2vw,48px); font-size: clamp(20px,10.2cqi,54px); }
 .contact-copy>p { max-width: 405px; margin-top: 18px; color: #d4e2d5; font-size: 16px; line-height: 1.65; }
-/* podnaslov ispod naslova: jaci od teksta, slabiji od naslova */
-.contact-copy>.contact-sub { max-width: 475px; margin-top: 16px; color: #f3f7e9; font-size: clamp(22px,2.1vw,31px); font-weight: 640; line-height: 1.15; letter-spacing: -.035em; text-wrap: balance; }
 .direct-contact { display: grid; justify-items: start; gap: 4px; margin-top: clamp(25px,3vw,43px); }
 .direct-contact>span { color: #c2d6c7; font-size: 13px; }
 .direct-contact a { display: inline-flex; align-items: center; gap: 8px; color: #e2f5bd; font-weight: 600; font-size: 16px; text-underline-offset: 4px; }
@@ -854,8 +853,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
       <div class="contact-grid" aria-hidden="true"></div>
       <div class="wrap contact-inner">
         <div class="contact-copy">
-          <h2 id="contact-title">Trebaju Vam dodatne informacije?</h2>
-          <p class="contact-sub">Na raspolaganju smo&nbsp;Vam!</p>
+          <h2 id="contact-title">Zakažite besplatne&nbsp;konsultacije</h2>
           <p>Ostavite nam Vaše podatke i neko iz našeg tima će Vas&nbsp;kontaktirati.</p>
           <div class="direct-contact">
             <span>Možete nas kontaktirati i direktno&nbsp;na</span>
@@ -864,7 +862,7 @@ html body{line-height:1.55 !important;font-weight:400 !important}
         </div>
         <div class="form-card">
           <form id="ticket-form" novalidate aria-labelledby="form-title">
-            <h3 id="form-title">Zakažite besplatne&nbsp;konsultacije</h3>
+            <h3 id="form-title">Unesite Vaše&nbsp;podatke</h3>
             <div class="form-fields">
               <div class="form-field"><label for="contact-name">Ime i prezime</label>
                 <input id="contact-name" name="Ime i prezime" autocomplete="name" maxlength="100" required pattern=".*\S.*" title="Unesite ime i prezime."></div>
